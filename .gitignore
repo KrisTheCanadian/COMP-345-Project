@@ -4,6 +4,7 @@
 
 # C-Make
 cmake-build-debug/*
+build/*
 
 # Prerequisites
 *.d
