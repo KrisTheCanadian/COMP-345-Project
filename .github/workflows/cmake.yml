@@ -32,5 +32,5 @@ jobs:
     - name: Test
       working-directory: ${{github.workspace}}/build
       # Running the generated test runner
-      run: build/testRunner
+      run: ./testRunner
       
