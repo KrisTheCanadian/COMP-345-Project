@@ -1,6 +1,7 @@
 # IDEs and Text Editors
 .vscode/*
 .idea/*
+**/.DS_Store
 
 # C-Make
 cmake-build-debug/*
