@@ -17,7 +17,7 @@ if(NOT googletest_POPULATED)
     add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 endif()
 
-add_library(Example STATIC src/source/Example.cpp)
+add_library(Example STATIC src/source/Example.cpp src/headers/Example.hpp)
 
 add_executable(mainApp src/main.cpp)
 target_link_libraries(mainApp Example)
