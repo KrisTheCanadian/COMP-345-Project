@@ -29,8 +29,8 @@ public:
     // --------------------------------------------------
     // map adders
     // --------------------------------------------------
-    bool addContinent(std::shared_ptr<Continent> continent);
-    bool addTerritory(std::shared_ptr<Territory> territory);
+    void addContinent(std::shared_ptr<Continent> continent);
+    void addTerritory(std::shared_ptr<Territory> territory);
 
     // --------------------------------------------------
     // setters
