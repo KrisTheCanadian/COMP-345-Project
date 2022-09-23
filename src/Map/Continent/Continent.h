@@ -6,6 +6,8 @@
 
 #include "Territory.h"
 
+class Territory;
+
 class Continent
 {
 private:
@@ -15,8 +17,8 @@ private:
 
 public:
   Continent(std::string name, int bonus);
-  void addTerritory(std::shared_ptr<Territory> territory);
+  void addTerritory(const std::shared_ptr<Territory>& territory);
   std::string getName();
-  int getBonus();
+  int getBonus() const;
   std::vector<std::shared_ptr<Territory>> getTerritories();
 };

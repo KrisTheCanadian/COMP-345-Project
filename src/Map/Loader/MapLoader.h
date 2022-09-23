@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <memory>
 
 #include "Map.h"
 
@@ -11,20 +12,24 @@ class MapLoader
 private:
     enum ReadingState
     {
-        ReadingState_Error,
         ReadingState_Idle,
-        ReadingState_Start,
         ReadingState_Map,
         ReadingState_Continents,
         ReadingState_Territories
     };
     Map map;
-    // territory name -> List of Adjacent territories
-    std::unordered_map<std::string, std::vector<std::string>> territories;
-    std::unordered_map<std::string, int> continents;
+    // territory name -> Territory Shared Pointer
+    std::unordered_map<std::string, std::shared_ptr<Territory>> territories;
+
+    // territories to add to the map
+    std::unordered_map<std::string, std::shared_ptr<Territory>> territoriesToCreate;
+
+    // continent name -> Continent Shared Pointer
+    std::unordered_map<std::string, std::shared_ptr<Continent>> continents;
+
     ReadingState state = ReadingState_Idle;
 
 public:
-    void load(std::string path);
+    std::shared_ptr<Map> load(const std::string& path);
     void parse(std::string &line);
 };

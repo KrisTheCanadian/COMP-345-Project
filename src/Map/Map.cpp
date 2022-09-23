@@ -1,16 +1,18 @@
 #include "Map.h"
 
+#include <utility>
+
 void Map::validate()
 {
   // TODO implement
 }
 
-void Map::addContinent(std::shared_ptr<Continent> continent)
+void Map::addContinent(const std::shared_ptr<Continent>& continent)
 {
   this->continents.push_back(continent);
 }
 
-void Map::addTerritory(std::shared_ptr<Territory> territory)
+void Map::addTerritory(const std::shared_ptr<Territory>& territory)
 {
   this->territories.push_back(territory);
 }
@@ -33,17 +35,17 @@ std::string Map::getAuthor()
   return this->author;
 }
 
-bool Map::getWrap()
+bool Map::getWrap() const
 {
   return this->wrap;
 }
 
-bool Map::getScroll()
+bool Map::getScroll() const
 {
   return this->scroll;
 }
 
-bool Map::getWarn()
+bool Map::getWarn() const
 {
   return this->warn;
 }
@@ -62,42 +64,42 @@ std::vector<std::shared_ptr<Continent>> Map::getContinents()
 // setters
 // --------------------------------------------------
 
-void Map::setName(std::string name)
+void Map::setName(std::string _name)
 {
-  this->name = name;
+  this->name = std::move(_name);
 }
 
-void Map::setImage(std::string image)
+void Map::setImage(std::string _image)
 {
-  this->image = image;
+  this->image = std::move(_image);
 }
 
-void Map::setAuthor(std::string author)
+void Map::setAuthor(std::string _author)
 {
-  this->author = author;
+  this->author = std::move(_author);
 }
 
-void Map::setWrap(bool wrap)
+void Map::setWrap(bool _wrap)
 {
-  this->wrap = wrap;
+  this->wrap = _wrap;
 }
 
-void Map::setScroll(bool scroll)
+void Map::setScroll(bool _scroll)
 {
-  this->scroll = scroll;
+  this->scroll = _scroll;
 }
 
-void Map::setWarn(bool warn)
+void Map::setWarn(bool _warn)
 {
-  this->warn = warn;
+  this->warn = _warn;
 }
 
-void Map::setTerritories(std::vector<std::shared_ptr<Territory>> territories)
+void Map::setTerritories(std::vector<std::shared_ptr<Territory>> _territories)
 {
-  this->territories = territories;
+  this->territories = std::move(_territories);
 }
 
-void Map::setContinents(std::vector<std::shared_ptr<Continent>> continents)
+void Map::setContinents(std::vector<std::shared_ptr<Continent>> _continents)
 {
-  this->continents = continents;
+  this->continents = std::move(_continents);
 }

@@ -29,14 +29,14 @@ public:
     // --------------------------------------------------
     // map adders
     // --------------------------------------------------
-    void addContinent(std::shared_ptr<Continent> continent);
-    void addTerritory(std::shared_ptr<Territory> territory);
+    void addContinent(const std::shared_ptr<Continent>& continent);
+    void addTerritory(const std::shared_ptr<Territory>& territory);
 
     // --------------------------------------------------
     // setters
     // --------------------------------------------------
-    void setName(std::string name);
-    void setImage(std::string image);
+    void setName(std::string _name);
+    void setImage(std::string _image);
     void setAuthor(std::string author);
     void setWrap(bool wrap);
     void setScroll(bool scroll);
@@ -50,9 +50,9 @@ public:
     std::string getName();
     std::string getImage();
     std::string getAuthor();
-    bool getWrap();
-    bool getScroll();
-    bool getWarn();
+    bool getWrap() const;
+    bool getScroll() const;
+    bool getWarn() const;
     std::vector<std::shared_ptr<Territory>> getTerritories();
     std::vector<std::shared_ptr<Continent>> getContinents();
 };

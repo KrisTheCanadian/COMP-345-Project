@@ -1,12 +1,14 @@
 #include "Continent.h"
 
+#include <utility>
+
 Continent::Continent(std::string name, int bonus)
 {
-  this->name = name;
+  this->name = std::move(name);
   this->bonus = bonus;
 }
 
-void Continent::addTerritory(std::shared_ptr<Territory> territory)
+void Continent::addTerritory(const std::shared_ptr<Territory>& territory)
 {
   this->territories.push_back(territory);
 }
@@ -16,7 +18,7 @@ std::string Continent::getName()
   return this->name;
 }
 
-int Continent::getBonus()
+int Continent::getBonus() const
 {
   return this->bonus;
 }
