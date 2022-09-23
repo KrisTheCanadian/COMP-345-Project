@@ -14,4 +14,9 @@ private:
   std::vector<std::shared_ptr<Territory>> territories;
 
 public:
+  Continent(std::string name, int bonus);
+  void addTerritory(std::shared_ptr<Territory> territory);
+  std::string getName();
+  int getBonus();
+  std::vector<std::shared_ptr<Territory>> getTerritories();
 };

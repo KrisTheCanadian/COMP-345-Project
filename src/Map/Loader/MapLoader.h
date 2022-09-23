@@ -24,7 +24,7 @@ private:
     std::unordered_map<std::string, int> continents;
     ReadingState state = ReadingState_Idle;
 
-private:
+public:
     void load(std::string path);
     void parse(std::string &line);
 };
