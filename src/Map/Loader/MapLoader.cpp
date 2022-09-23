@@ -1,6 +1,6 @@
 #include "MapLoader.h"
 
-std::shared_ptr<Map> MapLoader::load(const std::string& path)
+Map* MapLoader::load(const std::string& path)
 {
   std::ifstream input_file(path, std::ios::in);
   std::string line;
@@ -26,7 +26,7 @@ std::shared_ptr<Map> MapLoader::load(const std::string& path)
 
   this->state = ReadingState_Idle;
   input_file.close();
-  return std::shared_ptr<Map>(&this->map);
+  return &(this->map);
 }
 
 void MapLoader::parse(std::string &line)

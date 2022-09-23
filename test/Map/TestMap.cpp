@@ -8,7 +8,7 @@ TEST(TestSuiteSample, TestSample)
     MapLoader loader;
 
     // act
-    std::shared_ptr<Map> map = loader.load("../res/Test.map");
+    Map* map = loader.load("../res/Test.map");
 
     std::string map_name = map->getName();
     // assert
