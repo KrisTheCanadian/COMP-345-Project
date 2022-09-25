@@ -30,6 +30,6 @@ private:
     ReadingState state = ReadingState_Idle;
 
 public:
-    Map* load(const std::string& path);
+    std::shared_ptr<Map> load(const std::string& path);
     void parse(std::string &line);
 };

@@ -47,7 +47,7 @@ target_include_directories(Map PUBLIC
 # ---------------------------------------------------------
 # Map Test
 # ---------------------------------------------------------
-add_executable(testRunnerMap test/Map/TestMap.cpp)
+add_executable(testRunnerMap test/Map/TEST_MapLoader.cpp)
 target_link_libraries(testRunnerMap gtest_main gmock_main Map)
 add_test(NAME MapTests COMMAND testRunnerMap)
 

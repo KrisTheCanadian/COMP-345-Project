@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include "MapLoader.h"
 
@@ -13,6 +14,6 @@ int main(int argc, char *argv[])
   std::string path = argv[1];
   // load map
   MapLoader loader;
-  Map* map = loader.load(path);
+  std::shared_ptr<Map> map = loader.load(path);
   return 0;
 }

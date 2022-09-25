@@ -1,6 +1,6 @@
 #include "MapLoader.h"
 
-Map* MapLoader::load(const std::string& path)
+std::shared_ptr<Map> MapLoader::load(const std::string& path)
 {
   std::ifstream input_file(path, std::ios::in);
   std::string line;
@@ -26,7 +26,7 @@ Map* MapLoader::load(const std::string& path)
 
   this->state = ReadingState_Idle;
   input_file.close();
-  return &(this->map);
+  return std::make_shared<Map>(this->map);
 }
 
 void MapLoader::parse(std::string &line)
@@ -102,84 +102,96 @@ void MapLoader::parse(std::string &line)
     break;
     // FORMAT: Territory name, x, y, continent, adjacent territories
   case ReadingState_Territories:
-    // parse territories
-    std::string delimiter = ",";
-    // Territory
-    std::shared_ptr<Territory> territory = nullptr;
+      if(line.empty()){
+          // blank line
+          return;
+      }
+        // parse territories
+        std::string delimiter = ",";
+        // Territory
+        std::shared_ptr<Territory> territory = nullptr;
 
-    if (line.find(delimiter) != std::string::npos)
-    {
-      std::string name = line.substr(0, line.find(delimiter));
-      line = line.substr(line.find(delimiter) + 1, line.length());
-      // check if territory exists in territoriesToCreate before creating a new one
-      if (this->territoriesToCreate.find(name) != this->territoriesToCreate.end())
-      {
-        territory = this->territoriesToCreate[name];
-        // remove from territoriesToCreate
-        this->territoriesToCreate.erase(name);
-      }
-      else
-      {
-        territory = std::make_shared<Territory>(name);
-      }
-    }
-
-    // parse the rest of the line
-    while (line.find(delimiter) != std::string::npos)
-    {
-      std::string value = line.substr(0, line.find(delimiter));
-      line = line.substr(line.find(delimiter) + 1, line.length());
-      // x
-      if (territory->getX() == -1)
-      {
-        territory->setX(std::stoi(value));
-          continue;
-      }
-      // y
-      else if (territory->getY() == -1)
-      {
-        territory->setY(std::stoi(value));
-          continue;
-      }
-      // continent
-      else if (territory->getContinent() == nullptr)
-      {
-        // check if continents exists in hashmap
-        if (this->continents.find(value) == this->continents.end())
+        if (line.find(delimiter) != std::string::npos)
         {
-          throw std::runtime_error("Invalid continent: " + value);
-        }
-        else
-        {
-          territory->setContinent(this->continents[value]);
-          continents[value]->addTerritory(territory);
-        }
-          continue;
-      }
-      // adjacent territories
-      else
-      {
-        // check if territory exists in hashmap
-        if (this->territories.find(value) != this->territories.end())
-        {
-          if (territory == nullptr)
+          std::string name = line.substr(0, line.find(delimiter));
+          line = line.substr(line.find(delimiter) + 1, line.length());
+          // check if territory exists in territoriesToCreate before creating a new one
+          if (this->territoriesToCreate.find(name) != this->territoriesToCreate.end())
           {
-            throw std::runtime_error("Invalid territory: " + value);
+            territory = this->territoriesToCreate[name];
+            // remove from territoriesToCreate
+            this->territoriesToCreate.erase(name);
           }
+          else
+          {
+            territory = std::make_shared<Territory>(name);
+          }
+        }
 
-          territory->addAdjacentTerritory(territories[value]);
-        }
-        else
+        // parse the rest of the line
+        while (line.find(delimiter) != std::string::npos)
         {
-          // create new territory
-          std::shared_ptr<Territory> adjacentTerritory = std::make_shared<Territory>(value);
-          territory->addAdjacentTerritory(adjacentTerritory);
-          // add to territoriesToCreate
-          this->territoriesToCreate[value] = adjacentTerritory;
+          std::string value = line.substr(0, line.find(delimiter));
+          line = line.substr(line.find(delimiter) + 1, line.length());
+          // x
+          if (territory->getX() == -1)
+          {
+            territory->setX(std::stoi(value));
+              continue;
+          }
+          // y
+          else if (territory->getY() == -1)
+          {
+            territory->setY(std::stoi(value));
+              continue;
+          }
+          // continent
+          else if (territory->getContinent() == nullptr)
+          {
+            // check if continents exists in hashmap
+            if (this->continents.find(value) == this->continents.end())
+            {
+              throw std::runtime_error("Invalid continent: " + value);
+            }
+            else
+            {
+              territory->setContinent(this->continents[value]);
+              continents[value]->addTerritory(territory);
+            }
+              continue;
+          }
+          // adjacent territories
+          else
+          {
+            // check if territory exists in hashmap
+            if (this->territories.find(value) != this->territories.end())
+            {
+              if (territory == nullptr)
+              {
+                throw std::runtime_error("Invalid territory: " + value);
+              }
+
+              territory->addAdjacentTerritory(territories[value]);
+            }
+            else
+            {
+              std::shared_ptr<Territory> adjacentTerritory;
+              // check inside territories to create
+              if(this->territoriesToCreate.find(value) != this->territoriesToCreate.end()){
+                // use previously created
+                adjacentTerritory = territoriesToCreate[value];
+              } else {
+                // create new territory
+                adjacentTerritory = std::make_shared<Territory>(value);
+              }
+              territory->addAdjacentTerritory(adjacentTerritory);
+              // add to territoriesToCreate
+              this->territoriesToCreate[value] = adjacentTerritory;
+            }
         }
-      }
     }
-    this->map.addTerritory(territory);
-    break;
-  }
+        this->territories[territory->getName()] = territory;
+        this->map.addTerritory(territory);
+        break;
+    }
 }
