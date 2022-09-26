@@ -14,6 +14,14 @@ int main(int argc, char *argv[])
   std::string path = argv[1];
   // load map
   MapLoader loader;
-  std::shared_ptr<Map> map = loader.load(path);
+  std::shared_ptr<Map> map;
+
+  try {
+    map = loader.load(path);
+  } catch (const std::runtime_error& error){
+    std::cout << "Map Format is Invalid" << std::endl;
+  }
+
+  std::cout << "Map is valid: " << (map->validate() ? "True" : "False") << std::endl;
   return 0;
 }

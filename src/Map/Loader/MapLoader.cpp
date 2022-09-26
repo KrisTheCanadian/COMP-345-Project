@@ -94,7 +94,15 @@ void MapLoader::parse(std::string &line)
       {
         std::string name = line.substr(0, line.find(delimiter));
         std::string value = line.substr(line.find(delimiter) + 1, line.length());
-        std::shared_ptr<Continent> continent = std::make_shared<Continent>(name, std::stoi(value));
+        std::shared_ptr<Continent> continent;
+        try{
+          continent = std::make_shared<Continent>(name, std::stoi(value));
+        } catch (std::invalid_argument& e){
+          throw std::runtime_error("Map Formatting Error: Invalid Continent Bonus.");
+        } catch (std::out_of_range& e) {
+          throw std::runtime_error("Map Formatting Error: Continent Bonus Coordinate Out Of Range.");
+        }
+
         this->map.addContinent(continent);
         this->continents[name] = continent;
       }
@@ -129,20 +137,34 @@ void MapLoader::parse(std::string &line)
         }
 
         // parse the rest of the line
-        while (line.find(delimiter) != std::string::npos)
+        while (!line.empty())
         {
-          std::string value = line.substr(0, line.find(delimiter));
-          line = line.substr(line.find(delimiter) + 1, line.length());
+          auto delimiter_location = line.find(delimiter);
+          std::string value = line.substr(0, delimiter_location);
+          line = delimiter_location == std::string::npos ? "" : line.substr(delimiter_location + 1, line.length());
+
           // x
           if (territory->getX() == -1)
           {
-            territory->setX(std::stoi(value));
+            try{
+              territory->setX(std::stoi(value));
+            } catch (std::invalid_argument& e){
+              throw std::runtime_error("Map Formatting Error: Invalid X Coordinate.");
+            } catch (std::out_of_range& e) {
+              throw std::runtime_error("Map Formatting Error: X Coordinate Out Of Range.");
+            }
               continue;
           }
           // y
           else if (territory->getY() == -1)
           {
-            territory->setY(std::stoi(value));
+            try{
+              territory->setY(std::stoi(value));
+            } catch (std::invalid_argument& e){
+              throw std::runtime_error("Map Formatting Error: Invalid Y Coordinate.");
+            } catch (std::out_of_range& e) {
+              throw std::runtime_error("Map Formatting Error: Y Coordinate Out Of Range.");
+            }
               continue;
           }
           // continent
@@ -194,4 +216,6 @@ void MapLoader::parse(std::string &line)
         this->map.addTerritory(territory);
         break;
     }
+
+
 }

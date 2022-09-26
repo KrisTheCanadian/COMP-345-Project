@@ -11,11 +11,11 @@ TEST(MapLoaderTestSuite, TestMap1LoadBasic)
     MapLoader loader;
 
     // act
-    std::shared_ptr<Map> map = loader.load("../res/TestMap1.map");
+    std::shared_ptr<Map> map = loader.load("../res/TestMap1_valid.map");
 
     // assert
     // Map Name
-    EXPECT_EQ(map->getName(), "TestMap1.map");
+    EXPECT_EQ(map->getName(), "TestMap1_valid.map");
     // Image Name
     EXPECT_EQ(map->getImage(), "Asia.bmp");
     // Author Name
@@ -46,7 +46,7 @@ TEST(MapLoaderTestSuite, TestMap1LoadTerritoriesCorrectly)
   MapLoader loader;
 
   // act
-  std::shared_ptr<Map> map = loader.load("../res/TestMap1.map");
+  std::shared_ptr<Map> map = loader.load("../res/TestMap1_valid.map");
 
   auto territories = map->getTerritories();
 
@@ -89,7 +89,7 @@ TEST(MapLoaderTestSuite, TestMap1LoadContinentsCorrectly){
   // arrange
   MapLoader loader;
   // act
-  std::shared_ptr<Map> map = loader.load("../res/TestMap1.map");
+  std::shared_ptr<Map> map = loader.load("../res/TestMap1_valid.map");
   // assert
   auto continents = map->getContinents();
 
@@ -106,8 +106,56 @@ TEST(MapLoaderTestSuite, TestMap1LoadContinentsCorrectly){
     }
   }
 
+}
 
+TEST(MaploaderTestSuite, TestMap1LoadValid){
+  // arrange
+  MapLoader loader;
+  auto map = loader.load("../res/TestMap1_valid.map");
+  // act
+  auto isValid = map->validate();
+  // assert
+  EXPECT_TRUE(isValid);
+}
 
+TEST(MaploaderTestSuite, TestMap4LoadValid){
+  // arrange
+  MapLoader loader;
+  auto map = loader.load("../res/TestMap4_valid.map");
+  // act
+  auto isValid = map->validate();
+  // assert
+  EXPECT_TRUE(isValid);
+}
+
+TEST(MaploaderTestSuite, TestMap2LoadInvalid) {
+  // arrange
+  MapLoader loader;
+  auto map = loader.load("../res/TestMap2_invalid.map");
+  // act
+  auto isValid = map->validate();
+  // assert
+  EXPECT_FALSE(isValid);
+}
+
+TEST(MaploaderTestSuite, TestMap3LoadInvalid){
+  // arrange
+  MapLoader loader;
+  auto map = loader.load("../res/TestMap3_invalid.map");
+  // act
+  auto isValid = map->validate();
+  // assert
+  EXPECT_FALSE(isValid);
+}
+
+TEST(MaploaderTestSuite, TestMap5LoadInvalidFormat){
+  // arrange
+  MapLoader loader;
+  auto map = loader.load("../res/TestMap5_invalid_format.map");
+  // act
+  auto isValid = map->validate();
+  // assert
+  EXPECT_FALSE(isValid);
 }
 
 int main(int argc, char **argv)
