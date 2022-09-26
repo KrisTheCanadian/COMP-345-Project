@@ -187,4 +187,4 @@ target_link_libraries(MapDriver Map)
 # Main
 # ---------------------------------------------------------
 add_executable(mainApp src/main.cpp)
-target_link_libraries(mainApp Map Player Orders GameEngine)
+target_link_libraries(mainApp Map Player Orders Game_Engine)
