@@ -148,6 +148,16 @@ TEST(MaploaderTestSuite, TestMap3LoadInvalid){
   EXPECT_FALSE(isValid);
 }
 
+TEST(MaploaderTestSuite, TestMap5LoadInvalidFormat){
+  // arrange
+  MapLoader loader;
+  auto map = loader.load("../res/TestMap5_invalid_format.map");
+  // act
+  auto isValid = map->validate();
+  // assert
+  EXPECT_FALSE(isValid);
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
