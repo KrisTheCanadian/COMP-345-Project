@@ -79,8 +79,8 @@ set(ORDER_SRCS
     src/Orders/OrderTypes/Negotiate/Negotiate.h
     src/Orders/OrderTypes/Negotiate/Negotiate.cpp
     )
-add_library(Order STATIC ${ORDER_SRCS})
-target_include_directories(Order PUBLIC
+add_library(Orders STATIC ${ORDER_SRCS})
+target_include_directories(Orders PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes
