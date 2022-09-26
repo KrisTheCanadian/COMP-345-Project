@@ -1,7 +1,5 @@
 #include "Territory.h"
 
-#include <utility>
-
 Territory::Territory(std::string name)
 {
   this->name = std::move(name);

@@ -15,5 +15,7 @@ int main(int argc, char *argv[])
   // load map
   MapLoader loader;
   std::shared_ptr<Map> map = loader.load(path);
+
+  std::cout << "Map is valid: " << (map->validate() ? "True" : "False") << std::endl;
   return 0;
 }

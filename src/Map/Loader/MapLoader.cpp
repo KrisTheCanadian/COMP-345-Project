@@ -129,10 +129,12 @@ void MapLoader::parse(std::string &line)
         }
 
         // parse the rest of the line
-        while (line.find(delimiter) != std::string::npos)
+        while (!line.empty())
         {
-          std::string value = line.substr(0, line.find(delimiter));
-          line = line.substr(line.find(delimiter) + 1, line.length());
+          auto delimiter_location = line.find(delimiter);
+          std::string value = line.substr(0, delimiter_location);
+          line = delimiter_location == std::string::npos ? "" : line.substr(delimiter_location + 1, line.length());
+
           // x
           if (territory->getX() == -1)
           {

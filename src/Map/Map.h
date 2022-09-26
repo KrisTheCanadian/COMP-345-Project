@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <utility>
+#include <algorithm>
+#include <unordered_map>
 
 #include "Territory.h"
 #include "Continent.h"
@@ -23,14 +26,19 @@ private:
     std::vector<std::shared_ptr<Continent>> continents;
 
 private:
-    void validate();
+    bool isMapStronglyConnected();
+    bool isTerritories1to1Continents();
+    void DFS(const std::shared_ptr<Territory>& territory, std::vector<std::shared_ptr<Territory>> &visited);
+    bool isTerritoryStronglyConnected(const std::shared_ptr<Territory>& territory);
 
 public:
+    bool validate();
+
     // --------------------------------------------------
     // map adders
     // --------------------------------------------------
-    void addContinent(const std::shared_ptr<Continent>& continent);
-    void addTerritory(const std::shared_ptr<Territory>& territory);
+    void addContinent(const std::shared_ptr<Continent> &continent);
+    void addTerritory(const std::shared_ptr<Territory> &territory);
 
     // --------------------------------------------------
     // setters
@@ -41,8 +49,6 @@ public:
     void setWrap(bool wrap);
     void setScroll(bool scroll);
     void setWarn(bool warn);
-    void setTerritories(std::vector<std::shared_ptr<Territory>> territories);
-    void setContinents(std::vector<std::shared_ptr<Continent>> continents);
 
     // --------------------------------------------------
     // getters

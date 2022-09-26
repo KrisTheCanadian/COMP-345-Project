@@ -1,7 +1,5 @@
 #include "Continent.h"
 
-#include <utility>
-
 Continent::Continent(std::string name, int bonus)
 {
   this->name = std::move(name);

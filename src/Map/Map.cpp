@@ -1,18 +1,46 @@
 #include "Map.h"
 
-#include <utility>
-
-void Map::validate()
+bool Map::validate()
 {
-  // TODO implement
+  return isMapStronglyConnected() && isTerritories1to1Continents();
 }
 
-void Map::addContinent(const std::shared_ptr<Continent>& continent)
+void Map::DFS(const std::shared_ptr<Territory>& territory, std::vector<std::shared_ptr<Territory>> &visited)
+{
+  visited.push_back(territory);
+  for (auto &adjacent : territory->getAdjacentTerritories())
+  {
+    if (std::find(visited.begin(), visited.end(), adjacent) == visited.end())
+    {
+      DFS(adjacent, visited);
+    }
+  }
+}
+
+bool Map::isTerritoryStronglyConnected(const std::shared_ptr<Territory>& territory)
+{
+  std::vector<std::shared_ptr<Territory>> visited;
+  DFS(territory, visited);
+  return visited.size() == territories.size();
+}
+
+bool Map::isMapStronglyConnected()
+{
+  return std::all_of(territories.begin(), territories.end(), [this](
+      const std::shared_ptr<Territory>& t){return isTerritoryStronglyConnected(t);});
+}
+
+bool Map::isTerritories1to1Continents()
+{
+  return std::all_of(continents.begin(), continents.end(), [](const std::shared_ptr<Continent>& c){return !c->getTerritories().empty();});
+}
+
+void Map::addContinent(const std::shared_ptr<Continent> &continent)
 {
   this->continents.push_back(continent);
 }
 
-void Map::addTerritory(const std::shared_ptr<Territory>& territory)
+void Map::addTerritory(const std::shared_ptr<Territory> &territory)
 {
   this->territories.push_back(territory);
 }
@@ -92,14 +120,4 @@ void Map::setScroll(bool _scroll)
 void Map::setWarn(bool _warn)
 {
   this->warn = _warn;
-}
-
-void Map::setTerritories(std::vector<std::shared_ptr<Territory>> _territories)
-{
-  this->territories = std::move(_territories);
-}
-
-void Map::setContinents(std::vector<std::shared_ptr<Continent>> _continents)
-{
-  this->continents = std::move(_continents);
 }
