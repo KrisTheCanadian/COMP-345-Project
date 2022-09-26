@@ -1,8 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
-#include "Territory.h"
+class Territory;
 
 class Player {
 private:

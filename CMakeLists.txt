@@ -34,7 +34,7 @@ set(MAP_SRCS
     src/Map/Territory/Territory.h 
     src/Map/Continent/Continent.cpp 
     src/Map/Continent/Continent.h
-    src/Player/Player.cpp src/Player/Player.h)
+    )
 
 add_library(Map STATIC ${MAP_SRCS})
 target_include_directories(Map PUBLIC
