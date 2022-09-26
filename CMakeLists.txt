@@ -44,14 +44,38 @@ target_include_directories(Map PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Continent
     )
 
-set(PLAYER_SRCS)
-add_library(Player STATIC ${PLAYER_SRCS}
+# ---------------------------------------------------------
+# Player Library
+# ---------------------------------------------------------
+
+set(PLAYER_SRCS
     src/Player/Player.cpp
     src/Player/Player.h
+    )
+add_library(Player STATIC ${PLAYER_SRCS}
     )
 target_include_directories(Player PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Player
     )
+
+# ---------------------------------------------------------
+# Order Library
+# ---------------------------------------------------------
+set(ORDER_SRCS
+    src/Orders/Orders.cpp
+    src/Orders/Orders.h
+    )
+add_library(Order STATIC ${ORDER_SRCS})
+target_include_directories(Order PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
+    )
+
+# ---------------------------------------------------------
+# Orders Test
+# ---------------------------------------------------------
+add_executable(testRunnerOrders test/Orders/TEST_Orders.cpp)
+target_link_libraries(testRunnerOrders gtest_main gmock_main Orders)
+add_test(NAME OrdersTests COMMAND testRunnerOrders)
 
 # ---------------------------------------------------------
 # Player Test
@@ -68,7 +92,13 @@ target_link_libraries(testRunnerMap gtest_main gmock_main Player Map)
 add_test(NAME MapTests COMMAND testRunnerMap)
 
 # ---------------------------------------------------------
-# Map Player - DEMO
+# Orders - DEMO
+# ---------------------------------------------------------
+add_executable(OrdersDriver src/Orders/OrdersDriver.cpp)
+target_link_libraries(OrdersDriver Orders)
+
+# ---------------------------------------------------------
+# Player - DEMO
 # ---------------------------------------------------------
 add_executable(PlayerDriver src/Player/PlayerDriver.cpp)
 target_link_libraries(PlayerDriver Player Map)
@@ -78,6 +108,7 @@ target_link_libraries(PlayerDriver Player Map)
 # ---------------------------------------------------------
 add_executable(MapDriver src/Map/MapDriver.cpp)
 target_link_libraries(MapDriver Map)
+
 
 # ---------------------------------------------------------
 # Main
