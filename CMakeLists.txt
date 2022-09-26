@@ -107,12 +107,30 @@ target_include_directories(Cards PUBLIC
     )
 
 # ---------------------------------------------------------
+# Game Engine Library
+# ---------------------------------------------------------
+set(GAME_ENGINE_SRCS
+    src/GameEngine/GameEngine.cpp
+    src/GameEngine/GameEngine.h
+    )
+add_library(Game_Engine STATIC ${CARDS_SRCS})
+target_include_directories(Game_Engine PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GameEngine
+    )
+
+# ---------------------------------------------------------
+# Game Engine Test
+# ---------------------------------------------------------
+add_executable(testRunnerGameEngine test/GameEngine/TEST_GameEngine.cpp)
+target_link_libraries(testRunnerGameEngine gtest_main gmock_main Cards)
+add_test(NAME GameEngineTests COMMAND testRunnerGameEngine)
+
+# ---------------------------------------------------------
 # Cards Test
 # ---------------------------------------------------------
 add_executable(testRunnerCards test/Cards/TEST_Cards.cpp)
 target_link_libraries(testRunnerCards gtest_main gmock_main Cards)
 add_test(NAME CardsTests COMMAND testRunnerCards)
-
 
 # ---------------------------------------------------------
 # Orders Test
@@ -134,6 +152,12 @@ add_test(NAME PlayerTests COMMAND testRunnerPlayer)
 add_executable(testRunnerMap test/Map/TEST_MapLoader.cpp)
 target_link_libraries(testRunnerMap gtest_main gmock_main Player Map)
 add_test(NAME MapTests COMMAND testRunnerMap)
+
+# ---------------------------------------------------------
+# Game Engine Driver - DEMO
+# ---------------------------------------------------------
+add_executable(GameEngineDriver src/GameEngine/GameEngineDriver.cpp)
+target_link_libraries(GameEngineDriver Game_Engine)
 
 # ---------------------------------------------------------
 # Cards Driver - DEMO
@@ -159,9 +183,8 @@ target_link_libraries(PlayerDriver Player Map)
 add_executable(MapDriver src/Map/MapDriver.cpp)
 target_link_libraries(MapDriver Map)
 
-
 # ---------------------------------------------------------
 # Main
 # ---------------------------------------------------------
 add_executable(mainApp src/main.cpp)
-target_link_libraries(mainApp Map Player)
+target_link_libraries(mainApp Map Player Orders GameEngine)
