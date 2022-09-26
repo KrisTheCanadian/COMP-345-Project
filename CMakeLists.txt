@@ -34,7 +34,7 @@ set(MAP_SRCS
     src/Map/Territory/Territory.h 
     src/Map/Continent/Continent.cpp 
     src/Map/Continent/Continent.h
-    )
+    src/Player/Player.cpp src/Player/Player.h)
 
 add_library(Map STATIC ${MAP_SRCS})
 target_include_directories(Map PUBLIC
@@ -44,12 +44,34 @@ target_include_directories(Map PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Continent
     )
 
+set(PLAYER_SRCS)
+add_library(Player STATIC ${PLAYER_SRCS}
+    src/Player/Player.cpp
+    src/Player/Player.h
+    )
+target_include_directories(Player PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Player
+    )
+
+# ---------------------------------------------------------
+# Player Test
+# ---------------------------------------------------------
+add_executable(testRunnerPlayer test/Player/TEST_Player.cpp)
+target_link_libraries(testRunnerPlayer gtest_main gmock_main Player)
+add_test(NAME PlayerTests COMMAND testRunnerPlayer)
+
 # ---------------------------------------------------------
 # Map Test
 # ---------------------------------------------------------
 add_executable(testRunnerMap test/Map/TEST_MapLoader.cpp)
-target_link_libraries(testRunnerMap gtest_main gmock_main Map)
+target_link_libraries(testRunnerMap gtest_main gmock_main Player Map)
 add_test(NAME MapTests COMMAND testRunnerMap)
+
+# ---------------------------------------------------------
+# Map Player - DEMO
+# ---------------------------------------------------------
+add_executable(PlayerDriver src/Player/PlayerDriver.cpp)
+target_link_libraries(PlayerDriver Player Map)
 
 # ---------------------------------------------------------
 # Map Driver - DEMO
@@ -57,9 +79,8 @@ add_test(NAME MapTests COMMAND testRunnerMap)
 add_executable(MapDriver src/Map/MapDriver.cpp)
 target_link_libraries(MapDriver Map)
 
-
 # ---------------------------------------------------------
 # Main
 # ---------------------------------------------------------
 add_executable(mainApp src/main.cpp)
-target_link_libraries(mainApp Map)
+target_link_libraries(mainApp Map Player)
