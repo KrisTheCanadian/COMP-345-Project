@@ -64,10 +64,32 @@ target_include_directories(Player PUBLIC
 set(ORDER_SRCS
     src/Orders/Orders.cpp
     src/Orders/Orders.h
+    src/Orders/OrdersList/OrdersList.cpp
+    src/Orders/OrdersList/OrdersList.h
+    src/Orders/OrderTypes/Advance/Advance.h
+    src/Orders/OrderTypes/Advance/Advance.cpp
+    src/Orders/OrderTypes/Airlift/Airlift.h
+    src/Orders/OrderTypes/Airlift/Airlift.cpp
+    src/Orders/OrderTypes/Blockade/Blockade.h
+    src/Orders/OrderTypes/Blockade/Blockade.cpp
+    src/Orders/OrderTypes/Bomb/Bomb.h
+    src/Orders/OrderTypes/Bomb/Bomb.cpp
+    src/Orders/OrderTypes/Deploy/Deploy.h
+    src/Orders/OrderTypes/Deploy/Deploy.cpp
+    src/Orders/OrderTypes/Negotiate/Negotiate.h
+    src/Orders/OrderTypes/Negotiate/Negotiate.cpp
     )
 add_library(Order STATIC ${ORDER_SRCS})
 target_include_directories(Order PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Advance
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Airlift
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Blockade
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Bomb
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Deploy
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Negotiate
     )
 
 # ---------------------------------------------------------
