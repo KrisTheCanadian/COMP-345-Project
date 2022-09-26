@@ -71,6 +71,28 @@ target_include_directories(Order PUBLIC
     )
 
 # ---------------------------------------------------------
+# Cards Library
+# ---------------------------------------------------------
+set(CARDS_SRCS
+    src/Cards/Card/Card.cpp
+    src/Cards/Card/Card.h
+    )
+add_library(Cards STATIC ${CARDS_SRCS})
+target_include_directories(Cards PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Card
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Deck
+    )
+
+# ---------------------------------------------------------
+# Cards Test
+# ---------------------------------------------------------
+add_executable(testRunnerCards test/Cards/TEST_Cards.cpp)
+target_link_libraries(testRunnerCards gtest_main gmock_main Cards)
+add_test(NAME CardsTests COMMAND testRunnerCards)
+
+
+# ---------------------------------------------------------
 # Orders Test
 # ---------------------------------------------------------
 add_executable(testRunnerOrders test/Orders/TEST_Orders.cpp)
@@ -92,13 +114,19 @@ target_link_libraries(testRunnerMap gtest_main gmock_main Player Map)
 add_test(NAME MapTests COMMAND testRunnerMap)
 
 # ---------------------------------------------------------
-# Orders - DEMO
+# Cards Driver - DEMO
+# ---------------------------------------------------------
+add_executable(CardsDriver src/Cards/CardsDriver.cpp)
+target_link_libraries(CardsDriver Cards)
+
+# ---------------------------------------------------------
+# Orders Driver - DEMO
 # ---------------------------------------------------------
 add_executable(OrdersDriver src/Orders/OrdersDriver.cpp)
 target_link_libraries(OrdersDriver Orders)
 
 # ---------------------------------------------------------
-# Player - DEMO
+# Player Drive - DEMO
 # ---------------------------------------------------------
 add_executable(PlayerDriver src/Player/PlayerDriver.cpp)
 target_link_libraries(PlayerDriver Player Map)
