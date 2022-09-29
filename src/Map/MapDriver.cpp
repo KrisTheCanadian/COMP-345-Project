@@ -3,14 +3,23 @@
 
 #include "MapLoader.h"
 
+void testLoadMaps(int argc, char *const *argv);
+
 int main(int argc, char *argv[])
 {
+  testLoadMaps(argc, argv);
+
+  return 0;
+}
+
+void testLoadMaps(int argc, char *const *argv) {
+  // get cli arguments
   if (argc < 2)
   {
     std::cout << "Usage: " << argv[0] << " <map file>" << std::endl;
-    return 1;
+    return;
   }
-  // get cli arguments
+
   std::string path = argv[1];
   // load map
   MapLoader loader;
@@ -23,5 +32,4 @@ int main(int argc, char *argv[])
   }
 
   std::cout << "Map is valid: " << (map->validate() ? "True" : "False") << std::endl;
-  return 0;
 }

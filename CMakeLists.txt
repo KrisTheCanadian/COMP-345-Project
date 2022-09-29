@@ -113,7 +113,7 @@ set(GAME_ENGINE_SRCS
     src/GameEngine/GameEngine.cpp
     src/GameEngine/GameEngine.h
     )
-add_library(Game_Engine STATIC ${CARDS_SRCS})
+add_library(Game_Engine STATIC ${GAME_ENGINE_SRCS})
 target_include_directories(Game_Engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GameEngine
     )
@@ -122,7 +122,7 @@ target_include_directories(Game_Engine PUBLIC
 # Game Engine Test
 # ---------------------------------------------------------
 add_executable(testRunnerGameEngine test/GameEngine/TEST_GameEngine.cpp)
-target_link_libraries(testRunnerGameEngine gtest_main gmock_main Cards)
+target_link_libraries(testRunnerGameEngine gtest_main gmock_main Game_Engine)
 add_test(NAME GameEngineTests COMMAND testRunnerGameEngine)
 
 # ---------------------------------------------------------
