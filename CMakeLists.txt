@@ -34,6 +34,8 @@ set(MAP_SRCS
     src/Map/Territory/Territory.h 
     src/Map/Continent/Continent.cpp 
     src/Map/Continent/Continent.h
+    Drivers/MapDriver.cpp
+    Drivers/MapDriver.h
     )
 
 add_library(Map STATIC ${MAP_SRCS})
@@ -42,6 +44,7 @@ target_include_directories(Map PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Loader
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Territory
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Continent
+    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
     )
 
 # ---------------------------------------------------------
@@ -51,11 +54,14 @@ target_include_directories(Map PUBLIC
 set(PLAYER_SRCS
     src/Player/Player.cpp
     src/Player/Player.h
+    Drivers/PlayerDriver.cpp
+    Drivers/PlayerDriver.h
     )
 add_library(Player STATIC ${PLAYER_SRCS}
     )
 target_include_directories(Player PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Player
+    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
     )
 
 # ---------------------------------------------------------
@@ -78,6 +84,8 @@ set(ORDER_SRCS
     src/Orders/OrderTypes/Deploy/Deploy.cpp
     src/Orders/OrderTypes/Negotiate/Negotiate.h
     src/Orders/OrderTypes/Negotiate/Negotiate.cpp
+    Drivers/OrdersDriver.cpp
+    Drivers/OrdersDriver.h
     )
 add_library(Orders STATIC ${ORDER_SRCS})
 target_include_directories(Orders PUBLIC
@@ -90,6 +98,7 @@ target_include_directories(Orders PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Bomb
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Deploy
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Negotiate
+    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
     )
 
 # ---------------------------------------------------------
@@ -98,24 +107,30 @@ target_include_directories(Orders PUBLIC
 set(CARDS_SRCS
     src/Cards/Card/Card.cpp
     src/Cards/Card/Card.h
+    Drivers/CardsDriver.cpp
+    Drivers/CardsDriver.h
     )
 add_library(Cards STATIC ${CARDS_SRCS})
 target_include_directories(Cards PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Card
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Deck
+    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
     )
 
 # ---------------------------------------------------------
 # Game Engine Library
 # ---------------------------------------------------------
 set(GAME_ENGINE_SRCS
+    Drivers/GameEngineDriver.cpp
+    Drivers/GameEngineDriver.h
     src/GameEngine/GameEngine.cpp
     src/GameEngine/GameEngine.h
     )
 add_library(Game_Engine STATIC ${GAME_ENGINE_SRCS})
 target_include_directories(Game_Engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/GameEngine
+    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
     )
 
 # ---------------------------------------------------------
@@ -154,37 +169,11 @@ target_link_libraries(testRunnerMap gtest_main gmock_main Player Map)
 add_test(NAME MapTests COMMAND testRunnerMap)
 
 # ---------------------------------------------------------
-# Game Engine Driver - DEMO
-# ---------------------------------------------------------
-add_executable(GameEngineDriver src/GameEngine/GameEngineDriver.cpp)
-target_link_libraries(GameEngineDriver Game_Engine)
-
-# ---------------------------------------------------------
-# Cards Driver - DEMO
-# ---------------------------------------------------------
-add_executable(CardsDriver src/Cards/CardsDriver.cpp)
-target_link_libraries(CardsDriver Cards)
-
-# ---------------------------------------------------------
-# Orders Driver - DEMO
-# ---------------------------------------------------------
-add_executable(OrdersDriver src/Orders/OrdersDriver.cpp)
-target_link_libraries(OrdersDriver Orders)
-
-# ---------------------------------------------------------
-# Player Drive - DEMO
-# ---------------------------------------------------------
-add_executable(PlayerDriver src/Player/PlayerDriver.cpp)
-target_link_libraries(PlayerDriver Player Map)
-
-# ---------------------------------------------------------
-# Map Driver - DEMO
-# ---------------------------------------------------------
-add_executable(MapDriver src/Map/MapDriver.cpp)
-target_link_libraries(MapDriver Map)
-
-# ---------------------------------------------------------
 # Main
 # ---------------------------------------------------------
 add_executable(mainApp src/main.cpp)
 target_link_libraries(mainApp Map Player Orders Game_Engine)
+
+# When Res is modified, rerun cmake (to copy new files to binary out)
+file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+

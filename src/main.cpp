@@ -1,7 +1,9 @@
-#include <iostream>
+#include "MapDriver.h"
+#include "GameEngineDriver.h"
 
 int main()
 {
-  std::cout << "Hello World!" << std::endl;
+  testLoadMaps();
+  testGameStates();
   return 0;
 }
