@@ -27,7 +27,11 @@ bool Map::isTerritoryStronglyConnected(const std::shared_ptr<Territory>& territo
 bool Map::isMapStronglyConnected()
 {
   return std::all_of(territories.begin(), territories.end(), [this](
-      const std::shared_ptr<Territory>& t){return isTerritoryStronglyConnected(t);});
+      const std::shared_ptr<Territory>& t)
+      {
+          auto val = isTerritoryStronglyConnected(t);
+          return val;
+      });
 }
 
 bool Map::isTerritories1to1Continents()

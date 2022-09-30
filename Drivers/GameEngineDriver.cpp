@@ -1,13 +1,7 @@
-#include <iostream>
+#include "GameEngineDriver.h"
 
-#include "GameEngine.h"
-
-void testGameStates();
-void printInvalidCommand(const std::string& command);
-
-int main(){
-  testGameStates();
-  return 0;
+void printInvalidCommand(const std::string& command){
+  std::cout << "Incorrect Command: \"" << command << "\". Please input a correct command." << std::endl;
 }
 
 void testGameStates(){
@@ -64,8 +58,4 @@ void testGameStates(){
     }
     std:: cout << "------------------------------" << std::endl;
   }
-}
-
-void printInvalidCommand(const std::string& command){
-  std::cout << "Incorrect Command: \"" << command << "\". Please input a correct command." << std::endl;
 }
