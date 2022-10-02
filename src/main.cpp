@@ -1,6 +1,7 @@
 #include "MapDriver.h"
 #include "GameEngineDriver.h"
 #include "OrdersDriver.h"
+#include "CardsDriver.h"
 
 using namespace std;
 
@@ -11,3 +12,4 @@ int main()
   testOrdersLists();
   return 0;
 }
+
