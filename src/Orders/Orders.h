@@ -1,9 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
-#include <string>
-#include <iomanip>
+
 // Abstract Order class data members and methods to be implemented by derived classes
 class Order
 {
@@ -19,11 +17,4 @@ private:
 
   friend std::ostream &operator<<(std::ostream &, const Order &);
   friend class OrdersList;
-};
-
-// Initially would use user cin to allocated type and create an order
-class UserInputOrder
-{
-public:
-  static Order *create(const std::string&) ;
 };
