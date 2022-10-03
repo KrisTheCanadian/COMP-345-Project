@@ -1,22 +1,22 @@
 #include "Blockade.h"
 
-const string Blockade::label = "Blockade";
+const std::string Blockade::label = "Blockade";
 
 Blockade::~Blockade() = default;
 
-string Blockade::getLabel() const { return label; }
+std::string Blockade::getLabel() const { return label; }
 
-ostream &Blockade::orderCout(ostream &output) const { return output << "-> Blockade order."; }
+std::ostream &Blockade::orderCout(std::ostream &output) const { return output << "-> Blockade order."; }
 
 bool Blockade::validate() const
 {
-  cout << "-> Blockade order validation check" << endl;
+  std::cout << "-> Blockade order validation check" << std::endl;
   return true;
 }
 
 void Blockade::execute() const
 {
-  if (validate()) { cout << "Blockade execution." << endl; }
+  if (validate()) { std::cout << "Blockade execution." << std::endl; }
 }
 
 Order *Blockade::clone() const { return new Blockade(*this); }

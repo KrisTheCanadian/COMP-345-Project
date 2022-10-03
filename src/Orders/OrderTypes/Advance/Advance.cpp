@@ -1,22 +1,22 @@
 #include "Advance.h"
 
-ostream &Advance::orderCout(ostream &output) const { return output << "-> Advance order."; }
+std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
 
-string Advance::getLabel() const { return label; }
+std::string Advance::getLabel() const { return label; }
 
 Advance::~Advance() = default;
 
-const string Advance::label = "Advance";
+const std::string Advance::label = "Advance";
 
 bool Advance::validate() const
 {
-  cout << "-> Advance order validation check" << endl;
+  std::cout << "-> Advance order validation check" << std::endl;
   return true;
 }
 
 void Advance::execute() const
 {
-  if (validate()) { cout << "Advance execution." << endl; }
+  if (validate()) { std::cout << "Advance execution." << std::endl; }
 }
 
 Order *Advance::clone() const { return new Advance(*this); }

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 
 #include "Orders.h"
 
@@ -19,7 +20,7 @@ public:
   void orderExecuter();
 
 private:
-  vector<Order *> orders;
+  std::vector<Order *> orders{};
 
-  friend ostream &operator<<(ostream &, const OrdersList &);
+  friend std::ostream &operator<<(std::ostream &, const OrdersList &);
 };

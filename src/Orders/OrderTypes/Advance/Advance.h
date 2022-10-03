@@ -1,17 +1,19 @@
 #pragma once
 
+#include <iostream>
+
 #include "Orders.h"
 
 class Advance : public Order
 {
 public:
-  string getLabel() const override;
+  std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
   ~Advance() override;
 
 private:
-  const static string label;
+  const static std::string label;
   Order *clone() const override;
-  ostream &orderCout(ostream &) const override;
+  std::ostream &orderCout(std::ostream &) const override;
 };

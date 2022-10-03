@@ -16,11 +16,11 @@ OrdersList::~OrdersList()
 OrdersList::OrdersList(const OrdersList &oldList)
 {
   unsigned listLength = oldList.orders.size();
-  orders = vector<Order *>(listLength);
+  orders = std::vector<Order *>(listLength);
   // cloning the same object into another memory slot
   for (unsigned o = 0; o < listLength; o++)
     orders[o] = oldList.orders[o]->clone();
-  cout << "->Order list copy completed." << endl;
+  std::cout << "->Order list copy completed." << std::endl;
 }
 
 // Method adding order to the order list vector
@@ -28,12 +28,12 @@ void OrdersList::add(Order *o)
 {
   // grabbing nullptr from UserInputOrder
   if (o == nullptr)
-    cout << "Can't add the order as o is a null pointer." << endl;
+    std::cout << "Can't add the order as o is a null pointer." << std::endl;
   else
   {
     orders.push_back(o);
-    cout << "User's order has been added to the list. Updated List: \n"
-         << *this << endl;
+    std::cout << "User's order has been added to the list. Updated List: \n"
+         << *this << std::endl;
   }
 }
 
@@ -43,11 +43,11 @@ void OrdersList::remove(int pos)
   unsigned listLength = orders.size();
   // as listLength is 0 the list is empty no need to remove an order
   if (listLength == 0){
-    cout << "The order list is empty, can't remove any more orders." << endl;
+    std::cout << "The order list is empty, can't remove any more orders." << std::endl;
   }
     // make sure order position is valid
   else if (pos > listLength || pos < 1) {
-    cout << "The inputed position isn't valid please make another entry." << endl;
+    std::cout << "The inputed position isn't valid please make another entry." << std::endl;
   }
   else
   {
@@ -55,8 +55,8 @@ void OrdersList::remove(int pos)
     delete orders[pos - 1];
     // when the memory is deleted need to remove the pointer from the list as well to avoid memory leak
     orders.erase(orders.begin() + pos - 1);
-    cout << "Requested order was deleted at " << pos << ", Updated List: \n"
-         << *this << endl;
+    std::cout << "Requested order was deleted at " << pos << ", Updated List: \n"
+         << *this << std::endl;
   }
 }
 
@@ -67,16 +67,16 @@ void OrdersList::move(int pos1, int pos2)
   unsigned listLength = orders.size();
   // checks if the order list is empty if so no need to move anything
   if (listLength == 0){
-    cout << "Order list is empty, won't move anything." << endl;
+    std::cout << "Order list is empty, won't move anything." << std::endl;
   }
   else if (listLength == 1)
   {
-    cout << "There is only one order in the list, need more than one orders for the move." << endl;
+    std::cout << "There is only one order in the list, need more than one orders for the move." << std::endl;
   }
   // check to make sure user inputted positions are valid
   else if (pos1 > listLength || pos2 > listLength || pos1 < 1 || pos2 < 1)
   {
-    cout << "None or only one inputted position is valid. Please try again." << endl;
+    std::cout << "None or only one inputted position is valid. Please try again." << std::endl;
   }
   else
   {
@@ -84,8 +84,8 @@ void OrdersList::move(int pos1, int pos2)
     Order *temp = orders[pos1 - 1];
     orders[pos1 - 1] = orders[pos2 - 1];
     orders[pos2 - 1] = temp;
-    cout << "Two order " << pos1 << " & " << pos2 << " have been moved and replace each other, Updated list \n"
-         << *this << endl;
+    std::cout << "Two order " << pos1 << " & " << pos2 << " have been moved and replace each other, Updated list \n"
+         << *this << std::endl;
   }
 }
 
@@ -94,7 +94,7 @@ void OrdersList::orderExecuter()
 {
   unsigned listLength = orders.size();
   if (listLength == 0){
-    cout << "As order list is empty won't execute an order." << endl;
+    std::cout << "As order list is empty won't execute an order." << std::endl;
   }
   else
   {
@@ -107,7 +107,7 @@ void OrdersList::orderExecuter()
 
     orders.clear();
 
-    cout << "Completed orders execution." << endl;
+    std::cout << "Completed orders execution." << std::endl;
   }
 }
 
@@ -126,7 +126,7 @@ OrdersList &OrdersList::operator=(const OrdersList &copyList)
   for (int o = 0; o < initialListLength; o++)
     delete orders[o];
   // Grab memory same size as the right hand side vector
-  orders = vector<Order *>(copyListLength);
+  orders = std::vector<Order *>(copyListLength);
 
   for (int i = 0; i < copyListLength; i++)
     // clone copied element to left hand side
@@ -136,7 +136,7 @@ OrdersList &OrdersList::operator=(const OrdersList &copyList)
 }
 
 // print out the order list
-ostream &operator<<(ostream &stream, const OrdersList &ol)
+std::ostream &operator<<(std::ostream &stream, const OrdersList &ol)
 {
   unsigned listLength = ol.orders.size();
 

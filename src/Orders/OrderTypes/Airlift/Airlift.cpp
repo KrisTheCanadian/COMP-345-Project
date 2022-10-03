@@ -1,22 +1,22 @@
 #include "Airlift.h"
 
-const string Airlift::label = "Airlift";
+const std::string Airlift::label = "Airlift";
 
 Airlift::~Airlift() = default;
 
-string Airlift::getLabel() const { return label; }
+std::string Airlift::getLabel() const { return label; }
 
-ostream &Airlift::orderCout(ostream &output) const { return output << "-> Airlift order."; }
+std::ostream &Airlift::orderCout(std::ostream &output) const { return output << "-> Airlift order."; }
 
 bool Airlift::validate() const
 {
-  cout << "-> Airlift order validation check" << endl;
+  std::cout << "-> Airlift order validation check" << std::endl;
   return true;
 }
 
 void Airlift::execute() const
 {
-  if (validate()) { cout << "Airlift execution." << endl; }
+  if (validate()) { std::cout << "Airlift execution." << std::endl; }
 }
 
 Order *Airlift::clone() const { return new Airlift(*this); }
