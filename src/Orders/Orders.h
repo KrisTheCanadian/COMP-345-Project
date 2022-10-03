@@ -32,16 +32,16 @@ private:
   virtual ostream &orderCout(ostream &) const = 0;
 
   friend ostream &operator<<(ostream &, const Order &);
-  friend class ordersList;
+  friend class OrdersList;
 };
 
-class deploy : public Order
+class Deploy : public Order
 {
 public:
   string getLabel() const override;
   bool validate() const override;
   void execute() const override;
-  ~deploy();
+  ~Deploy();
 
 private:
   const static string label;
@@ -49,13 +49,13 @@ private:
   ostream &orderCout(ostream &) const override;
 };
 
-class advance : public Order
+class Advance : public Order
 {
 public:
   string getLabel() const override;
   bool validate() const override;
   void execute() const override;
-  ~advance();
+  ~Advance();
 
 private:
   const static string label;
@@ -63,13 +63,13 @@ private:
   ostream &orderCout(ostream &) const override;
 };
 
-class bomb : public Order
+class Bomb : public Order
 {
 public:
   string getLabel() const override;
   bool validate() const override;
   void execute() const override;
-  ~bomb();
+  ~Bomb();
 
 private:
   const static string label;
@@ -77,13 +77,13 @@ private:
   ostream &orderCout(ostream &) const override;
 };
 
-class blockade : public Order
+class Blockade : public Order
 {
 public:
   string getLabel() const override;
   bool validate() const override;
   void execute() const override;
-  ~blockade();
+  ~Blockade();
 
 private:
   const static string label;
@@ -91,13 +91,13 @@ private:
   ostream &orderCout(ostream &) const override;
 };
 
-class airlift : public Order
+class Airlift : public Order
 {
 public:
   string getLabel() const override;
   bool validate() const override;
   void execute() const override;
-  ~airlift();
+  ~Airlift();
 
 private:
   const static string label;
@@ -105,13 +105,13 @@ private:
   ostream &orderCout(ostream &) const override;
 };
 
-class negotiate : public Order
+class Negotiate : public Order
 {
 public:
   string getLabel() const override;
   bool validate() const override;
   void execute() const override;
-  ~negotiate();
+  ~Negotiate();
 
 private:
   const static string label;
@@ -120,19 +120,19 @@ private:
 };
 
 // Initially would use user cin to allocated type and create an order
-class userInputOrder
+class UserInputOrder
 {
 public:
   Order *create(string) const;
 };
 
-class ordersList
+class OrdersList
 {
 public:
-  ordersList();
-  ~ordersList();
-  ordersList(const ordersList &);
-  ordersList &operator=(const ordersList &);
+  OrdersList();
+  ~OrdersList();
+  OrdersList(const OrdersList &);
+  OrdersList &operator=(const OrdersList &);
 
   void add(Order *o);
   void remove(int);
@@ -144,5 +144,5 @@ public:
 private:
   vector<Order *> orders;
 
-  friend ostream &operator<<(ostream &, const ordersList &);
+  friend ostream &operator<<(ostream &, const OrdersList &);
 };

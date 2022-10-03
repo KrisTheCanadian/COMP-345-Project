@@ -1,16 +1,16 @@
 #include "Orders.h"
 
-const string deploy::label = "Deploy";
-const string advance::label = "Advance";
-const string bomb::label = "Bomb";
-const string blockade::label = "Blockade";
-const string airlift::label = "Airlift";
-const string negotiate::label = "Negotiate";
+const string Deploy::label = "Deploy";
+const string Advance::label = "Advance";
+const string Bomb::label = "Bomb";
+const string Blockade::label = "Blockade";
+const string Airlift::label = "Airlift";
+const string Negotiate::label = "Negotiate";
 
 // Default constructor
-ordersList::ordersList() {}
+OrdersList::OrdersList() {}
 
-ordersList::~ordersList()
+OrdersList::~OrdersList()
 {
 
   int listLength = orders.size();
@@ -20,7 +20,7 @@ ordersList::~ordersList()
 }
 
 // Copy constructor to make deep copy of the order list
-ordersList::ordersList(const ordersList &oldList)
+OrdersList::OrdersList(const OrdersList &oldList)
 {
   int listLength = oldList.orders.size();
   orders = vector<Order *>(listLength);
@@ -32,17 +32,17 @@ ordersList::ordersList(const ordersList &oldList)
 
 // different order destructors
 Order::~Order() {}
-deploy::~deploy() {}
-advance::~advance() {}
-bomb::~bomb() {}
-blockade::~blockade() {}
-airlift::~airlift() {}
-negotiate::~negotiate() {}
+Deploy::~Deploy() {}
+Advance::~Advance() {}
+Bomb::~Bomb() {}
+Blockade::~Blockade() {}
+Airlift::~Airlift() {}
+Negotiate::~Negotiate() {}
 
 // Method adding order to the order list vector
-void ordersList::add(Order *o)
+void OrdersList::add(Order *o)
 {
-  // grabbing nullptr from userInputOrder
+  // grabbing nullptr from UserInputOrder
   if (o == nullptr)
     cout << "Can't add the order as o is a null pointer." << endl;
   else
@@ -54,7 +54,7 @@ void ordersList::add(Order *o)
 }
 
 // method that removes an order
-void ordersList::remove(int pos)
+void OrdersList::remove(int pos)
 {
   int listLength = orders.size();
   // as listLength is 0 the list is empty no need to remove an order
@@ -69,13 +69,13 @@ void ordersList::remove(int pos)
     delete orders[pos - 1];
     // when the memory is deleted need to remove the pointer from the list as well to avoid memory leak
     orders.erase(orders.begin() + pos - 1);
-    cout << "Requested order was deleted at " << pos << " Updated List: \n"
+    cout << "Requested order was deleted at " << pos << ", Updated List: \n"
          << *this << endl;
   }
 }
 
 // method moving the orders positions
-void ordersList::move(int pos1, int pos2)
+void OrdersList::move(int pos1, int pos2)
 {
   // checks number of orders in order list to make sure the move is valid
   int listLength = orders.size();
@@ -93,13 +93,13 @@ void ordersList::move(int pos1, int pos2)
     Order *temp = orders[pos1 - 1];
     orders[pos1 - 1] = orders[pos2 - 1];
     orders[pos2 - 1] = temp;
-    cout << "Two order " << pos1 << " & " << pos2 << " have been moved and replace eachother, updated list \n"
+    cout << "Two order " << pos1 << " & " << pos2 << " have been moved and replace eachother, Updated list \n"
          << *this << endl;
   }
 }
 
 // order executer method
-void ordersList::orderExecuter()
+void OrdersList::orderExecuter()
 {
   int listLength = orders.size();
   if (listLength == 0)
@@ -119,8 +119,8 @@ void ordersList::orderExecuter()
   }
 }
 
-// ordersList class assignment operator
-ordersList &ordersList::operator=(const ordersList &copyList)
+// OrdersList class assignment operator
+OrdersList &OrdersList::operator=(const OrdersList &copyList)
 {
   // let go of left hand side memory and deep copy to right hand side
   // checks if we're self assigning
@@ -143,7 +143,7 @@ ordersList &ordersList::operator=(const ordersList &copyList)
 }
 
 // print out the order list
-ostream &operator<<(ostream &stream, const ordersList &ol)
+ostream &operator<<(ostream &stream, const OrdersList &ol)
 {
   int listLength = ol.orders.size();
 
@@ -156,88 +156,88 @@ ostream &operator<<(ostream &stream, const ordersList &ol)
 }
 
 // returning names of each order
-string deploy::getLabel() const { return label; }
-string advance::getLabel() const { return label; }
-string bomb::getLabel() const { return label; }
-string blockade::getLabel() const { return label; }
-string airlift::getLabel() const { return label; }
-string negotiate::getLabel() const { return label; }
+string Deploy::getLabel() const { return label; }
+string Advance::getLabel() const { return label; }
+string Bomb::getLabel() const { return label; }
+string Blockade::getLabel() const { return label; }
+string Airlift::getLabel() const { return label; }
+string Negotiate::getLabel() const { return label; }
 
 // Polymorphism use of orderCout to cout paramters on each order
 ostream &operator<<(ostream &stream, const Order &o) { return o.orderCout(stream); }
 
 // Just a place holder, should be populated by accurate data for assignments 2 and 3.
-ostream &deploy::orderCout(ostream &output) const { return output << "-> Deploy order."; }
-ostream &advance::orderCout(ostream &output) const { return output << "-> Advance order."; }
-ostream &bomb::orderCout(ostream &output) const { return output << "-> Bomb order."; }
-ostream &blockade::orderCout(ostream &output) const { return output << "-> Blockade order."; }
-ostream &airlift::orderCout(ostream &output) const { return output << "-> Airlift order."; }
-ostream &negotiate::orderCout(ostream &output) const { return output << "-> Negotiate order."; }
+ostream &Deploy::orderCout(ostream &output) const { return output << "-> Deploy order."; }
+ostream &Advance::orderCout(ostream &output) const { return output << "-> Advance order."; }
+ostream &Bomb::orderCout(ostream &output) const { return output << "-> Bomb order."; }
+ostream &Blockade::orderCout(ostream &output) const { return output << "-> Blockade order."; }
+ostream &Airlift::orderCout(ostream &output) const { return output << "-> Airlift order."; }
+ostream &Negotiate::orderCout(ostream &output) const { return output << "-> Negotiate order."; }
 
 // Just a place holder, should check order validation accuracy for assignments 2 and 3.
-bool deploy::validate() const
+bool Deploy::validate() const
 {
   cout << "-> Deploy order validation check" << endl;
   return true;
 }
 
-bool advance::validate() const
+bool Advance::validate() const
 {
   cout << "-> Advance order validation check" << endl;
   return true;
 }
 
-bool bomb::validate() const
+bool Bomb::validate() const
 {
   cout << "-> Bomb order validation check" << endl;
   return true;
 }
 
-bool blockade::validate() const
+bool Blockade::validate() const
 {
   cout << "-> Blockade order validation check" << endl;
   return true;
 }
 
-bool airlift::validate() const
+bool Airlift::validate() const
 {
   cout << "-> Airlift order validation check" << endl;
   return true;
 }
 
-bool negotiate::validate() const
+bool Negotiate::validate() const
 {
   cout << "-> Negotiate order validation check" << endl;
   return true;
 }
 
 // Just a place holder, will execute order after validation check for assignments 2 and 3.
-void deploy::execute() const
+void Deploy::execute() const
 {
   if (validate())
     cout << "Deploy execution." << endl;
 }
-void advance::execute() const
+void Advance::execute() const
 {
   if (validate())
     cout << "Advance execution." << endl;
 }
-void bomb::execute() const
+void Bomb::execute() const
 {
   if (validate())
     cout << "Bomb execution." << endl;
 }
-void blockade::execute() const
+void Blockade::execute() const
 {
   if (validate())
     cout << "Blockade execution." << endl;
 }
-void airlift::execute() const
+void Airlift::execute() const
 {
   if (validate())
     cout << "Airlift execution." << endl;
 }
-void negotiate::execute() const
+void Negotiate::execute() const
 {
   if (validate())
     cout << "Negotiate execution." << endl;
@@ -247,30 +247,30 @@ void negotiate::execute() const
 // the default copy constructor can be used in addition
 // to the pointers list pointing to our abstract class to clone order objects
 // in the order list using polymorphism.
-Order *deploy::clone() const { return new deploy(*this); }
-Order *advance::clone() const { return new advance(*this); }
-Order *bomb::clone() const { return new bomb(*this); }
-Order *blockade::clone() const { return new blockade(*this); }
-Order *airlift::clone() const { return new airlift(*this); }
-Order *negotiate::clone() const { return new negotiate(*this); }
+Order *Deploy::clone() const { return new Deploy(*this); }
+Order *Advance::clone() const { return new Advance(*this); }
+Order *Bomb::clone() const { return new Bomb(*this); }
+Order *Blockade::clone() const { return new Blockade(*this); }
+Order *Airlift::clone() const { return new Airlift(*this); }
+Order *Negotiate::clone() const { return new Negotiate(*this); }
 
 // Here depnding on the player's cin we create an order.
 // If player cins an invalid string a null pointer is returned and
-// handled through ordersList::addOrder()
-Order *userInputOrder::create(string orderType) const
+// handled through OrdersList::addOrder()
+Order *UserInputOrder::create(string orderType) const
 {
-  if (orderType == "deploy")
-    return new deploy;
-  else if (orderType == "advance")
-    return new advance;
-  else if (orderType == "bomb")
-    return new bomb;
-  else if (orderType == "blockade")
-    return new blockade;
-  else if (orderType == "airlift")
-    return new airlift;
-  else if (orderType == "negotiate")
-    return new negotiate;
+  if (orderType == "Deploy")
+    return new Deploy;
+  else if (orderType == "Advance")
+    return new Advance;
+  else if (orderType == "Bomb")
+    return new Bomb;
+  else if (orderType == "Blockade")
+    return new Blockade;
+  else if (orderType == "Airlift")
+    return new Airlift;
+  else if (orderType == "Negotiate")
+    return new Negotiate;
   else
     return nullptr;
 }

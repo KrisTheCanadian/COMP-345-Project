@@ -3,15 +3,15 @@
 
 void testOrdersLists()
 {
-  ordersList list;
-  userInputOrder userinputorder;
+  OrdersList list;
+  UserInputOrder UserInputOrder;
   cout << "-> Order Addition" << endl;
-  list.add(userinputorder.create("deploy"));
-  list.add(userinputorder.create("advance"));
-  list.add(userinputorder.create("bomb"));
-  list.add(userinputorder.create("blockade"));
-  list.add(userinputorder.create("airlift"));
-  list.add(userinputorder.create("negotiate"));
+  list.add(UserInputOrder.create("Deploy"));
+  list.add(UserInputOrder.create("Advance"));
+  list.add(UserInputOrder.create("Bomb"));
+  list.add(UserInputOrder.create("Blockade"));
+  list.add(UserInputOrder.create("Airlift"));
+  list.add(UserInputOrder.create("Negotiate"));
 
   cout << "-> Move 4 with 2" << endl;
   list.move(4, 2);
