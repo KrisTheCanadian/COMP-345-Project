@@ -7,16 +7,7 @@
 
 // iomanip library required for setfill and setw to manipulate the output
 #include <iomanip>
-
-using std::cout;
-using std::endl;
-using std::left;
-using std::ostream;
-using std::string;
-using std::vector;
-
-using std::setfill;
-using std::setw;
+using namespace std;
 
 // Abstract Order class data members and methods to be implemented by derived classes
 class Order
