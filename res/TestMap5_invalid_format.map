@@ -1,0 +1,16 @@
+[Map]
+author=Kris
+image=Test.bmp
+wrap=yes
+scroll=horizontal
+warn=yes
+
+[Territories]
+a,0,0,One,b
+b,1,1,Two,a,c
+c,2,2,Two,a,b,d
+d,3,3,Two,b,c
+
+[Continents]
+One=1
+Two=2

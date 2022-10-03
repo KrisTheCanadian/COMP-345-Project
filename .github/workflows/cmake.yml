@@ -31,6 +31,6 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}/build
-      # Running the generated test runner
-      run: ./testRunner
+      # Running CTests
+      run: ctest -j -V
       

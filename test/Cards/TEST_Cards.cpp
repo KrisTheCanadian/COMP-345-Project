@@ -1,10 +1,12 @@
 #include <gtest/gtest.h>
-#include "../src/headers/Example.hpp"
+#include <gmock/gmock.h>
 
-TEST(TestSuiteSample, TestSample)
+TEST(PlayerTestSuite, SampleTest)
 {
-  EXPECT_EQ(sum(5, 2), 7);
-  EXPECT_EQ(sum(0, 1), 1);
+  // arrange
+  // act
+  // assert
+  EXPECT_TRUE(true);
 }
 
 int main(int argc, char **argv)
