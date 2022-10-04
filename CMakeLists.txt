@@ -86,7 +86,8 @@ set(ORDER_SRCS
     src/Orders/OrderTypes/Negotiate/Negotiate.cpp
     Drivers/OrdersDriver.cpp
     Drivers/OrdersDriver.h
-    src/Orders/UserInputOrder/UserInputOrder.cpp src/Orders/UserInputOrder/UserInputOrder.h)
+    src/Orders/UserInputOrder/UserInputOrder.cpp
+    src/Orders/UserInputOrder/UserInputOrder.h)
 add_library(Orders STATIC ${ORDER_SRCS})
 target_include_directories(Orders PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
@@ -106,14 +107,14 @@ target_include_directories(Orders PUBLIC
 # Cards Library
 # ---------------------------------------------------------
 set(CARDS_SRCS
+    Drivers/CardsDriver.cpp
+    Drivers/CardsDriver.h
     src/Cards/Cards.cpp
     src/Cards/Cards.h
     src/Cards/Deck/Deck.cpp
     src/Cards/Deck/Deck.h
     src/Cards/Hand/Hand.cpp
     src/Cards/Hand/Hand.h
-    Drivers/CardsDriver.cpp
-    Drivers/CardsDriver.h
     )
 add_library(Cards STATIC ${CARDS_SRCS})
 target_include_directories(Cards PUBLIC
@@ -177,7 +178,7 @@ add_test(NAME MapTests COMMAND testRunnerMap)
 # Main
 # ---------------------------------------------------------
 add_executable(mainApp src/main.cpp)
-target_link_libraries(mainApp Map Player Orders Game_Engine)
+target_link_libraries(mainApp Map Player Orders Game_Engine Cards)
 
 # When Res is modified, rerun cmake (to copy new files to binary out)
 file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
