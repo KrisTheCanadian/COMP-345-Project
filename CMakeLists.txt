@@ -106,16 +106,20 @@ target_include_directories(Orders PUBLIC
 # Cards Library
 # ---------------------------------------------------------
 set(CARDS_SRCS
-    src/Cards/Card/Card.cpp
-    src/Cards/Card/Card.h
+    src/Cards/Cards.cpp
+    src/Cards/Cards.h
+    src/Cards/Deck/Deck.cpp
+    src/Cards/Deck/Deck.h
+    src/Cards/Hand/Hand.cpp
+    src/Cards/Hand/Hand.h
     Drivers/CardsDriver.cpp
     Drivers/CardsDriver.h
     )
 add_library(Cards STATIC ${CARDS_SRCS})
 target_include_directories(Cards PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Card
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Deck
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Hand
     ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
     )
 

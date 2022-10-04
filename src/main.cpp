@@ -10,6 +10,7 @@ int main()
   testLoadMaps();
   testGameStates();
   testOrdersLists();
+  testCards();
   return 0;
 }
 

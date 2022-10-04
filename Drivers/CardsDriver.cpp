@@ -1,27 +1,25 @@
-#include "Cards.h"
 #include "CardsDriver.h"
-#include <iostream>
+
 using namespace std;
 
 void testCards() {
-    //Dynamically creating deck obj
-    Deck *deck = new Deck();
-    //Createing a deck of all cards mixed
-    deck->initializeDeck();
+    Deck deck = Deck();
+
+    //Creating a deck of all cards mixed
     
     //creating the hand obj
-    Hand *hand = new Hand(); 
+    Hand hand = Hand();
 
     // Draw deck of cards for players hand
-    deck->draw(hand);
-    deck->draw(hand);
-    deck->draw(hand);
-    deck->draw(hand);
+    deck.draw(hand);
+    deck.draw(hand);
+    deck.draw(hand);
+    deck.draw(hand);
 
-    cout << "-> Cards in player's hand" <<endl;
+    cout << "-> Cards in player's hand" << endl;
 
-    for (int i=0; i < hand->handCards.size(); i++) {
-        cout << hand->handCards[i]->getCardType() <<endl;
+    for (auto & handCard : hand.handCards) {
+        cout << handCard->getCardType() << endl;
     }
 
 
