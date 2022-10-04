@@ -16,5 +16,5 @@ Order *UserInputOrder::create(const std::string& orderType)
   else if (orderType == "Blockade") { return new Blockade; }
   else if (orderType == "Airlift") { return new Airlift; }
   else if (orderType == "Negotiate") { return new Negotiate; }
-  else { return nullptr; }
+  else { throw std::runtime_error("Unexpected OrderType: " + orderType ); }
 }

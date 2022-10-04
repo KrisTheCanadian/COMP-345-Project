@@ -1,11 +1,15 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 #include "Orders.h"
 
 class OrdersList
 {
+private:
+  std::vector<Order *> orders{};
+
 public:
   OrdersList();
   ~OrdersList();
@@ -19,8 +23,8 @@ public:
   // Run user orders and remove them from order list
   void orderExecuter();
 
-private:
-  std::vector<Order *> orders{};
+  std::vector<Order *>* getOrdersList();
 
+private:
   friend std::ostream &operator<<(std::ostream &, const OrdersList &);
 };
