@@ -86,7 +86,7 @@ set(ORDER_SRCS
     src/Orders/OrderTypes/Negotiate/Negotiate.cpp
     Drivers/OrdersDriver.cpp
     Drivers/OrdersDriver.h
-    )
+    src/Orders/UserInputOrder/UserInputOrder.cpp src/Orders/UserInputOrder/UserInputOrder.h)
 add_library(Orders STATIC ${ORDER_SRCS})
 target_include_directories(Orders PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
@@ -98,6 +98,7 @@ target_include_directories(Orders PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Bomb
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Deploy
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Negotiate
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/UserInputOrder
     ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
     )
 
