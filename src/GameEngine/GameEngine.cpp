@@ -35,4 +35,6 @@ std::string GameEngine::getCurrentStateToString() {
     case GE_Win:
       return "Win";
   }
+
+  throw std::runtime_error("Invalid State");
 }

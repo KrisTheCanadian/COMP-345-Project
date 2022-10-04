@@ -2,6 +2,10 @@
 
 #include "Cards.h"
 
+#include <vector>
+
+class Cards;
+
 class Hand
 {
 public:
@@ -12,7 +16,7 @@ public:
   //hand copy constructor
   Hand(const Hand &initial);
   //cards pointer vector
-  vector<Cards *> handCards;
+  std::vector<Cards *> handCards{};
   void setPlayerID(int playerId);
   int getPlayerID() const;
 private:

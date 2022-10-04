@@ -1,5 +1,7 @@
 #pragma once
+
 #include <string>
+#include <stdexcept>
 
 enum GameEngineState {
   GE_Start = 0,
