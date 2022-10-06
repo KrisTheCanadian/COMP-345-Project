@@ -20,9 +20,5 @@ public:
   Deck(const Deck &initial);
   //cards pointer vector
   vector<Cards *> deckCards;
-  //deck of cards initializer method
-//  void initializeDeck();
-  //deck of cards shuffler method
-  void shuffleDeck();
 };
 
