@@ -16,7 +16,7 @@ void testLoadMaps() {
   for(auto& p : map_files){
     // load map
     MapLoader loader;
-    std::shared_ptr<Map> map;
+    Map* map;
 
     try {
       map = loader.load(p);

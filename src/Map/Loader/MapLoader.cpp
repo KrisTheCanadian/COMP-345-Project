@@ -1,6 +1,6 @@
 #include "MapLoader.h"
 
-std::shared_ptr<Map> MapLoader::load(const std::string& path)
+Map* MapLoader::load(const std::string& path)
 {
   std::ifstream input_file(path, std::ios::in);
   std::string line;
@@ -26,7 +26,7 @@ std::shared_ptr<Map> MapLoader::load(const std::string& path)
 
   this->state = ReadingState_Idle;
   input_file.close();
-  return std::make_shared<Map>(this->map);
+  return &this->map;
 }
 
 void MapLoader::parse(std::string &line)
@@ -71,7 +71,7 @@ void MapLoader::parse(std::string &line)
         }
         else if (key == "scroll")
         {
-          this->map.setScroll(value == "yes");
+          this->map.setScroll(value == "horizontal");
         }
         else if (key == "warn")
         {
@@ -94,9 +94,9 @@ void MapLoader::parse(std::string &line)
       {
         std::string name = line.substr(0, line.find(delimiter));
         std::string value = line.substr(line.find(delimiter) + 1, line.length());
-        std::shared_ptr<Continent> continent;
-        try{
-          continent = std::make_shared<Continent>(name, std::stoi(value));
+        Continent* continent;
+        try {
+          continent = new Continent(name, std::stoi(value));
         } catch (std::invalid_argument& e){
           throw std::runtime_error("Map Formatting Error: Invalid Continent Bonus.");
         } catch (std::out_of_range& e) {
@@ -117,7 +117,7 @@ void MapLoader::parse(std::string &line)
         // parse territories
         std::string delimiter = ",";
         // Territory
-        std::shared_ptr<Territory> territory = nullptr;
+        Territory* territory = nullptr;
 
         if (line.find(delimiter) != std::string::npos)
         {
@@ -132,7 +132,7 @@ void MapLoader::parse(std::string &line)
           }
           else
           {
-            territory = std::make_shared<Territory>(name);
+            territory = new Territory(name);
           }
         }
 
@@ -188,23 +188,18 @@ void MapLoader::parse(std::string &line)
             // check if territory exists in hashmap
             if (this->territories.find(value) != this->territories.end())
             {
-              if (territory == nullptr)
-              {
-                throw std::runtime_error("Invalid territory: " + value);
-              }
-
               territory->addAdjacentTerritory(territories[value]);
             }
             else
             {
-              std::shared_ptr<Territory> adjacentTerritory;
+              Territory* adjacentTerritory;
               // check inside territories to create
               if(this->territoriesToCreate.find(value) != this->territoriesToCreate.end()){
                 // use previously created
                 adjacentTerritory = territoriesToCreate[value];
               } else {
                 // create new territory
-                adjacentTerritory = std::make_shared<Territory>(value);
+                adjacentTerritory = new Territory(value);
               }
               territory->addAdjacentTerritory(adjacentTerritory);
               // add to territoriesToCreate
@@ -219,3 +214,55 @@ void MapLoader::parse(std::string &line)
 
 
 }
+
+MapLoader::MapLoader(const MapLoader &other) {
+  this->map = other.map;
+  this->state = other.state;
+
+  for(const auto& t : territoriesToCreate){
+    this->territoriesToCreate[t.first] = t.second;
+  }
+
+  for(const auto& t: territories){
+    this->territoriesToCreate[t.first] = t.second;
+  }
+
+  for(const auto& c : continents){
+    this->continents[c.first] = c.second;
+  }
+}
+
+MapLoader &MapLoader::operator=(const MapLoader &other) {
+  if(this == &other){
+    return *this;
+  }
+
+  this->map = other.map;
+  this->territoriesToCreate = other.territoriesToCreate;
+  this->state = other.state;
+  this->continents = other.continents;
+  this->territories = other.territories;
+  return *this;
+}
+
+std::ostream &operator<<(std::ostream &stream, const MapLoader &other) {
+  stream << "Maploader State: " << MapLoader::stateToString(other.state) << '\n';
+  return stream;
+}
+
+std::string MapLoader::stateToString(MapLoader::ReadingState state) {
+  switch (state) {
+    case ReadingState_Idle:
+      return "Idle";
+    case ReadingState_Map:
+      return "Reading Map";
+    case ReadingState_Continents:
+      return "Reading Continents";
+    case ReadingState_Territories:
+      return "Reading Territories";
+    default:
+      return "Invalid State";
+  }
+}
+
+MapLoader::MapLoader() = default;

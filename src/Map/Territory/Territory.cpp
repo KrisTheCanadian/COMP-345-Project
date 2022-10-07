@@ -1,11 +1,12 @@
 #include "Territory.h"
 
-Territory::Territory(std::string name)
-{
-  this->name = std::move(name);
-}
+#include <utility>
 
-void Territory::addAdjacentTerritory(const std::shared_ptr<Territory>& territory)
+Territory::Territory(std::string name)
+  : name(std::move(name)), continent(nullptr)
+{}
+
+void Territory::addAdjacentTerritory(Territory* territory)
 {
   this->adjacentTerritories.push_back(territory);
 }
@@ -15,9 +16,9 @@ std::string Territory::getName()
   return this->name;
 }
 
-std::vector<std::shared_ptr<Territory>> Territory::getAdjacentTerritories()
+std::vector<Territory *>* Territory::getAdjacentTerritories()
 {
-  return this->adjacentTerritories;
+  return &this->adjacentTerritories;
 }
 
 int Territory::getX() const
@@ -40,12 +41,34 @@ void Territory::setY(int _y)
   this->y = _y;
 }
 
-std::shared_ptr<Continent> Territory::getContinent()
+Continent* Territory::getContinent()
 {
   return this->continent;
 }
 
-void Territory::setContinent(std::shared_ptr<Continent> c)
+void Territory::setContinent(Continent* c)
 {
-  this->continent = std::move(c);
+  this->continent = c;
+}
+
+// avoid deep copy (due to other territories being only pointers)
+Territory::Territory(const Territory &other)= default;
+
+Territory& Territory::operator=(const Territory &other) {
+  if(this == &other){
+    return *this;
+  }
+
+  this->name = other.name;
+  this->continent = other.continent;
+  this->x = other.x;
+  this->y = other.y;
+  this->adjacentTerritories = other.adjacentTerritories;
+}
+
+std::ostream &operator<<(std::ostream &stream, const Territory &other) {
+  stream << "Territory Name: " << other.name << '\n'
+  << "Territory Coordinates: " << '(' << other.x << ", " << other.y << ')' << '\n'
+  << "Territory Continent: " << other.continent << '\n';
+  return stream ;
 }

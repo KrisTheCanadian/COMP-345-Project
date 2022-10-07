@@ -14,51 +14,62 @@ class Map
 {
 
 private:
-    std::string name;
-    std::string image;
-    std::string author;
+  std::string name;
+  std::string image;
+  std::string author;
 
-    bool wrap;
-    bool scroll;
-    bool warn;
+  bool wrap{};
+  bool scroll{};
+  bool warn{};
 
-    std::vector<std::shared_ptr<Territory>> territories;
-    std::vector<std::shared_ptr<Continent>> continents;
+  std::vector<Territory*> territories;
+  std::vector<Continent*> continents;
 
 private:
-    bool isMapStronglyConnected();
-    bool isTerritories1to1Continents();
-    void DFS(const std::shared_ptr<Territory>& territory, std::vector<std::shared_ptr<Territory>> &visited);
-    bool isTerritoryStronglyConnected(const std::shared_ptr<Territory>& territory);
+  bool isMapStronglyConnected();
+  bool isTerritories1to1Continents();
+  void DFS(Territory* territory, std::vector<Territory*>& visited);
+  bool isTerritoryStronglyConnected(Territory* territory);
 
 public:
-    bool validate();
+  // --------------------------------------------------
+  // Destructors + Constructors + Operator Overloads
+  // --------------------------------------------------
+  Map();
+  ~Map();
+  bool validate();
 
-    // --------------------------------------------------
-    // map adders
-    // --------------------------------------------------
-    void addContinent(const std::shared_ptr<Continent> &continent);
-    void addTerritory(const std::shared_ptr<Territory> &territory);
+  Map(const Map &other);
+  Map& operator=(const Map& other);
 
-    // --------------------------------------------------
-    // setters
-    // --------------------------------------------------
-    void setName(std::string _name);
-    void setImage(std::string _image);
-    void setAuthor(std::string author);
-    void setWrap(bool wrap);
-    void setScroll(bool scroll);
-    void setWarn(bool warn);
+  // --------------------------------------------------
+  // map adders
+  // --------------------------------------------------
+  void addContinent(Continent* continent);
+  void addTerritory(Territory* territory);
 
-    // --------------------------------------------------
-    // getters
-    // --------------------------------------------------
-    std::string getName();
-    std::string getImage();
-    std::string getAuthor();
-    bool getWrap() const;
-    bool getScroll() const;
-    bool getWarn() const;
-    std::vector<std::shared_ptr<Territory>> getTerritories();
-    std::vector<std::shared_ptr<Continent>> getContinents();
+  // --------------------------------------------------
+  // setters
+  // --------------------------------------------------
+  void setName(std::string _name);
+  void setImage(std::string _image);
+  void setAuthor(std::string author);
+  void setWrap(bool wrap);
+  void setScroll(bool scroll);
+  void setWarn(bool warn);
+
+  // --------------------------------------------------
+  // getters
+  // --------------------------------------------------
+  std::string getName();
+  std::string getImage();
+  std::string getAuthor();
+  bool getWrap() const;
+  bool getScroll() const;
+  bool getWarn() const;
+  std::vector<Territory *> * getTerritories();
+  std::vector<Continent *> * getContinents();
+
+public:
+  friend std::ostream& operator<<(std::ostream& stream, const Map& other);
 };

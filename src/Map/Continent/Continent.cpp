@@ -6,7 +6,7 @@ Continent::Continent(std::string name, int bonus)
   this->bonus = bonus;
 }
 
-void Continent::addTerritory(const std::shared_ptr<Territory>& territory)
+void Continent::addTerritory(Territory* territory)
 {
   this->territories.push_back(territory);
 }
@@ -21,7 +21,29 @@ int Continent::getBonus() const
   return this->bonus;
 }
 
-std::vector<std::shared_ptr<Territory>> Continent::getTerritories()
+std::vector<Territory*>* Continent::getTerritories()
 {
-  return this->territories;
+  return &this->territories;
 }
+
+std::ostream &operator<<(std::ostream &stream, const Continent &other) {
+  stream << "Continent Name: " << other.name << '\n'
+  << "Continent Bonus: " << other.bonus << '\n';
+
+  stream << "Continent Territories: " << '\n';
+  for(auto t: other.territories){
+    stream << *t << '\n';
+  }
+  return stream;
+}
+
+Continent &Continent::operator=(const Continent &other) {
+  this->name = other.name;
+  this->bonus = other.bonus;
+  this->territories = other.territories;
+}
+
+Continent::Continent(const Continent &other) = default;
+
+
+
