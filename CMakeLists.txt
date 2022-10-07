@@ -90,7 +90,8 @@ set(ORDER_SRCS
     src/Orders/OrderTypes/Negotiate/Negotiate.cpp
     Drivers/OrdersDriver.cpp
     Drivers/OrdersDriver.h
-    src/Orders/UserInputOrder/UserInputOrder.cpp src/Orders/UserInputOrder/UserInputOrder.h)
+    src/Orders/UserInputOrder/UserInputOrder.cpp
+    src/Orders/UserInputOrder/UserInputOrder.h)
 add_library(Orders STATIC ${ORDER_SRCS})
 target_include_directories(Orders PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
@@ -114,7 +115,8 @@ set(CARDS_SRCS
     src/Cards/Card/Card.h
     Drivers/CardsDriver.cpp
     Drivers/CardsDriver.h
-        src/Cards/Hand/Hand.cpp src/Cards/Hand/Hand.h)
+    src/Cards/Hand/Hand.cpp
+    src/Cards/Hand/Hand.h)
 add_library(Cards STATIC ${CARDS_SRCS})
 target_include_directories(Cards PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards
