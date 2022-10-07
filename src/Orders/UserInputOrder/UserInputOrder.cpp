@@ -4,6 +4,7 @@
 #include "Bomb.h"
 #include "Blockade.h"
 #include "Airlift.h"
+#include "Negotiate.h"
 
 // Here depnding on the player's cin we create an order.
 // If player cins an invalid string a null pointer is returned and
