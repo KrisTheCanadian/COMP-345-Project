@@ -97,10 +97,10 @@ OrdersList &OrdersList::operator=(const OrdersList &copyList)
   unsigned copyListLength = copyList.orders.size();
 
   for (int o = 0; o < initialListLength; o++) { delete orders[o]; }
-  {
-    // Grab memory same size as the right hand side vector
-    orders = std::vector<Order *>(copyListLength);
-  }
+
+  // Grab memory same size as the right hand side vector
+  orders = std::vector<Order *>(copyListLength);
+
 
   for (int i = 0; i < copyListLength; i++) {
     // clone copied element to left hand side

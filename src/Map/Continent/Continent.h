@@ -2,7 +2,6 @@
 
 #include <string>
 #include <vector>
-#include <memory>
 #include <utility>
 
 #include "Territory.h"
@@ -14,12 +13,19 @@ class Continent
 private:
   std::string name;
   int bonus;
-  std::vector<std::shared_ptr<Territory>> territories;
+  std::vector<Territory*> territories;
 
 public:
   Continent(std::string name, int bonus);
-  void addTerritory(const std::shared_ptr<Territory>& territory);
+
+  Continent(const Continent& other);
+  Continent& operator=(const Continent& other);
+
+  void addTerritory(Territory* territory);
   std::string getName();
   int getBonus() const;
-  std::vector<std::shared_ptr<Territory>> getTerritories();
+  std::vector<Territory *> * getTerritories();
+
+public:
+  friend std::ostream& operator<<(std::ostream& stream, const Continent& other);
 };

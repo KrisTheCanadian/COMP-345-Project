@@ -1,11 +1,11 @@
 #include "Player.h"
 
-std::vector<std::shared_ptr<Territory>> Player::toDefend() {
+std::vector<Territory*> Player::toDefend() {
   // TODO
   return {};
 }
 
-std::vector<std::shared_ptr<Territory>> Player::toAttack() {
+std::vector<Territory*> Player::toAttack() {
   // TODO
   return {};
 }

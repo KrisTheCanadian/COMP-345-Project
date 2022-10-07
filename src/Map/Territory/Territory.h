@@ -2,7 +2,6 @@
 
 #include <string>
 #include <vector>
-#include <memory>
 #include <fstream>
 #include <utility>
 
@@ -11,18 +10,18 @@ class Continent;
 class Territory
 {
 private:
-    std::shared_ptr<Continent> continent;
+    Continent* continent;
     std::string name;
-    std::vector<std::shared_ptr<Territory>> adjacentTerritories;
+    std::vector<Territory*> adjacentTerritories;
     int x = -1;
     int y = -1;
 
 public:
     explicit Territory(std::string name);
-    void addAdjacentTerritory(const std::shared_ptr<Territory>& territory);
+    void addAdjacentTerritory(Territory* territory);
 
     std::string getName();
-    std::vector<std::shared_ptr<Territory>> getAdjacentTerritories();
+    std::vector<Territory *>* getAdjacentTerritories();
 
     int getX() const;
     int getY() const;
@@ -30,6 +29,12 @@ public:
     void setX(int x);
     void setY(int y);
 
-    std::shared_ptr<Continent> getContinent();
-    void setContinent(std::shared_ptr<Continent> c);
+    Continent* getContinent();
+    void setContinent(Continent* c);
+
+    Territory(const Territory &other);
+    Territory& operator=(const Territory& other);
+
+public:
+    friend std::ostream& operator<<(std::ostream& stream, const Territory& other);
 };
