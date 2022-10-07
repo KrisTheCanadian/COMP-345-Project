@@ -4,8 +4,6 @@
 #include <vector>
 #include <utility>
 
-#include "Territory.h"
-
 class Territory;
 
 class Continent
