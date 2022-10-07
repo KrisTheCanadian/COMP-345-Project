@@ -1,33 +1,47 @@
 #include "Cards.h"
 
+
 using namespace std;
 
-//Default constructor
-Cards::Cards()
-{
-    cardType = "";
-}
-
 //Card constructor with a type parameter
-Cards::Cards(string& type) {
-    cardType = type;
-}
+Card::Card(CardType& type)
+: cardType(type)
+{}
 
 //Copy constructor
-Cards::Cards(const Cards &initial)
+Card::Card(const Card &initial)
 {
     cardType = initial.cardType;
 }
 
-void Cards::setCardType(string& type)
+void Card::setCardType(CardType& type)
 {
     cardType = type;
 }
 
-string* Cards::getCardType()
+CardType* Card::getCardType()
 {
     return &cardType;
 }
 
-//Destructor
-Cards::~Cards() = default;
+void Card::play() {
+  
+}
+
+std::string Card::CardTypeToString(CardType& c) {
+  switch (c) {
+    case CT_Bomb:
+      return "Bomb";
+    case CT_Reinforcement:
+      return "CT_Reinforcement";
+    case CT_Blockade:
+      return "Blockade";
+    case CT_Airlift:
+      return "Airlift";
+    case CT_Diplomacy:
+      return "Diplomacy";
+  }
+}
+
+// Destructor
+Card::~Card() = default;

@@ -16,7 +16,7 @@ Deck::~Deck()
 Deck::Deck(const Deck &initial)
 {
   for (auto &&temp : initial.deckCards) {
-    deckCards.push_back(new Cards(*temp));
+    deckCards.push_back(new Card(*temp));
   }
 }
 
@@ -27,36 +27,34 @@ void Deck::draw(Hand& currentHand)
   {
     throw std::runtime_error("The deck is currently empty.");
   }
-  else
-  {
-    //add last deck card to user's hand
-    currentHand.handCards.push_back(deckCards.back());
-    //removes card from the deck of cards after it has been drawn for hand
-    deckCards.pop_back();
-  }
-  
+  Card* c = removeCardRandom();
+  currentHand.addToHand(c);
 }
-
-////initialize the deck of cards
-//void Deck::initializeDeck()
-//{
-//  vector<string> cardTypes = {"Bomb", "Reinforcement", "Blockade", "Airlift", "Diplomacy"};
-//
-//  for (auto & cardType : cardTypes)
-//  {
-//    auto *card = new Cards();
-//    card->setCardType(cardType);
-//    for(const auto& c : cardTypes){
-//      deckCards.push_back(c);
-//    }
-//  }
-//  //shuffle the cards
-//  shuffleDeck();
-//}
 
 //method shuffling the deck of cards
 void Deck::shuffleDeck()
 {
   mt19937 rng(chrono::high_resolution_clock::now().time_since_epoch().count());
   shuffle(std::begin(deckCards), std::end(deckCards), rng);
+}
+
+void Deck::addCardToDeck(Card* card) {
+  deckCards.push_back(card);
+}
+
+Card *Deck::removeCardRandom() {
+  // randomly get a card from the deck
+  std::random_device dev;
+  std::mt19937 rng(dev());
+  std::uniform_int_distribution<std::mt19937::result_type> range_deck(0,deckCards.size() - 1);
+  int index = (int)range_deck(rng);
+
+  Card* c = deckCards.at(index);
+  // remove the card ptr from the deck
+  deckCards.erase(deckCards.begin() + index);
+  return c;
+}
+
+std::vector<Card *> *Deck::getDeckCards() {
+  return &this->deckCards;
 };

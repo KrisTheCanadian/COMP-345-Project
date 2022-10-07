@@ -8,6 +8,10 @@
 
 class Deck
 {
+private:
+  //cards pointer vector
+  vector<Card *> deckCards;
+
 public:
   //default constructor
   Deck();
@@ -17,11 +21,15 @@ public:
   void draw(Hand& currentHand);
   //deck copy constructor
   Deck(const Deck &initial);
-  //cards pointer vector
-  vector<Cards *> deckCards;
-  //deck of cards initializer method
-  void initializeDeck();
   //deck of cards shuffler method
   void shuffleDeck();
+  // get deck cards
+  std::vector<Card *> * getDeckCards();
+  // add card to deck
+  void addCardToDeck(Card* card);
+
+private:
+  // removes card from deck at random
+  Card* removeCardRandom();
 };
 

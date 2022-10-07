@@ -16,7 +16,7 @@ void testCards() {
     deck.draw(hand);
     deck.draw(hand);
 
-    cout << "-> Cards in player's hand" << endl;
+    cout << "-> Card in player's hand" << endl;
 
     for (auto & handCard : hand.handCards) {
         cout << handCard->getCardType() << endl;

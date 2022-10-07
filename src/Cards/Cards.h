@@ -8,21 +8,31 @@ using namespace std;
 
 class Map; class Hand; class Deck;
 
-class Cards
+enum CardType {
+  CT_Bomb = 0,
+  CT_Reinforcement,
+  CT_Blockade,
+  CT_Airlift,
+  CT_Diplomacy
+};
+
+class Card
 {
 private:
 //type of each card
-string cardType;
+CardType cardType;
 
 public:
-//default constructor
-Cards();
+// play
+void play();
 //constructor
-explicit Cards(string& type);
+explicit Card(CardType& type);
 //destruct
-~Cards();
-void setCardType(string& type);
-string* getCardType();
+~Card();
+void setCardType(CardType& type);
+CardType* getCardType();
 //cards copy constructor
-Cards(const Cards &initial);
+Card(const Card &initial);
+
+static std::string CardTypeToString(CardType& c);
 };

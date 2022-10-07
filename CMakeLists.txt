@@ -104,7 +104,7 @@ target_include_directories(Orders PUBLIC
     )
 
 # ---------------------------------------------------------
-# Cards Library
+# Card Library
 # ---------------------------------------------------------
 set(CARDS_SRCS
     Drivers/CardsDriver.cpp
@@ -147,7 +147,7 @@ target_link_libraries(testRunnerGameEngine gtest_main gmock_main Game_Engine)
 add_test(NAME GameEngineTests COMMAND testRunnerGameEngine)
 
 # ---------------------------------------------------------
-# Cards Test
+# Card Test
 # ---------------------------------------------------------
 add_executable(testRunnerCards test/Cards/TEST_Cards.cpp)
 target_link_libraries(testRunnerCards gtest_main gmock_main Cards)
