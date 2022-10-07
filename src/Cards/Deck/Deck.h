@@ -3,14 +3,17 @@
 #include <iostream>
 #include <random>
 #include <chrono>
-#include "Cards.h"
+#include <vector>
+
 #include "Hand.h"
+
+class Card;
 
 class Deck
 {
 private:
   //hand pointer vector
-  vector<Card *> deckCards;
+  std::vector<Card *> deckCards;
 
 public:
   //default constructor

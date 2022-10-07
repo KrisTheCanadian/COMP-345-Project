@@ -1,18 +1,19 @@
 #pragma once
 
 #include "OrdersList.h"
-#include "Hand.h"
 #include "Territory.h"
 #include "Deck.h"
-#include "Orders.h"
 #include "Bomb.h"
 #include "Blockade.h"
 #include "Airlift.h"
 #include "Negotiate.h"
+#include "Cards.h"
 
 #include <vector>
 
 class Order;
+class Deck;
+class Hand;
 
 class Player {
 private:

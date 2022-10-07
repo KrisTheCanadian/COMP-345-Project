@@ -10,7 +10,7 @@ using namespace std;
 
 class Map; class Hand; class Deck;
 
-enum CardType {
+enum CardType: int {
   CT_Bomb = 0,
   CT_Reinforcement,
   CT_Blockade,

@@ -89,8 +89,8 @@ Player &Player::operator=(const Player &other) {
 
 std::ostream &operator<<(std::ostream &out, const Player &player) {
   out << "-------------------" << "\n";
-  for(Territory * t : player.territories){
-    out << t->getName() << "\n";
+  for(auto t : player.territories){
+    out << *t << "\n";
   }
   out << "-------------------" << "\n";
   return out;

@@ -1,5 +1,5 @@
-#include <stdexcept>
 #include "Hand.h"
+
 
 //Default constructor
 Hand::Hand()= default;

@@ -32,15 +32,20 @@ std::ostream &operator<<(std::ostream &stream, const Continent &other) {
 
   stream << "Continent Territories: " << '\n';
   for(auto t: other.territories){
-    stream << *t << '\n';
+    stream << (*t) << '\n';
   }
   return stream;
 }
 
 Continent &Continent::operator=(const Continent &other) {
+  if(&other == this){
+    return *this;
+  }
   this->name = other.name;
   this->bonus = other.bonus;
   this->territories = other.territories;
+
+  return *this;
 }
 
 Continent::Continent(const Continent &other) = default;

@@ -1,8 +1,7 @@
-#include "Player.h"
-#include <iostream>
+#include "PlayerDriver.h"
 
 void testPlayers(){
-  Player p = Player();
+  Player p = Player(new Deck(), new Hand());
   Territory t1 = Territory("Territory 1");
   Territory t2 = Territory("Territory 2");
   Territory t3 = Territory("Territory 3");
@@ -15,7 +14,7 @@ void testPlayers(){
 
   std::cout << "All 4: " << std::endl;
 
-  for(auto t: p.getTerritories()){
+  for(auto t: *p.getTerritories()){
     std::cout << t->getName() << std::endl;
   }
 
@@ -23,7 +22,7 @@ void testPlayers(){
 
   std::cout << "After Removing last one: " << std::endl;
 
-  for(auto t: p.getTerritories()){
+  for(auto t: *p.getTerritories()){
     std::cout << t->getName() << std::endl;
   }
 

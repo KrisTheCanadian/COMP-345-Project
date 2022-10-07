@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Cards.h"
-
 #include <vector>
+#include <stdexcept>
 
-class Card;
+class Card; class Player;
+enum CardType : int;
 
 class Hand
 {
