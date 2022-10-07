@@ -62,6 +62,10 @@ add_library(Player STATIC ${PLAYER_SRCS}
 target_include_directories(Player PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Player
     ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Hand
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Territory
     )
 
 # ---------------------------------------------------------
@@ -110,7 +114,7 @@ set(CARDS_SRCS
     src/Cards/Card/Card.h
     Drivers/CardsDriver.cpp
     Drivers/CardsDriver.h
-    )
+        src/Cards/Hand/Hand.cpp src/Cards/Hand/Hand.h)
 add_library(Cards STATIC ${CARDS_SRCS})
 target_include_directories(Cards PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards

@@ -7,8 +7,8 @@
 #include <algorithm>
 #include <unordered_map>
 
-#include "Territory.h"
 #include "Continent.h"
+#include "Territory.h"
 
 class Map
 {
