@@ -1,6 +1,10 @@
 #include "Player.h"
 
-Player::Player() = default;
+Player::Player(Deck* deck, Hand* cards)
+  : deck(deck), hand(cards)
+{
+  orders = OrdersList();
+}
 
 // default copy constructor
 Player::Player(const Player &p) = default;
@@ -26,11 +30,30 @@ std::vector<Territory *> Player::toAttack() {
 }
 
 // Type of order
-void Player::issueOrder(std::string type){
+void Player::issueOrder(const CardType* cardType){
+  // order
+  Order* order = nullptr;
 
-    // given a type of order, create the appropriate order.
-
-  orders->add(&order);
+  switch(*cardType){
+    case CT_Bomb:
+      order = new Bomb();
+      break;
+    case CT_Reinforcement:
+      // TODO: Assignment 2
+      order = nullptr;
+      break;
+    case CT_Blockade:
+      order = new Blockade();
+      break;
+    case CT_Airlift:
+      order = new Airlift();
+      break;
+    case CT_Diplomacy:
+      order = new Negotiate();
+      break;
+  }
+  if(order == nullptr){ return; }
+  orders.add(order);
 }
 
 void Player::addTerritory(Territory& territory) {
@@ -46,16 +69,22 @@ void Player::removeTerritory(Territory& territory) {
   }
 }
 
-std::vector<Territory *> Player::getTerritories() {
-  return territories;
-}
-
-Player::~Player() = default;
+Player::~Player() {
+  for(auto c : *hand->getCards()){
+    delete c;
+  }
+};
 
 Player &Player::operator=(const Player &other) {
-    this->orders = other.orders;
-    this->cards = other.cards;
-    this->territories = other.territories;
+  if(this == &other){
+    return *this;
+  }
+
+  this->deck = other.deck;
+  this->orders = other.orders;
+  this->hand = other.hand;
+  this->territories = other.territories;
+  return *this;
 }
 
 std::ostream &operator<<(std::ostream &out, const Player &player) {
@@ -65,4 +94,24 @@ std::ostream &operator<<(std::ostream &out, const Player &player) {
   }
   out << "-------------------" << "\n";
   return out;
+}
+
+// ----------------------------------------------------------------
+// Getters
+// ----------------------------------------------------------------
+
+std::vector<Territory *>* Player::getTerritories() {
+  return &territories;
+}
+
+Hand *Player::getHand() {
+  return hand;
+}
+
+Deck *Player::getDeck() {
+  return deck;
+}
+
+OrdersList *Player::getOrdersList() {
+  return &orders;
 }

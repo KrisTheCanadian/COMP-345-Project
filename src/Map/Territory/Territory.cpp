@@ -64,6 +64,7 @@ Territory& Territory::operator=(const Territory &other) {
   this->x = other.x;
   this->y = other.y;
   this->adjacentTerritories = other.adjacentTerritories;
+  return *this;
 }
 
 std::ostream &operator<<(std::ostream &stream, const Territory &other) {

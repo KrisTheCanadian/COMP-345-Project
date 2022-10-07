@@ -20,7 +20,32 @@ if(NOT googletest_POPULATED)
     add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 endif()
 
-
+# ---------------------------------------------------------
+# Directories
+# ---------------------------------------------------------
+set(Directories
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Loader
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Continent
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Player
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Hand
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Territory
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Deck
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Advance
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Airlift
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Blockade
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Bomb
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Deploy
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Negotiate
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/UserInputOrder
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/GameEngine
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards
+    )
 
 # ---------------------------------------------------------
 # Map Library
@@ -40,11 +65,7 @@ set(MAP_SRCS
 
 add_library(Map STATIC ${MAP_SRCS})
 target_include_directories(Map PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Loader
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Territory
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Continent
-    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
+    ${Directories}
     )
 
 # ---------------------------------------------------------
@@ -60,12 +81,7 @@ set(PLAYER_SRCS
 add_library(Player STATIC ${PLAYER_SRCS}
     )
 target_include_directories(Player PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Player
-    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Hand
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Territory
+    ${Directories}
     )
 
 # ---------------------------------------------------------
@@ -94,17 +110,7 @@ set(ORDER_SRCS
     src/Orders/UserInputOrder/UserInputOrder.h)
 add_library(Orders STATIC ${ORDER_SRCS})
 target_include_directories(Orders PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Advance
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Airlift
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Blockade
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Bomb
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Deploy
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Negotiate
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/UserInputOrder
-    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
+    ${Directories}
     )
 
 # ---------------------------------------------------------
@@ -126,6 +132,12 @@ target_include_directories(Cards PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Deck
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Hand
     ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Player
+    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Hand
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Territory
     )
 
 # ---------------------------------------------------------

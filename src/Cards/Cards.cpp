@@ -19,13 +19,16 @@ void Card::setCardType(CardType& type)
     cardType = type;
 }
 
-CardType* Card::getCardType()
+CardType Card::getCardType()
 {
-    return &cardType;
+    return cardType;
 }
 
-void Card::play() {
-  
+void Card::play(Deck* deck, Player* player) {
+  player->issueOrder(cardType);
+  Card* card = player->getHand()->removeCard(cardType);
+  if(card == nullptr){ throw std::runtime_error(&"Hand did not contain card type: " [cardType]); }
+  deck->addCardToDeck(card);
 }
 
 std::string Card::CardTypeToString(CardType& c) {

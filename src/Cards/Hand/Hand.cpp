@@ -12,7 +12,6 @@ Hand::Hand(const Hand &initial)
   }
 };
 
-
 //Destruct
 Hand::~Hand()
 {
@@ -48,12 +47,13 @@ void Hand::addToHand(Card *card) {
   handCards.push_back(card);
 }
 
-void Hand::deleteCard(int index) {
-  if (index < 0 || index >= handCards.size()){
-    throw std::invalid_argument("Index out of range.");
+Card* Hand::removeCard(CardType type) {
+  for(int i = 0; i < handCards.size(); i++){
+    if(handCards[i]->getCardType() == type){
+      Card* card = handCards.at(i);
+      handCards.erase(handCards.begin() + i);
+      return card;
+    }
   }
-
-  // delete heap allocated card
-  delete handCards.at(index);
-  handCards.erase(handCards.begin() + index);
+  return nullptr;
 }

@@ -10,7 +10,7 @@ class Hand
 {
 private:
   int playerID = -1;
-  //cards pointer vector
+  //hand pointer vector
   std::vector<Card *> handCards;
 public:
   //default constructor
@@ -28,5 +28,5 @@ public:
   // add to handCards
   void addToHand(Card* card);
   // remove & delete from handCards (once the card is used, it should be deleted)
-  void deleteCard(int index);
+  Card* removeCard(CardType);
 };

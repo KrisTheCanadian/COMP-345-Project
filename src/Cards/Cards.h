@@ -4,6 +4,8 @@
 #include <vector>
 #include <algorithm>
 
+#include "Player.h"
+
 using namespace std;
 
 class Map; class Hand; class Deck;
@@ -24,14 +26,14 @@ CardType cardType;
 
 public:
 // play
-void play();
+void play(Deck* deck, Player* player);
 //constructor
 explicit Card(CardType& type);
 //destruct
 ~Card();
 void setCardType(CardType& type);
-CardType* getCardType();
-//cards copy constructor
+CardType getCardType();
+//hand copy constructor
 Card(const Card &initial);
 
 static std::string CardTypeToString(CardType& c);

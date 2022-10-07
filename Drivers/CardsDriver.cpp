@@ -5,12 +5,12 @@ using namespace std;
 void testCards() {
     Deck deck = Deck();
 
-    //Creating a deck of all cards mixed
+    //Creating a deck of all hand mixed
     
     //creating the hand obj
     Hand hand = Hand();
 
-    // Draw deck of cards for players hand
+    // Draw deck of hand for players hand
     deck.draw(hand);
     deck.draw(hand);
     deck.draw(hand);

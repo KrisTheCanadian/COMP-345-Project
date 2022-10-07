@@ -20,7 +20,7 @@ Deck::Deck(const Deck &initial)
   }
 }
 
-//draw card from the deck of cards
+//draw card from the deck of hand
 void Deck::draw(Hand& currentHand)
 {
   if (deckCards.empty())
@@ -31,7 +31,7 @@ void Deck::draw(Hand& currentHand)
   currentHand.addToHand(c);
 }
 
-//method shuffling the deck of cards
+//method shuffling the deck of hand
 void Deck::shuffleDeck()
 {
   mt19937 rng(chrono::high_resolution_clock::now().time_since_epoch().count());
