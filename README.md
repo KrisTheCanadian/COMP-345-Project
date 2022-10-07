@@ -56,7 +56,8 @@ ctest -v
   </tr>
     <tr>
   <td align="center"><a href="https://github.com/kimdera"><img src="https://avatars.githubusercontent.com/u/39693234?v=4" width="100px;" alt=""/><br /><sub><b>Kim Dera</b></sub></a></td>
-  </tr>
+  <td align="center"><a href="https://github.com/D-Valentina"><img src="https://avatars.githubusercontent.com/u/60553975?v=4" width="100px;" alt=""/><br /><sub><b>Valentina Dobrea</b></sub></a></td>
+</tr>
 </table>
 </div>
 <br>
