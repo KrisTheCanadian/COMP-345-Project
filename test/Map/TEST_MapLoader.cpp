@@ -159,7 +159,7 @@ TEST(MaploaderTestSuite, TestMap5LoadInvalidFormat){
   // arrange
   GameEngine gameEngine = GameEngine();
   auto map = gameEngine.getMap();
-  MapLoader::load("../res/TestMap5_invalid_format.map");
+  MapLoader::load("../res/TestMap5_invalid_format.map", map);
   // act
   auto isValid = map->validate();
   // assert
