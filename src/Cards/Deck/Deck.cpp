@@ -34,8 +34,8 @@ void Deck::draw(Hand& currentHand)
 //method shuffling the deck of hand
 void Deck::shuffleDeck()
 {
-  mt19937 rng(chrono::high_resolution_clock::now().time_since_epoch().count());
-  shuffle(std::begin(deckCards), std::end(deckCards), rng);
+  std::mt19937 rng(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+  std::shuffle(std::begin(deckCards), std::end(deckCards), rng);
 }
 
 void Deck::addCardToDeck(Card* card) {

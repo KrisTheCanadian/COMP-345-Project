@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "Map.h"
+#include "Map/Map.h"
 
 class MapLoader
 {

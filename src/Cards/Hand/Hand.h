@@ -3,7 +3,11 @@
 #include <vector>
 #include <stdexcept>
 
-class Card; class Player;
+#include "Cards/Cards.h"
+
+//class Player;
+class Card;
+
 enum CardType : int;
 
 class Hand
@@ -14,7 +18,7 @@ private:
   std::vector<Card *> handCards;
 public:
   //default constructor
-  Hand();
+  Hand() = default;
   //destruct
   ~Hand();
   //hand copy constructor
@@ -29,4 +33,6 @@ public:
   void addToHand(Card* card);
   // remove & delete from handCards (once the card is used, it should be deleted)
   Card* removeCard(CardType);
+
+  std::vector<Card *>& getHandCards() { return handCards; }
 };

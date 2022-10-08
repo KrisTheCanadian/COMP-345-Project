@@ -1,19 +1,20 @@
 #pragma once
 
-#include "OrdersList.h"
-#include "Territory.h"
-#include "Deck.h"
-#include "Bomb.h"
-#include "Blockade.h"
-#include "Airlift.h"
-#include "Negotiate.h"
-#include "Cards.h"
+#include "Orders/OrdersList/OrdersList.h"
+#include "Map/Territory/Territory.h"
+#include "Cards/Deck/Deck.h"
+#include "Orders/OrderTypes/Bomb/Bomb.h"
+#include "Orders/OrderTypes/Blockade/Blockade.h"
+#include "Orders/OrderTypes/Airlift/Airlift.h"
+#include "Orders/OrderTypes/Negotiate/Negotiate.h"
+#include "Cards/Cards.h"
 
 #include <vector>
 
 class Order;
 class Deck;
 class Hand;
+enum CardType : int;
 
 class Player {
 private:
@@ -41,7 +42,7 @@ public:
   std::vector<Territory *> toDefend();
   std::vector<Territory *> toAttack();
 
-  void issueOrder(const CardType* cardType);
+  void issueOrder(CardType cardType);
   void addTerritory(Territory& territory);
   void removeTerritory(Territory& territory);
 

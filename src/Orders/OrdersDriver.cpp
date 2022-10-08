@@ -1,7 +1,7 @@
 #include "Orders.h"
 #include "OrdersDriver.h"
-#include "OrdersList.h"
-#include "UserInputOrder.h"
+#include "Orders/OrdersList/OrdersList.h"
+#include "Orders//UserInputOrder/UserInputOrder.h"
 
 void testOrdersLists()
 {

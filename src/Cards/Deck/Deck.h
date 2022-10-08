@@ -4,10 +4,13 @@
 #include <random>
 #include <chrono>
 #include <vector>
+#include <algorithm>
 
-#include "Hand.h"
+#include "Cards/Hand/Hand.h"
+#include "Cards/Cards.h"
 
 class Card;
+class Hand;
 
 class Deck
 {

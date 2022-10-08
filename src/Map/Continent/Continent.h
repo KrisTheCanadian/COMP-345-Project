@@ -5,7 +5,7 @@
 #include <vector>
 #include <utility>
 
-#include "Territory.h"
+#include "Map/Territory/Territory.h"
 
 class Continent
 {

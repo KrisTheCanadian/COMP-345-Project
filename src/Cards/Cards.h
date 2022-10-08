@@ -4,11 +4,13 @@
 #include <vector>
 #include <algorithm>
 
-#include "Player.h"
+#include "Player/Player.h"
 
 using namespace std;
 
-class Map; class Hand; class Deck;
+class Map;
+class Deck;
+class Player;
 
 enum CardType: int {
   CT_Bomb = 0,

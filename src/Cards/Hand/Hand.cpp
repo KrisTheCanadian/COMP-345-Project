@@ -1,9 +1,5 @@
 #include "Hand.h"
 
-
-//Default constructor
-Hand::Hand()= default;
-
 //Copy construct
 Hand::Hand(const Hand &initial)
 {

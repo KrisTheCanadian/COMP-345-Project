@@ -18,7 +18,7 @@ void testCards() {
 
     cout << "-> Card in player's hand" << endl;
 
-    for (auto & handCard : hand.handCards) {
+    for (auto & handCard : hand.getHandCards()) {
         cout << handCard->getCardType() << endl;
     }
 

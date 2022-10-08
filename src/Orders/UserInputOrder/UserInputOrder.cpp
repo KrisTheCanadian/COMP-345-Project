@@ -1,10 +1,10 @@
 #include "UserInputOrder.h"
-#include "Deploy.h"
-#include "Advance.h"
-#include "Bomb.h"
-#include "Blockade.h"
-#include "Airlift.h"
-#include "Negotiate.h"
+#include "Orders/OrderTypes/Deploy/Deploy.h"
+#include "Orders/OrderTypes/Advance/Advance.h"
+#include "Orders/OrderTypes/Bomb/Bomb.h"
+#include "Orders/OrderTypes/Blockade/Blockade.h"
+#include "Orders/OrderTypes/Airlift/Airlift.h"
+#include "Orders/OrderTypes/Negotiate/Negotiate.h"
 
 // Here depnding on the player's cin we create an order.
 // If player cins an invalid string a null pointer is returned and

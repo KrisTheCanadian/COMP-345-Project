@@ -43,6 +43,8 @@ std::string Card::CardTypeToString(CardType& c) {
       return "Airlift";
     case CT_Diplomacy:
       return "Diplomacy";
+    default:
+      throw std::runtime_error("ASSERT: Invalid Card Type");
   }
 }
 

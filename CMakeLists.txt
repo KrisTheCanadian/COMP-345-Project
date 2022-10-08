@@ -3,6 +3,8 @@ project(COMP_345_Project)
 
 set(CMAKE_CXX_STANDARD 14)
 
+
+
 # ---------------------------------------------------------
 # Dependencies
 # ---------------------------------------------------------
@@ -20,74 +22,32 @@ if(NOT googletest_POPULATED)
     add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 endif()
 
-# ---------------------------------------------------------
-# Directories
-# ---------------------------------------------------------
-set(Directories
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Loader
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Continent
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Player
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Hand
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Territory
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Deck
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Advance
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Airlift
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Blockade
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Bomb
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Deploy
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrderTypes/Negotiate
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/UserInputOrder
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/GameEngine
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards
-    )
+
 
 # ---------------------------------------------------------
-# Map Library
+# Game Library
 # ---------------------------------------------------------
-set(MAP_SRCS 
+
+set(GAME_LIB_SRCS
+    # Map
     src/Map/Map.cpp
-    src/Map/Map.h 
-    src/Map/Loader/MapLoader.cpp 
-    src/Map/Loader/MapLoader.h 
+    src/Map/Map.h
+    src/Map/Loader/MapLoader.cpp
+    src/Map/Loader/MapLoader.h
     src/Map/Territory/Territory.cpp
-    src/Map/Territory/Territory.h 
-    src/Map/Continent/Continent.cpp 
+    src/Map/Territory/Territory.h
+    src/Map/Continent/Continent.cpp
     src/Map/Continent/Continent.h
-    Drivers/MapDriver.cpp
-    Drivers/MapDriver.h
-    )
+    src/Map/MapDriver.cpp
+    src/Map/MapDriver.h
 
-add_library(Map STATIC ${MAP_SRCS})
-target_include_directories(Map PUBLIC
-    ${Directories}
-    )
-
-# ---------------------------------------------------------
-# Player Library
-# ---------------------------------------------------------
-
-set(PLAYER_SRCS
+    # Player
     src/Player/Player.cpp
     src/Player/Player.h
-    Drivers/PlayerDriver.cpp
-    Drivers/PlayerDriver.h
-    )
-add_library(Player STATIC ${PLAYER_SRCS}
-    )
-target_include_directories(Player PUBLIC
-    ${Directories}
-    )
+    src/Player/PlayerDriver.cpp
+    src/Player/PlayerDriver.h
 
-# ---------------------------------------------------------
-# Order Library
-# ---------------------------------------------------------
-set(ORDER_SRCS
+    # Orders
     src/Orders/Orders.cpp
     src/Orders/Orders.h
     src/Orders/OrdersList/OrdersList.cpp
@@ -104,98 +64,76 @@ set(ORDER_SRCS
     src/Orders/OrderTypes/Deploy/Deploy.cpp
     src/Orders/OrderTypes/Negotiate/Negotiate.h
     src/Orders/OrderTypes/Negotiate/Negotiate.cpp
-    Drivers/OrdersDriver.cpp
-    Drivers/OrdersDriver.h
+    src/Orders/OrdersDriver.cpp
+    src/Orders/OrdersDriver.h
     src/Orders/UserInputOrder/UserInputOrder.cpp
-    src/Orders/UserInputOrder/UserInputOrder.h)
-add_library(Orders STATIC ${ORDER_SRCS})
-target_include_directories(Orders PUBLIC
-    ${Directories}
-    )
+    src/Orders/UserInputOrder/UserInputOrder.h
 
-# ---------------------------------------------------------
-# Card Library
-# ---------------------------------------------------------
-set(CARDS_SRCS
-    Drivers/CardsDriver.cpp
-    Drivers/CardsDriver.h
+    # Cards
+    src/Cards/CardsDriver.cpp
+    src/Cards/CardsDriver.h
     src/Cards/Cards.cpp
     src/Cards/Cards.h
     src/Cards/Deck/Deck.cpp
     src/Cards/Deck/Deck.h
     src/Cards/Hand/Hand.cpp
     src/Cards/Hand/Hand.h
-    )
-add_library(Cards STATIC ${CARDS_SRCS})
-target_include_directories(Cards PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Deck
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Hand
-    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Player
-    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Cards/Hand
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Orders/OrdersList
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Map/Territory
-    )
 
-# ---------------------------------------------------------
-# Game Engine Library
-# ---------------------------------------------------------
-set(GAME_ENGINE_SRCS
-    Drivers/GameEngineDriver.cpp
-    Drivers/GameEngineDriver.h
+    # GameEngine
+    src/GameEngine/GameEngineDriver.cpp
+    src/GameEngine/GameEngineDriver.h
     src/GameEngine/GameEngine.cpp
     src/GameEngine/GameEngine.h
-    )
-add_library(Game_Engine STATIC ${GAME_ENGINE_SRCS})
-target_include_directories(Game_Engine PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/GameEngine
-    ${CMAKE_CURRENT_SOURCE_DIR}/Drivers
-    )
+)
+add_library(Game STATIC ${GAME_LIB_SRCS})
+target_include_directories(Game PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+
 
 # ---------------------------------------------------------
-# Game Engine Test
+# Main Driver
 # ---------------------------------------------------------
+add_executable(MainDriver src/main.cpp)
+target_link_libraries(MainDriver Game)
+
+
+
+# ---------------------------------------------------------
+# Tests
+# ---------------------------------------------------------
+
+# Game Engine Test
 add_executable(testRunnerGameEngine test/GameEngine/TEST_GameEngine.cpp)
-target_link_libraries(testRunnerGameEngine gtest_main gmock_main Game_Engine)
+target_link_libraries(testRunnerGameEngine gtest_main gmock_main Game)
 add_test(NAME GameEngineTests COMMAND testRunnerGameEngine)
 
-# ---------------------------------------------------------
 # Card Test
-# ---------------------------------------------------------
 add_executable(testRunnerCards test/Cards/TEST_Cards.cpp)
-target_link_libraries(testRunnerCards gtest_main gmock_main Cards)
+target_link_libraries(testRunnerCards gtest_main gmock_main Game)
 add_test(NAME CardsTests COMMAND testRunnerCards)
 
-# ---------------------------------------------------------
 # Orders Test
-# ---------------------------------------------------------
 add_executable(testRunnerOrders test/Orders/TEST_Orders.cpp)
-target_link_libraries(testRunnerOrders gtest_main gmock_main Orders)
+target_link_libraries(testRunnerOrders gtest_main gmock_main Game)
 add_test(NAME OrdersTests COMMAND testRunnerOrders)
 
-# ---------------------------------------------------------
 # Player Test
-# ---------------------------------------------------------
 add_executable(testRunnerPlayer test/Player/TEST_Player.cpp)
-target_link_libraries(testRunnerPlayer gtest_main gmock_main Player)
+target_link_libraries(testRunnerPlayer gtest_main gmock_main Game)
 add_test(NAME PlayerTests COMMAND testRunnerPlayer)
 
-# ---------------------------------------------------------
 # Map Test
-# ---------------------------------------------------------
 add_executable(testRunnerMap test/Map/TEST_MapLoader.cpp)
-target_link_libraries(testRunnerMap gtest_main gmock_main Player Map)
+target_link_libraries(testRunnerMap gtest_main gmock_main Game)
 add_test(NAME MapTests COMMAND testRunnerMap)
 
+
+
 # ---------------------------------------------------------
-# Main
+# Maps
 # ---------------------------------------------------------
-add_executable(mainApp src/main.cpp)
-target_link_libraries(mainApp Map Player Orders Game_Engine Cards)
 
 # When Res is modified, rerun cmake (to copy new files to binary out)
 file(COPY res DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-

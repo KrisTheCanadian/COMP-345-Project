@@ -1,7 +1,8 @@
-#include "MapDriver.h"
-#include "GameEngineDriver.h"
-#include "OrdersDriver.h"
-#include "CardsDriver.h"
+#include "Map/MapDriver.h"
+#include "GameEngine/GameEngineDriver.h"
+#include "Orders/OrdersDriver.h"
+#include "Cards/CardsDriver.h"
+#include "Player/PlayerDriver.h"
 
 using namespace std;
 

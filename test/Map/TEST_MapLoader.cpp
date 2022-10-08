@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "MapLoader.h"
+#include "Map/Loader/MapLoader.h"
 
 TEST(MapLoaderTestSuite, TestMap1LoadBasic)
 {

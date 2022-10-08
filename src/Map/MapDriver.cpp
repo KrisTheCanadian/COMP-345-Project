@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "MapLoader.h"
+#include "Map/Loader/MapLoader.h"
 
 void testLoadMaps() {
 

@@ -30,11 +30,11 @@ std::vector<Territory *> Player::toAttack() {
 }
 
 // Type of order
-void Player::issueOrder(const CardType* cardType){
+void Player::issueOrder(CardType cardType){
   // order
   Order* order = nullptr;
 
-  switch(*cardType){
+  switch(cardType){
     case CT_Bomb:
       order = new Bomb();
       break;
