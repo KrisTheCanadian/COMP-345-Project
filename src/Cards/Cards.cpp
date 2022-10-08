@@ -4,14 +4,17 @@
 using namespace std;
 
 //Card constructor with a type parameter
-Card::Card(CardType& type)
-: cardType(type)
-{}
+Card::Card(CardType& type, GameEngine* game)
+: cardType(type), game(game)
+{
+  if(game == nullptr){throw std::runtime_error("Card::Error | Cannot set Card Game Engine to null");}
+}
 
 //Copy constructor
 Card::Card(const Card &initial)
+  : cardType(initial.cardType), game(initial.game)
 {
-    cardType = initial.cardType;
+  if(game == nullptr){throw std::runtime_error("Card::Error | Cannot set Card Game Engine to null");}
 }
 
 void Card::setCardType(CardType& type)
@@ -24,11 +27,15 @@ CardType Card::getCardType()
     return cardType;
 }
 
-void Card::play(Deck* deck, Player* player) {
-  player->issueOrder(cardType);
-  Card* card = player->getHand()->removeCard(cardType);
+void Card::play() {
+  // check to see whose turn it is
+  Player* currentPlayer = game->getCurrentPlayerTurn();
+  currentPlayer->issueOrder(cardType);
+  Card* card = currentPlayer->getHand()->removeCard(cardType);
+
   if(card == nullptr){ throw std::runtime_error(&"Hand did not contain card type: " [cardType]); }
-  deck->addCardToDeck(card);
+  Deck* gameDeck = game->getDeck();
+  gameDeck->addCardToDeck(card);
 }
 
 std::string Card::CardTypeToString(CardType& c) {

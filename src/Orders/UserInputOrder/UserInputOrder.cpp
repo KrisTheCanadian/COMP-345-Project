@@ -6,7 +6,7 @@
 #include "Orders/OrderTypes/Airlift/Airlift.h"
 #include "Orders/OrderTypes/Negotiate/Negotiate.h"
 
-// Here depnding on the player's cin we create an order.
+// Here depending on the player's cin we create an order.
 // If player cins an invalid string a null pointer is returned and
 // handled through OrdersList::addOrder()
 Order *UserInputOrder::create(const std::string& orderType)

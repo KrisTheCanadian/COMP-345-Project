@@ -5,12 +5,14 @@
 #include <algorithm>
 
 #include "Player/Player.h"
+#include "GameEngine/GameEngine.h"
 
 using namespace std;
 
 class Map;
 class Deck;
 class Player;
+class GameEngine;
 
 enum CardType: int {
   CT_Bomb = 0,
@@ -23,20 +25,23 @@ enum CardType: int {
 class Card
 {
 private:
-//type of each card
-CardType cardType;
+  //type of each card
+  CardType cardType;
+
+  // Object Owner
+  GameEngine* game;
 
 public:
-// play
-void play(Deck* deck, Player* player);
-//constructor
-explicit Card(CardType& type);
-//destruct
-~Card();
-void setCardType(CardType& type);
-CardType getCardType();
-//hand copy constructor
-Card(const Card &initial);
+  // play
+  void play();
+  //constructor
+  explicit Card(CardType& type, GameEngine* game);
+  //destruct
+  ~Card();
+  void setCardType(CardType& type);
+  CardType getCardType();
+  //hand copy constructor
+  Card(const Card &initial);
 
 static std::string CardTypeToString(CardType& c);
 };

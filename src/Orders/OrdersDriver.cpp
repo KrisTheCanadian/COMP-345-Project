@@ -1,23 +1,26 @@
 #include "Orders.h"
 #include "OrdersDriver.h"
-#include "Orders/OrdersList/OrdersList.h"
-#include "Orders//UserInputOrder/UserInputOrder.h"
+#include "Orders/UserInputOrder/UserInputOrder.h"
 
 void testOrdersLists()
 {
-  OrdersList list;
+  auto gameEngine = new GameEngine;
+  auto player = new Player(gameEngine, new Hand());
+  gameEngine->addPlayer(player);
+
+  auto orderList = player->getOrdersList();
   std::cout << "-> Order Addition" << std::endl;
-  list.add(UserInputOrder::create("Deploy"));
-  list.add(UserInputOrder::create("Advance"));
-  list.add(UserInputOrder::create("Bomb"));
-  list.add(UserInputOrder::create("Blockade"));
-  list.add(UserInputOrder::create("Airlift"));
-  list.add(UserInputOrder::create("Negotiate"));
+  orderList->add(UserInputOrder::create("Deploy"));
+  orderList->add(UserInputOrder::create("Advance"));
+  orderList->add(UserInputOrder::create("Bomb"));
+  orderList->add(UserInputOrder::create("Blockade"));
+  orderList->add(UserInputOrder::create("Airlift"));
+  orderList->add(UserInputOrder::create("Negotiate"));
 
   std::cout << "-> Move 4 with 2" << std::endl;
-  list.move(4, 2);
-  list.remove(2);
+  orderList->move(4, 2);
+  orderList->remove(2);
 
   std::cout << "-> List order execution" << std::endl;
-  list.orderExecuter();
+  orderList->orderExecuter();
 }

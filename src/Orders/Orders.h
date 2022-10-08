@@ -1,6 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include "GameEngine/GameEngine.h"
+
+class GameEngine;
 
 // Abstract Order class data members and methods to be implemented by derived classes
 class Order

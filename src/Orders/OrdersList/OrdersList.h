@@ -9,9 +9,10 @@ class OrdersList
 {
 private:
   std::vector<Order *> orders{};
+  GameEngine* game;
 
 public:
-  OrdersList();
+  explicit OrdersList(GameEngine* game);
   ~OrdersList();
   OrdersList(const OrdersList &);
   OrdersList &operator=(const OrdersList &);

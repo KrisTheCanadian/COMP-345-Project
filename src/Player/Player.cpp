@@ -1,10 +1,8 @@
 #include "Player.h"
 
-Player::Player(Deck* deck, Hand* cards)
-  : deck(deck), hand(cards)
-{
-  orders = OrdersList();
-}
+Player::Player(GameEngine* game, Hand* cards)
+  : game(game), hand(cards), orders(OrdersList(game))
+{}
 
 // default copy constructor
 Player::Player(const Player &p) = default;
@@ -80,7 +78,7 @@ Player &Player::operator=(const Player &other) {
     return *this;
   }
 
-  this->deck = other.deck;
+  this->game = other.game;
   this->orders = other.orders;
   this->hand = other.hand;
   this->territories = other.territories;
@@ -106,10 +104,6 @@ std::vector<Territory *>* Player::getTerritories() {
 
 Hand *Player::getHand() {
   return hand;
-}
-
-Deck *Player::getDeck() {
-  return deck;
 }
 
 OrdersList *Player::getOrdersList() {

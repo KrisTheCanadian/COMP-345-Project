@@ -8,6 +8,7 @@
 
 #include "Cards/Hand/Hand.h"
 #include "Cards/Cards.h"
+#include "GameEngine/GameEngine.h"
 
 class Card;
 class Hand;
@@ -18,9 +19,12 @@ private:
   //hand pointer vector
   std::vector<Card *> deckCards;
 
+  // Object Owner
+  GameEngine* game;
+
 public:
   //default constructor
-  Deck();
+  explicit Deck(GameEngine*);
   //destruct
   ~Deck();
   //random card drawer to players hand from remaining deck hand method

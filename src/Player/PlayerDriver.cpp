@@ -1,11 +1,18 @@
 #include "PlayerDriver.h"
 
 void testPlayers(){
-  Player p = Player(new Deck(), new Hand());
-  Territory t1 = Territory("Territory 1");
-  Territory t2 = Territory("Territory 2");
-  Territory t3 = Territory("Territory 3");
-  Territory t4 = Territory("Territory 4");
+
+  auto gameEngine = new GameEngine();
+  Player p = Player(gameEngine, new Hand());
+  gameEngine->addPlayer(p);
+
+  gameEngine->loadMap("res/TestMap1_valid.map");
+  auto map_territories = gameEngine->getMap()->getTerritories();
+
+  auto t1 = *map_territories->at(0);
+  auto t2 = *map_territories->at(1);
+  auto t3 = *map_territories->at(2);
+  auto t4 = *map_territories->at(3);
 
   p.addTerritory(t1);
   p.addTerritory(t2);

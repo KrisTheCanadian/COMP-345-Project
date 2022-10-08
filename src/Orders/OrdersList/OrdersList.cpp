@@ -1,11 +1,16 @@
 #include "OrdersList.h"
 
-OrdersList::OrdersList() = default;
+OrdersList::OrdersList(GameEngine* game)
+  :game(game)
+{
+  if(game == nullptr){throw std::runtime_error("OrdersList::Error | Cannot set OrdersList Game Engine to null");}
+}
 
 OrdersList::~OrdersList(){ for(auto order: orders){ delete order; } }
 
 // Copy constructor to make deep copy of the order list
 OrdersList::OrdersList(const OrdersList &oldList)
+  : game(oldList.game)
 {
   unsigned listLength = oldList.orders.size();
   orders = std::vector<Order *>(listLength);
@@ -92,6 +97,8 @@ OrdersList &OrdersList::operator=(const OrdersList &copyList)
   if (&copyList == this){
     return *this;
   }
+
+  game = copyList.game;
 
   unsigned initialListLength = orders.size();
   unsigned copyListLength = copyList.orders.size();

@@ -3,24 +3,25 @@
 using namespace std;
 
 void testCards() {
-    Deck deck = Deck();
+  auto gameEngine = new GameEngine();
+  Deck* deck = gameEngine->getDeck();
 
-    //Creating a deck of all hand mixed
-    
-    //creating the hand obj
-    Hand hand = Hand();
+  //Creating a deck of all hand mixed
 
-    // Draw deck of hand for players hand
-    deck.draw(hand);
-    deck.draw(hand);
-    deck.draw(hand);
-    deck.draw(hand);
+  //creating the hand obj
+  Hand hand = Hand();
 
-    cout << "-> Card in player's hand" << endl;
+  // Draw deck of hand for players hand
+  deck->draw(hand);
+  deck->draw(hand);
+  deck->draw(hand);
+  deck->draw(hand);
 
-    for (auto & handCard : hand.getHandCards()) {
-        cout << handCard->getCardType() << endl;
-    }
+  cout << "-> Card in player's hand" << endl;
+
+  for (auto & handCard : hand.getHandCards()) {
+      cout << handCard->getCardType() << endl;
+  }
 
 
 }

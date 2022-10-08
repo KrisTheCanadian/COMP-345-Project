@@ -19,15 +19,16 @@ enum CardType : int;
 class Player {
 private:
   std::vector<Territory*> territories;
-  Deck* deck;
   Hand* hand;
   OrdersList orders;
+
+  GameEngine* game;
 
 public:
   // --------------------------------
   // Constructors
   // --------------------------------
-  Player(Deck* deck, Hand* cards);
+  Player(GameEngine* game, Hand* cards);
   ~Player();
   Player(const Player &p);
 
@@ -50,7 +51,6 @@ public:
   // Getters
   // --------------------------------
   Hand* getHand();
-  Deck* getDeck();
   OrdersList* getOrdersList();
   std::vector<Territory*>* getTerritories();
 

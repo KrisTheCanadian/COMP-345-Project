@@ -1,7 +1,9 @@
 #include "Deck.h"
 
 //Default constructor
-Deck::Deck() = default;
+Deck::Deck(GameEngine* game)
+  :game(game)
+{}
 
 //Destructor
 Deck::~Deck()

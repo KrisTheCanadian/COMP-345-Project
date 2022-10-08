@@ -6,6 +6,7 @@
 #include <utility>
 
 #include "Map/Territory/Territory.h"
+#include "GameEngine/GameEngine.h"
 
 class Continent
 {
@@ -24,6 +25,9 @@ public:
   std::string getName();
   int getBonus() const;
   std::vector<Territory *> * getTerritories();
+
+  // Object Owner
+  GameEngine* game;
 
 public:
   friend std::ostream& operator<<(std::ostream& stream, const Continent& other);

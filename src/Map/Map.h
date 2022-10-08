@@ -9,6 +9,7 @@
 
 #include "Map/Continent/Continent.h"
 #include "Map/Territory/Territory.h"
+#include "GameEngine/GameEngine.h"
 
 class Map
 {
@@ -25,6 +26,9 @@ private:
   std::vector<Territory*> territories;
   std::vector<Continent*> continents;
 
+  // Object Owner
+  GameEngine* game;
+
 private:
   bool isMapStronglyConnected();
   bool isTerritories1to1Continents();
@@ -35,7 +39,7 @@ public:
   // --------------------------------------------------
   // Destructors + Constructors + Operator Overloads
   // --------------------------------------------------
-  Map();
+  explicit Map(GameEngine* game);
   ~Map();
   bool validate();
 
