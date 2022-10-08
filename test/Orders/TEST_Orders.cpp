@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
-#include "Orders/OrdersList/OrdersList.h"
-#include "Orders/UserInputOrder/UserInputOrder.h"
+#include "Orders/Orders.h"
 
 TEST(OrdersListSuite, listInitialized)
 {

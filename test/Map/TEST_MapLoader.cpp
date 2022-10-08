@@ -1,8 +1,7 @@
 #include <memory>
-
 #include <gtest/gtest.h>
-
-#include "Map/Loader/MapLoader.h"
+#include "Map/Map.h"
+#include "GameEngine/GameEngine.h"
 
 TEST(MapLoaderTestSuite, TestMap1LoadBasic)
 {

@@ -32,12 +32,6 @@ set(GAME_LIB_SRCS
     # Map
     src/Map/Map.cpp
     src/Map/Map.h
-    src/Map/Loader/MapLoader.cpp
-    src/Map/Loader/MapLoader.h
-    src/Map/Territory/Territory.cpp
-    src/Map/Territory/Territory.h
-    src/Map/Continent/Continent.cpp
-    src/Map/Continent/Continent.h
     src/Map/MapDriver.cpp
     src/Map/MapDriver.h
 
@@ -50,36 +44,14 @@ set(GAME_LIB_SRCS
     # Orders
     src/Orders/Orders.cpp
     src/Orders/Orders.h
-    src/Orders/OrdersList/OrdersList.cpp
-    src/Orders/OrdersList/OrdersList.h
-    src/Orders/OrderTypes/Advance/Advance.h
-    src/Orders/OrderTypes/Advance/Advance.cpp
-    src/Orders/OrderTypes/Airlift/Airlift.h
-    src/Orders/OrderTypes/Airlift/Airlift.cpp
-    src/Orders/OrderTypes/Blockade/Blockade.h
-    src/Orders/OrderTypes/Blockade/Blockade.cpp
-    src/Orders/OrderTypes/Bomb/Bomb.h
-    src/Orders/OrderTypes/Bomb/Bomb.cpp
-    src/Orders/OrderTypes/Deploy/Deploy.h
-    src/Orders/OrderTypes/Deploy/Deploy.cpp
-    src/Orders/OrderTypes/Negotiate/Negotiate.h
-    src/Orders/OrderTypes/Negotiate/Negotiate.cpp
     src/Orders/OrdersDriver.cpp
     src/Orders/OrdersDriver.h
-    src/Orders/UserInputOrder/UserInputOrder.cpp
-    src/Orders/UserInputOrder/UserInputOrder.h
-    src/Orders/OrdersFactory.cpp
-    src/Orders/OrdersFactory.h
 
     # Cards
     src/Cards/CardsDriver.cpp
     src/Cards/CardsDriver.h
     src/Cards/Cards.cpp
     src/Cards/Cards.h
-    src/Cards/Deck/Deck.cpp
-    src/Cards/Deck/Deck.h
-    src/Cards/Hand/Hand.cpp
-    src/Cards/Hand/Hand.h
 
     # GameEngine
     src/GameEngine/GameEngineDriver.cpp

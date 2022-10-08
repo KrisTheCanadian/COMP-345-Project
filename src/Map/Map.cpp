@@ -1,5 +1,12 @@
 #include "Map.h"
 
+// -----------------------------------------------------------------------------------------------------------------
+//
+//
+//                                                Map
+//
+// ----------------------------------------------------------------------------------------------------------------
+
 bool Map::validate()
 {
   return isMapStronglyConnected() && isTerritories1to1Continents();
@@ -201,4 +208,421 @@ Map::Map(GameEngine* game)
   :game(game)
 {
   if(game == nullptr){throw std::runtime_error("Map::Error | Cannot set map Game Engine to null");}
+}
+
+
+
+
+// -----------------------------------------------------------------------------------------------------------------
+//
+//
+//                                                Territory
+//
+// ----------------------------------------------------------------------------------------------------------------
+
+
+Territory::Territory(std::string name)
+    : name(std::move(name)), continent(nullptr)
+{}
+
+void Territory::addAdjacentTerritory(Territory* territory)
+{
+  this->adjacentTerritories.push_back(territory);
+}
+
+std::string Territory::getName()
+{
+  return this->name;
+}
+
+std::vector<Territory *>* Territory::getAdjacentTerritories()
+{
+  return &this->adjacentTerritories;
+}
+
+int Territory::getX() const
+{
+  return this->x;
+}
+
+int Territory::getY() const
+{
+  return this->y;
+}
+
+void Territory::setX(int _x)
+{
+  this->x = _x;
+}
+
+void Territory::setY(int _y)
+{
+  this->y = _y;
+}
+
+Continent* Territory::getContinent()
+{
+  return this->continent;
+}
+
+void Territory::setContinent(Continent* c)
+{
+  this->continent = c;
+}
+
+// avoid deep copy (due to other territories being only pointers)
+Territory::Territory(const Territory &other)= default;
+
+Territory& Territory::operator=(const Territory &other) {
+  if(this == &other){
+    return *this;
+  }
+
+  this->name = other.name;
+  this->continent = other.continent;
+
+  this->armies = other.armies;
+  this->ownerId = other.ownerId;
+
+  this->x = other.x;
+  this->y = other.y;
+
+  this->adjacentTerritories = other.adjacentTerritories;
+  return *this;
+}
+
+std::ostream &operator<<(std::ostream &stream, const Territory &other) {
+  stream << "Territory Name: " << other.name << '\n'
+         << "Territory Coordinates: " << '(' << other.x << ", " << other.y << ')' << '\n'
+         << "Territory Continent: " << other.continent << '\n';
+  return stream ;
+}
+
+void Territory::setOwnerId(int id) {
+  this->ownerId = id;
+}
+
+int Territory::getOwnerId() const {
+  return this->ownerId;
+}
+
+int Territory::getArmies() const {
+  return this->armies;
+}
+
+void Territory::setArmies(int army_units) {
+  this->armies = army_units;
+}
+
+int Territory::removeArmyUnits(int removed) {
+  if(removed < 0){ throw std::runtime_error("Cannot remove a negative amount of army units."); }
+  int total = this->armies - removed;
+  if(total < 0){ throw std::runtime_error("Cannot remove more armies than the territory currently has."); }
+  this->armies = total;
+  return total;
+}
+
+int Territory::addArmyUnits(int added) {
+  if(added < 0){ throw std::runtime_error("Cannot add a negative amount of army units."); }
+  int total = this->armies + added;
+  this->armies = total;
+  return total;
+}
+
+
+
+// -----------------------------------------------------------------------------------------------------------------
+//
+//
+//                                                Continent
+//
+// ----------------------------------------------------------------------------------------------------------------
+
+
+
+Continent::Continent(std::string name, int bonus)
+{
+  this->name = std::move(name);
+  this->bonus = bonus;
+}
+
+void Continent::addTerritory(Territory* territory)
+{
+  this->territories.push_back(territory);
+}
+
+std::string Continent::getName()
+{
+  return this->name;
+}
+
+int Continent::getBonus() const
+{
+  return this->bonus;
+}
+
+std::vector<Territory*>* Continent::getTerritories()
+{
+  return &this->territories;
+}
+
+std::ostream &operator<<(std::ostream &stream, const Continent &other) {
+  stream << "Continent Name: " << other.name << '\n'
+         << "Continent Bonus: " << other.bonus << '\n';
+
+  stream << "Continent Territories: " << '\n';
+  for(auto t: other.territories){
+    stream << (*t) << '\n';
+  }
+  return stream;
+}
+
+Continent &Continent::operator=(const Continent &other) {
+  if(&other == this){
+    return *this;
+  }
+  this->name = other.name;
+  this->bonus = other.bonus;
+  this->territories = other.territories;
+
+  return *this;
+}
+
+Continent::Continent(const Continent &other) = default;
+
+
+
+// -----------------------------------------------------------------------------------------------------------------
+//
+//
+//                                                MapLoader
+//
+// ----------------------------------------------------------------------------------------------------------------
+
+
+void MapLoader::load(const std::string& path, Map* out_map)
+{
+  std::ifstream input_file(path, std::ios::in);
+  std::string line;
+
+  // check if file is open
+  if (!input_file.is_open())
+  {
+    throw std::runtime_error("Could not open file: " + path);
+  }
+
+  MapLoaderState state;
+
+  std::string map_name = path.substr(path.find_last_of('/') + 1);
+  out_map->setName(map_name);
+
+  while (getline(input_file, line))
+  {
+    line = trim(line);
+    if(line.empty()) { continue; }
+
+    parseLine(line, out_map, state);
+  }
+
+  state.parseState = ReadingState_Idle;
+  input_file.close();
+}
+
+void MapLoader::parseLine(std::string &line, Map* map, MapLoaderState& mapLoaderState)
+{
+
+  switch (mapLoaderState.parseState)
+  {
+    case ReadingState_Idle:
+      if (line == "[Map]")
+      {
+        mapLoaderState.parseState = ReadingState_Map;
+      }
+      else
+      {
+        throw std::runtime_error("Invalid map file");
+      }
+      break;
+
+    case ReadingState_Map:
+      if (line == "[Continents]")
+      {
+        mapLoaderState.parseState = ReadingState_Continents;
+      }
+      else
+      {
+        std::string delimiter = "=";
+        if (line.find(delimiter) != std::string::npos)
+        {
+          std::string key = line.substr(0, line.find(delimiter));
+          std::string value = line.substr(line.find(delimiter) + 1, line.length());
+          if (key == "author")
+          {
+            map->setAuthor(value);
+          }
+          else if (key == "image")
+          {
+            map->setImage(value);
+          }
+          else if (key == "wrap")
+          {
+            map->setWrap(value == "yes");
+          }
+          else if (key == "scroll")
+          {
+            map->setScroll(value == "horizontal");
+          }
+          else if (key == "warn")
+          {
+            map->setWarn(value == "yes");
+          }
+        }
+      }
+      break;
+
+    case ReadingState_Continents:
+      if (line == "[Territories]")
+      {
+        mapLoaderState.parseState = ReadingState_Territories;
+      }
+      else
+      {
+        // parse continents
+        std::string delimiter = "=";
+        if (line.find(delimiter) != std::string::npos)
+        {
+          std::string name = line.substr(0, line.find(delimiter));
+          std::string value = line.substr(line.find(delimiter) + 1, line.length());
+          Continent* continent;
+          try {
+            continent = new Continent(name, std::stoi(value));
+          } catch (std::invalid_argument& e){
+            throw std::runtime_error("Map Formatting Error: Invalid Continent Bonus.");
+          } catch (std::out_of_range& e) {
+            throw std::runtime_error("Map Formatting Error: Continent Bonus Coordinate Out Of Range.");
+          }
+
+          map->addContinent(continent);
+          mapLoaderState.continents[name] = continent;
+        }
+      }
+      break;
+      // FORMAT: Territory name, x, y, continent, adjacent territories
+    case ReadingState_Territories:
+
+      // parse territories
+      std::string delimiter = ",";
+      // Territory
+      Territory* territory = nullptr;
+
+      if (line.find(delimiter) != std::string::npos)
+      {
+        std::string name = line.substr(0, line.find(delimiter));
+        line = line.substr(line.find(delimiter) + 1, line.length());
+
+        // check if territory exists in territoriesToCreate before creating a new one
+        if (mapLoaderState.territoriesToCreate.find(name) != mapLoaderState.territoriesToCreate.end())
+        {
+          territory = mapLoaderState.territoriesToCreate[name];
+          // remove from territoriesToCreate
+          mapLoaderState.territoriesToCreate.erase(name);
+        }
+        else
+        {
+          territory = new Territory(name);
+        }
+      }
+
+      // parse the rest of the line
+      while (!line.empty())
+      {
+        auto delimiter_location = line.find(delimiter);
+        std::string value = line.substr(0, delimiter_location);
+        line = delimiter_location == std::string::npos ? "" : line.substr(delimiter_location + 1, line.length());
+
+        // x
+        if (territory->getX() == -1)
+        {
+          try{
+            territory->setX(std::stoi(value));
+          } catch (std::invalid_argument& e){
+            throw std::runtime_error("Map Formatting Error: Invalid X Coordinate.");
+          } catch (std::out_of_range& e) {
+            throw std::runtime_error("Map Formatting Error: X Coordinate Out Of Range.");
+          }
+          continue;
+        }
+          // y
+        else if (territory->getY() == -1)
+        {
+          try{
+            territory->setY(std::stoi(value));
+          } catch (std::invalid_argument& e){
+            throw std::runtime_error("Map Formatting Error: Invalid Y Coordinate.");
+          } catch (std::out_of_range& e) {
+            throw std::runtime_error("Map Formatting Error: Y Coordinate Out Of Range.");
+          }
+          continue;
+        }
+          // continent
+        else if (territory->getContinent() == nullptr)
+        {
+          // check if continents exists in hashmap
+          if (mapLoaderState.continents.find(value) == mapLoaderState.continents.end())
+          {
+            throw std::runtime_error("Invalid continent: " + value);
+          }
+          else
+          {
+            territory->setContinent(mapLoaderState.continents[value]);
+            mapLoaderState.continents[value]->addTerritory(territory);
+          }
+          continue;
+        }
+          // adjacent territories
+        else
+        {
+          // check if territory exists in hashmap
+          if (mapLoaderState.territories.find(value) != mapLoaderState.territories.end())
+          {
+            territory->addAdjacentTerritory(mapLoaderState.territories[value]);
+          }
+          else
+          {
+            Territory* adjacentTerritory;
+            // check inside territories to create
+            if(mapLoaderState.territoriesToCreate.find(value) != mapLoaderState.territoriesToCreate.end()){
+              // use previously created
+              adjacentTerritory = mapLoaderState.territoriesToCreate[value];
+            } else {
+              // create new territory
+              adjacentTerritory = new Territory(value);
+            }
+            territory->addAdjacentTerritory(adjacentTerritory);
+            // add to territoriesToCreate
+            mapLoaderState.territoriesToCreate[value] = adjacentTerritory;
+          }
+        }
+      }
+      mapLoaderState.territories[territory->getName()] = territory;
+      map->addTerritory(territory);
+      break;
+  }
+}
+
+// Utils
+std::string MapLoader::ltrim(const std::string &s)
+{
+  size_t start = s.find_first_not_of(" \n\r\t\f\v");
+  return (start == std::string::npos) ? "" : s.substr(start);
+}
+
+std::string MapLoader::rtrim(const std::string &s)
+{
+  size_t end = s.find_last_not_of(" \n\r\t\f\v");
+  return (end == std::string::npos) ? "" : s.substr(0, end + 1);
+}
+
+std::string MapLoader::trim(const std::string &s) {
+  return rtrim(ltrim(s));
 }
