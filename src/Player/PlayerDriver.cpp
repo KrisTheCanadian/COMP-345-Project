@@ -61,8 +61,9 @@ void testPlayers(){
 
   std::cout << "\n " << std::endl;
   std::cout << "Testing player issueOrder Airlift" << std::endl;
-  // issueing order
+  // issue an order
   p->issueOrder(CT_Airlift);
   auto orders = p->getOrdersListObject()->getList();
+  std::cout << "Order that has been added to Player OrderList: " << std::endl;
   std::cout << orders->at(0) << std::endl;
 }

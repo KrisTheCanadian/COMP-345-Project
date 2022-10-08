@@ -66,7 +66,7 @@ void OrdersList::move(int pos1, int pos2)
 }
 
 // order executer method
-void OrdersList::orderExecuter()
+void OrdersList::execute()
 {
   unsigned listLength = orders.size();
   if (listLength == 0){

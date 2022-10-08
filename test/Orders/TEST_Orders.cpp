@@ -54,7 +54,7 @@ TEST(OrdersListSuite, listExecuteOrder)
   list.add(UserInputOrder::create("Deploy"));
   list.add(UserInputOrder::create("Advance"));
   list.add(UserInputOrder::create("Airlift"));
-  list.orderExecuter();
+  list.execute();
 
   auto orders = list.getList();
   // assert

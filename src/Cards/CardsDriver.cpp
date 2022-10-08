@@ -8,6 +8,7 @@ void testCards() {
   auto player = new Player(gameEngine, new Hand());
   Deck* deck = gameEngine->getDeck();
 
+  cout << "-> Adding 10 cards to deck..." << endl;
   // initialize deck (10 cards)
   deck->addCardToDeck(new Card(CT_Bomb, gameEngine));
   deck->addCardToDeck(new Card(CT_Diplomacy, gameEngine));
@@ -22,12 +23,14 @@ void testCards() {
   deck->addCardToDeck(new Card(CT_Airlift, gameEngine));
 
 
+  cout << "-> shuffling deck..." << endl;
   //Creating a deck of all hand mixed
   deck->shuffleDeck();
 
   //getting the hand obj
   Hand player_hand = *player->getHand();
 
+  cout << "-> player draws 4 cards" << endl;
   // Draw deck of hand for players hand
   deck->draw(player_hand);
   deck->draw(player_hand);
@@ -40,8 +43,14 @@ void testCards() {
       cout << handCard->getCardType() << endl;
   }
 
+  cout << "-> Number of Cards in Deck: " << deck->getDeckCards()->size() << endl;
+  cout << "-> Number of Cards in Player's hand: " << player_hand.getHandCards().size() << endl;
+
   cout << "-> Player Plays a card" << endl;
   // play most left hand size card
   player_hand.getHandCards().at(0)->play();
+
+  cout << "-> Number of Cards in Deck: " << deck->getDeckCards()->size() << endl;
+  cout << "-> Number of Cards in Player's hand: " << player_hand.getHandCards().size() << endl;
 
 }

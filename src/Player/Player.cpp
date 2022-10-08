@@ -61,7 +61,7 @@ Player &Player::operator=(const Player &other) {
   if(this == &other){
     return *this;
   }
-
+  this->id = other.id;
   this->game = other.game;
   this->orders = other.orders;
   this->hand = other.hand;

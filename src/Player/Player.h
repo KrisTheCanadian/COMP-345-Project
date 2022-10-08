@@ -17,7 +17,6 @@ class Player {
 private:
   static int nextId;
   int id;
-  int army = 0;
   std::vector<Territory*> territories;
   Hand* hand;
   OrdersList orders;
