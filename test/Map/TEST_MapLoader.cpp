@@ -6,46 +6,48 @@
 
 TEST(MapLoaderTestSuite, TestMap1LoadBasic)
 {
-    // arrange
-    MapLoader loader;
+  // arrange
+  GameEngine gameEngine = GameEngine();
+  auto map = gameEngine.getMap();
+  // act
 
-    // act
-    Map* map = loader.load("../res/TestMap1_valid.map");
+  MapLoader::load("../res/TestMap1_valid.map", map);
 
-    // assert
-    // Map Name
-    EXPECT_EQ(map->getName(), "TestMap1_valid.map");
-    // Image Name
-    EXPECT_EQ(map->getImage(), "Asia.bmp");
-    // Author Name
-    EXPECT_EQ(map->getAuthor(), "Rustin Terry");
-    // Extra Properties
-    EXPECT_TRUE(map->getWrap());
-    EXPECT_TRUE(map->getScroll());
-    EXPECT_TRUE(map->getWarn());
+  // assert
+  // Map Name
+  EXPECT_EQ(map->getName(), "TestMap1_valid.map");
+  // Image Name
+  EXPECT_EQ(map->getImage(), "Asia.bmp");
+  // Author Name
+  EXPECT_EQ(map->getAuthor(), "Rustin Terry");
+  // Extra Properties
+  EXPECT_TRUE(map->getWrap());
+  EXPECT_TRUE(map->getScroll());
+  EXPECT_TRUE(map->getWarn());
 
-    // Scanned Correct Number of Continents & Territories
-    EXPECT_EQ(map->getTerritories()->size(), 48);
-    EXPECT_EQ(map->getContinents()->size(), 7);
+  // Scanned Correct Number of Continents & Territories
+  EXPECT_EQ(map->getTerritories()->size(), 48);
+  EXPECT_EQ(map->getContinents()->size(), 7);
 
-    // check for nullptr in territories
-    for(const auto t : *map->getTerritories()) {
-        EXPECT_FALSE(t == nullptr);
-    }
+  // check for nullptr in territories
+  for(const auto t : *map->getTerritories()) {
+      EXPECT_FALSE(t == nullptr);
+  }
 
-    // check for nullptr in continents
-    for(const auto c : *map->getContinents()){
-        EXPECT_FALSE(c == nullptr);
-    }
+  // check for nullptr in continents
+  for(const auto c : *map->getContinents()){
+      EXPECT_FALSE(c == nullptr);
+  }
 }
 
 TEST(MapLoaderTestSuite, TestMap1LoadTerritoriesCorrectly)
 {
   // arrange
-  MapLoader loader;
+  GameEngine gameEngine = GameEngine();
+  auto map = gameEngine.getMap();
 
   // act
-  Map* map = loader.load("../res/TestMap1_valid.map");
+  MapLoader::load("../res/TestMap1_valid.map", map);
 
   auto territories = map->getTerritories();
 
@@ -86,9 +88,10 @@ TEST(MapLoaderTestSuite, TestMap1LoadTerritoriesCorrectly)
 
 TEST(MapLoaderTestSuite, TestMap1LoadContinentsCorrectly){
   // arrange
-  MapLoader loader;
+  GameEngine gameEngine = GameEngine();
+  auto map = gameEngine.getMap();
   // act
-  Map* map = loader.load("../res/TestMap1_valid.map");
+  MapLoader::load("../res/TestMap1_valid.map", map);
   // assert
   auto continents = map->getContinents();
 
@@ -109,8 +112,10 @@ TEST(MapLoaderTestSuite, TestMap1LoadContinentsCorrectly){
 
 TEST(MaploaderTestSuite, TestMap1LoadValid){
   // arrange
-  MapLoader loader;
-  auto map = loader.load("../res/TestMap1_valid.map");
+  GameEngine gameEngine = GameEngine();
+  auto map = gameEngine.getMap();
+
+  MapLoader::load("../res/TestMap1_valid.map", map);
   // act
   auto isValid = map->validate();
   // assert
@@ -119,8 +124,9 @@ TEST(MaploaderTestSuite, TestMap1LoadValid){
 
 TEST(MaploaderTestSuite, TestMap4LoadValid){
   // arrange
-  MapLoader loader;
-  auto map = loader.load("../res/TestMap4_valid.map");
+  GameEngine gameEngine = GameEngine();
+  auto map = gameEngine.getMap();
+  MapLoader::load("../res/TestMap4_valid.map", map);
   // act
   auto isValid = map->validate();
   // assert
@@ -129,8 +135,9 @@ TEST(MaploaderTestSuite, TestMap4LoadValid){
 
 TEST(MaploaderTestSuite, TestMap2LoadInvalid) {
   // arrange
-  MapLoader loader;
-  auto map = loader.load("../res/TestMap2_invalid.map");
+  GameEngine gameEngine = GameEngine();
+  auto map = gameEngine.getMap();
+  MapLoader::load("../res/TestMap2_invalid.map", map);
   // act
   auto isValid = map->validate();
   // assert
@@ -139,8 +146,9 @@ TEST(MaploaderTestSuite, TestMap2LoadInvalid) {
 
 TEST(MaploaderTestSuite, TestMap3LoadInvalid){
   // arrange
-  MapLoader loader;
-  auto map = loader.load("../res/TestMap3_invalid.map");
+  GameEngine gameEngine = GameEngine();
+  auto map = gameEngine.getMap();
+  MapLoader::load("../res/TestMap3_invalid.map", map);
   // act
   auto isValid = map->validate();
   // assert
@@ -149,8 +157,9 @@ TEST(MaploaderTestSuite, TestMap3LoadInvalid){
 
 TEST(MaploaderTestSuite, TestMap5LoadInvalidFormat){
   // arrange
-  MapLoader loader;
-  auto map = loader.load("../res/TestMap5_invalid_format.map");
+  GameEngine gameEngine = GameEngine();
+  auto map = gameEngine.getMap();
+  MapLoader::load("../res/TestMap5_invalid_format.map");
   // act
   auto isValid = map->validate();
   // assert
