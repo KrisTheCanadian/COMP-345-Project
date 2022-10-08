@@ -68,6 +68,8 @@ set(GAME_LIB_SRCS
     src/Orders/OrdersDriver.h
     src/Orders/UserInputOrder/UserInputOrder.cpp
     src/Orders/UserInputOrder/UserInputOrder.h
+    src/Orders/OrdersFactory.cpp
+    src/Orders/OrdersFactory.h
 
     # Cards
     src/Cards/CardsDriver.cpp
@@ -84,7 +86,7 @@ set(GAME_LIB_SRCS
     src/GameEngine/GameEngineDriver.h
     src/GameEngine/GameEngine.cpp
     src/GameEngine/GameEngine.h
-)
+    )
 add_library(Game STATIC ${GAME_LIB_SRCS})
 target_include_directories(Game PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src

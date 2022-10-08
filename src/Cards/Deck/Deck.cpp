@@ -17,6 +17,7 @@ Deck::~Deck()
 //copy constructor
 Deck::Deck(const Deck &initial)
 {
+  this->game = initial.game;
   for (auto &&temp : initial.deckCards) {
     deckCards.push_back(new Card(*temp));
   }

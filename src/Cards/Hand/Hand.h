@@ -5,10 +5,9 @@
 
 #include "Cards/Cards.h"
 
-//class Player;
+class Order;
 class Card;
-
-enum CardType : int;
+enum CardType: int;
 
 class Hand
 {

@@ -1,20 +1,17 @@
 #pragma once
 
 #include "Orders/OrdersList/OrdersList.h"
+#include "Orders/OrdersFactory.h"
 #include "Map/Territory/Territory.h"
 #include "Cards/Deck/Deck.h"
-#include "Orders/OrderTypes/Bomb/Bomb.h"
-#include "Orders/OrderTypes/Blockade/Blockade.h"
-#include "Orders/OrderTypes/Airlift/Airlift.h"
-#include "Orders/OrderTypes/Negotiate/Negotiate.h"
+#include "GameEngine/GameEngine.h"
+#include "Cards/Hand/Hand.h"
 #include "Cards/Cards.h"
 
 #include <vector>
 
-class Order;
-class Deck;
 class Hand;
-enum CardType : int;
+class GameEngine;
 
 class Player {
 private:

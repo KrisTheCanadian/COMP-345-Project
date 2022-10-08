@@ -7,6 +7,8 @@
 
 #include "Map/Map.h"
 
+class Map;
+
 // Static Class
 class MapLoader
 {

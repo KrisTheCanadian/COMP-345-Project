@@ -2,17 +2,16 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
 #include "Orders/Orders.h"
+
 
 class OrdersList
 {
 private:
   std::vector<Order *> orders{};
-  GameEngine* game;
 
 public:
-  explicit OrdersList(GameEngine* game);
+  OrdersList() = default;
   ~OrdersList();
   OrdersList(const OrdersList &);
   OrdersList &operator=(const OrdersList &);

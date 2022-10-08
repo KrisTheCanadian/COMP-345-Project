@@ -11,6 +11,9 @@
 #include "Map/Territory/Territory.h"
 #include "GameEngine/GameEngine.h"
 
+class GameEngine;
+class Deck;
+
 class Map
 {
 

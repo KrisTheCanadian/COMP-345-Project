@@ -4,15 +4,10 @@
 #include <vector>
 #include <algorithm>
 
+#include "Map/Map.h"
+#include "Deck/Deck.h"
 #include "Player/Player.h"
-#include "GameEngine/GameEngine.h"
-
 using namespace std;
-
-class Map;
-class Deck;
-class Player;
-class GameEngine;
 
 enum CardType: int {
   CT_Bomb = 0,

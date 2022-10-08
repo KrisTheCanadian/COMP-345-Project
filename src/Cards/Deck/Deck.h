@@ -12,6 +12,7 @@
 
 class Card;
 class Hand;
+class GameEngine;
 
 class Deck
 {

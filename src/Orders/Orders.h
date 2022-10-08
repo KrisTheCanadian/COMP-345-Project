@@ -1,9 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include "GameEngine/GameEngine.h"
-
-class GameEngine;
 
 // Abstract Order class data members and methods to be implemented by derived classes
 class Order
@@ -14,10 +11,10 @@ public:
   virtual void execute() const = 0;
   virtual ~Order() = 0;
 
-private:
   virtual Order *clone() const = 0;
+
+private:
   virtual std::ostream &orderCout(std::ostream &) const = 0;
 
   friend std::ostream &operator<<(std::ostream &, const Order &);
-  friend class OrdersList;
 };

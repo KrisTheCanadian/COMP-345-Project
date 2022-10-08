@@ -1,8 +1,10 @@
 #include "Player.h"
 
 Player::Player(GameEngine* game, Hand* cards)
-  : game(game), hand(cards), orders(OrdersList(game))
-{}
+  : game(game), hand(cards)
+{
+  orders = OrdersList();
+}
 
 // default copy constructor
 Player::Player(const Player &p) = default;
@@ -29,28 +31,7 @@ std::vector<Territory *> Player::toAttack() {
 
 // Type of order
 void Player::issueOrder(CardType cardType){
-  // order
-  Order* order = nullptr;
-
-  switch(cardType){
-    case CT_Bomb:
-      order = new Bomb();
-      break;
-    case CT_Reinforcement:
-      // TODO: Assignment 2
-      order = nullptr;
-      break;
-    case CT_Blockade:
-      order = new Blockade();
-      break;
-    case CT_Airlift:
-      order = new Airlift();
-      break;
-    case CT_Diplomacy:
-      order = new Negotiate();
-      break;
-  }
-  if(order == nullptr){ return; }
+  auto order = OrdersFactory::CreateOrder(cardType);
   orders.add(order);
 }
 

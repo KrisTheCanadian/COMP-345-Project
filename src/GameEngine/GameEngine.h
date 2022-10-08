@@ -5,6 +5,11 @@
 #include <vector>
 #include "Player/Player.h"
 #include "Map/Loader/MapLoader.h"
+#include "Cards/Deck/Deck.h"
+
+class Player;
+class Map;
+class Deck;
 
 enum GameEngineState {
   GE_Start = 0,
