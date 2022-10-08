@@ -2,29 +2,46 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include "Orders/Orders.h"
 
-#include "Orders.h"
 
 class OrdersList
 {
 private:
+  // vector of Order pointers
   std::vector<Order *> orders{};
 
 public:
-  OrdersList();
+  // --------------------------------
+  // Constructors + destructors
+  // --------------------------------
+  OrdersList() = default;
   ~OrdersList();
   OrdersList(const OrdersList &);
+
+  // --------------------------------
+  // Operator Overloads
+  // --------------------------------
   OrdersList &operator=(const OrdersList &);
 
+  // --------------------------------
+  // Adders + mutators
+  // --------------------------------
   void add(Order *o);
   void remove(int);
   void move(int, int);
 
   // Run user orders and remove them from order list
-  void orderExecuter();
+  void execute();
 
-  std::vector<Order *>* getOrdersList();
+  // --------------------------------
+  // Getters
+  // --------------------------------
+  std::vector<Order *>* getList();
 
 private:
+  // --------------------------------
+  // ostream overload
+  // --------------------------------
   friend std::ostream &operator<<(std::ostream &, const OrdersList &);
 };

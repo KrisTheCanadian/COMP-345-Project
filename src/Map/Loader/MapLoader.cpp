@@ -1,6 +1,7 @@
 #include "MapLoader.h"
 
-Map* MapLoader::load(const std::string& path)
+
+void MapLoader::load(const std::string& path, Map* out_map)
 {
   std::ifstream input_file(path, std::ios::in);
   std::string line;
@@ -11,33 +12,32 @@ Map* MapLoader::load(const std::string& path)
     throw std::runtime_error("Could not open file: " + path);
   }
 
+  MapLoaderState state;
+
   std::string map_name = path.substr(path.find_last_of('/') + 1);
-  this->map.setName(map_name);
+  out_map->setName(map_name);
 
   while (getline(input_file, line))
   {
-    // remove \r from line
-    if (line[line.length() - 1] == '\r')
-    {
-      line = line.substr(0, line.length() - 1);
-    }
-    parse(line);
+    line = trim(line);
+    if(line.empty()) { continue; }
+
+    parseLine(line, out_map, state);
   }
 
-  this->state = ReadingState_Idle;
+  state.parseState = ReadingState_Idle;
   input_file.close();
-  return &this->map;
 }
 
-void MapLoader::parse(std::string &line)
+void MapLoader::parseLine(std::string &line, Map* map, MapLoaderState& mapLoaderState)
 {
 
-  switch (this->state)
+  switch (mapLoaderState.parseState)
   {
   case ReadingState_Idle:
     if (line == "[Map]")
     {
-      this->state = ReadingState_Map;
+      mapLoaderState.parseState = ReadingState_Map;
     }
     else
     {
@@ -48,7 +48,7 @@ void MapLoader::parse(std::string &line)
   case ReadingState_Map:
     if (line == "[Continents]")
     {
-      this->state = ReadingState_Continents;
+      mapLoaderState.parseState = ReadingState_Continents;
     }
     else
     {
@@ -59,23 +59,23 @@ void MapLoader::parse(std::string &line)
         std::string value = line.substr(line.find(delimiter) + 1, line.length());
         if (key == "author")
         {
-          this->map.setAuthor(value);
+          map->setAuthor(value);
         }
         else if (key == "image")
         {
-          this->map.setImage(value);
+          map->setImage(value);
         }
         else if (key == "wrap")
         {
-          this->map.setWrap(value == "yes");
+          map->setWrap(value == "yes");
         }
         else if (key == "scroll")
         {
-          this->map.setScroll(value == "horizontal");
+          map->setScroll(value == "horizontal");
         }
         else if (key == "warn")
         {
-          this->map.setWarn(value == "yes");
+          map->setWarn(value == "yes");
         }
       }
     }
@@ -84,7 +84,7 @@ void MapLoader::parse(std::string &line)
   case ReadingState_Continents:
     if (line == "[Territories]")
     {
-      this->state = ReadingState_Territories;
+      mapLoaderState.parseState = ReadingState_Territories;
     }
     else
     {
@@ -103,17 +103,14 @@ void MapLoader::parse(std::string &line)
           throw std::runtime_error("Map Formatting Error: Continent Bonus Coordinate Out Of Range.");
         }
 
-        this->map.addContinent(continent);
-        this->continents[name] = continent;
+        map->addContinent(continent);
+        mapLoaderState.continents[name] = continent;
       }
     }
     break;
     // FORMAT: Territory name, x, y, continent, adjacent territories
   case ReadingState_Territories:
-      if(line.empty()){
-          // blank line
-          return;
-      }
+
         // parse territories
         std::string delimiter = ",";
         // Territory
@@ -123,12 +120,13 @@ void MapLoader::parse(std::string &line)
         {
           std::string name = line.substr(0, line.find(delimiter));
           line = line.substr(line.find(delimiter) + 1, line.length());
+
           // check if territory exists in territoriesToCreate before creating a new one
-          if (this->territoriesToCreate.find(name) != this->territoriesToCreate.end())
+          if (mapLoaderState.territoriesToCreate.find(name) != mapLoaderState.territoriesToCreate.end())
           {
-            territory = this->territoriesToCreate[name];
+            territory = mapLoaderState.territoriesToCreate[name];
             // remove from territoriesToCreate
-            this->territoriesToCreate.erase(name);
+            mapLoaderState.territoriesToCreate.erase(name);
           }
           else
           {
@@ -171,14 +169,14 @@ void MapLoader::parse(std::string &line)
           else if (territory->getContinent() == nullptr)
           {
             // check if continents exists in hashmap
-            if (this->continents.find(value) == this->continents.end())
+            if (mapLoaderState.continents.find(value) == mapLoaderState.continents.end())
             {
               throw std::runtime_error("Invalid continent: " + value);
             }
             else
             {
-              territory->setContinent(this->continents[value]);
-              continents[value]->addTerritory(territory);
+              territory->setContinent(mapLoaderState.continents[value]);
+              mapLoaderState.continents[value]->addTerritory(territory);
             }
               continue;
           }
@@ -186,83 +184,46 @@ void MapLoader::parse(std::string &line)
           else
           {
             // check if territory exists in hashmap
-            if (this->territories.find(value) != this->territories.end())
+            if (mapLoaderState.territories.find(value) != mapLoaderState.territories.end())
             {
-              territory->addAdjacentTerritory(territories[value]);
+              territory->addAdjacentTerritory(mapLoaderState.territories[value]);
             }
             else
             {
               Territory* adjacentTerritory;
               // check inside territories to create
-              if(this->territoriesToCreate.find(value) != this->territoriesToCreate.end()){
+              if(mapLoaderState.territoriesToCreate.find(value) != mapLoaderState.territoriesToCreate.end()){
                 // use previously created
-                adjacentTerritory = territoriesToCreate[value];
+                adjacentTerritory = mapLoaderState.territoriesToCreate[value];
               } else {
                 // create new territory
                 adjacentTerritory = new Territory(value);
               }
               territory->addAdjacentTerritory(adjacentTerritory);
               // add to territoriesToCreate
-              this->territoriesToCreate[value] = adjacentTerritory;
+              mapLoaderState.territoriesToCreate[value] = adjacentTerritory;
             }
         }
     }
-        this->territories[territory->getName()] = territory;
-        this->map.addTerritory(territory);
-        break;
+      mapLoaderState.territories[territory->getName()] = territory;
+      map->addTerritory(territory);
+      break;
     }
-
-
 }
 
-MapLoader::MapLoader(const MapLoader &other) {
-  this->map = other.map;
-  this->state = other.state;
-
-  for(const auto& t : territoriesToCreate){
-    this->territoriesToCreate[t.first] = t.second;
-  }
-
-  for(const auto& t: territories){
-    this->territoriesToCreate[t.first] = t.second;
-  }
-
-  for(const auto& c : continents){
-    this->continents[c.first] = c.second;
-  }
+// Utils
+std::string MapLoader::ltrim(const std::string &s)
+{
+  size_t start = s.find_first_not_of(" \n\r\t\f\v");
+  return (start == std::string::npos) ? "" : s.substr(start);
 }
 
-MapLoader &MapLoader::operator=(const MapLoader &other) {
-  if(this == &other){
-    return *this;
-  }
-
-  this->map = other.map;
-  this->territoriesToCreate = other.territoriesToCreate;
-  this->state = other.state;
-  this->continents = other.continents;
-  this->territories = other.territories;
-  return *this;
+std::string MapLoader::rtrim(const std::string &s)
+{
+  size_t end = s.find_last_not_of(" \n\r\t\f\v");
+  return (end == std::string::npos) ? "" : s.substr(0, end + 1);
 }
 
-std::ostream &operator<<(std::ostream &stream, const MapLoader &other) {
-  stream << "Maploader State: " << MapLoader::stateToString(other.state) << '\n';
-  return stream;
+std::string MapLoader::trim(const std::string &s) {
+  return rtrim(ltrim(s));
 }
-
-std::string MapLoader::stateToString(MapLoader::ReadingState state) {
-  switch (state) {
-    case ReadingState_Idle:
-      return "Idle";
-    case ReadingState_Map:
-      return "Reading Map";
-    case ReadingState_Continents:
-      return "Reading Continents";
-    case ReadingState_Territories:
-      return "Reading Territories";
-    default:
-      return "Invalid State";
-  }
-}
-
-MapLoader::MapLoader() = default;

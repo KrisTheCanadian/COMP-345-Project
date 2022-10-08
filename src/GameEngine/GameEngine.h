@@ -1,6 +1,19 @@
 #pragma once
-#include <string>
 
+#include <string>
+#include <stdexcept>
+#include <vector>
+#include "Player/Player.h"
+#include "Map/Loader/MapLoader.h"
+#include "Cards/Deck/Deck.h"
+
+class Player;
+class Map;
+class Deck;
+
+// ----------------------------------------
+// Public GameEngine State Enum
+// ----------------------------------------
 enum GameEngineState {
   GE_Start = 0,
   GE_Map_Loaded,
@@ -14,12 +27,56 @@ enum GameEngineState {
 
 class GameEngine {
 private:
+  // current state
   GameEngineState state = GE_Start;
-
+  // Players
+  unsigned int playerTurn = 0;
+  std::vector<Player*> players;
+  // Deck
+  Deck* deck = nullptr;
+  // Map
+  Map* map = nullptr;
 public:
+  // ----------------------------------------
+  // Constructors
+  // ----------------------------------------
   GameEngine();
   explicit GameEngine(GameEngineState state);
-  GameEngineState getCurrentState();
+
+  // ----------------------------------------
+  // Modifications + setters
+  // ----------------------------------------
   void setCurrentState(GameEngineState engineState);
+
+  // ----------------------------------------
+  // Destructor
+  // ----------------------------------------
+  ~GameEngine();
+
+  // ----------------------------------------
+  // add players to game
+  // ----------------------------------------
+  void addPlayer(Player* player);
+
+  // ----------------------------------------
+  // load game map
+  // ----------------------------------------
+  void loadMap(const std::string& path);
+
+  // ----------------------------------------
+  // convert current state to string
+  // ----------------------------------------
   std::string getCurrentStateToString();
+
+private:
+  // player increment turn
+  void nextPlayerTurn();
+
+public:
+  // getters
+  std::vector<Player*>* getPlayers();
+  Player* getCurrentPlayerTurn();
+  Deck* getDeck();
+  Map* getMap();
+  GameEngineState getCurrentState();
 };

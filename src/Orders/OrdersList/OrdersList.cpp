@@ -1,7 +1,5 @@
 #include "OrdersList.h"
 
-OrdersList::OrdersList() = default;
-
 OrdersList::~OrdersList(){ for(auto order: orders){ delete order; } }
 
 // Copy constructor to make deep copy of the order list
@@ -68,7 +66,7 @@ void OrdersList::move(int pos1, int pos2)
 }
 
 // order executer method
-void OrdersList::orderExecuter()
+void OrdersList::execute()
 {
   unsigned listLength = orders.size();
   if (listLength == 0){
@@ -123,6 +121,6 @@ std::ostream &operator<<(std::ostream &stream, const OrdersList &ol)
   return stream;
 }
 
-std::vector<Order *> *OrdersList::getOrdersList() {
+std::vector<Order *> *OrdersList::getList() {
   return &this->orders;
 }

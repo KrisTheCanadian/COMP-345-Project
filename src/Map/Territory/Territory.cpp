@@ -61,9 +61,15 @@ Territory& Territory::operator=(const Territory &other) {
 
   this->name = other.name;
   this->continent = other.continent;
+
+  this->armies = other.armies;
+  this->ownerId = other.ownerId;
+
   this->x = other.x;
   this->y = other.y;
+
   this->adjacentTerritories = other.adjacentTerritories;
+  return *this;
 }
 
 std::ostream &operator<<(std::ostream &stream, const Territory &other) {
@@ -71,4 +77,35 @@ std::ostream &operator<<(std::ostream &stream, const Territory &other) {
   << "Territory Coordinates: " << '(' << other.x << ", " << other.y << ')' << '\n'
   << "Territory Continent: " << other.continent << '\n';
   return stream ;
+}
+
+void Territory::setOwnerId(int id) {
+  this->ownerId = id;
+}
+
+int Territory::getOwnerId() const {
+  return this->ownerId;
+}
+
+int Territory::getArmies() const {
+  return this->armies;
+}
+
+void Territory::setArmies(int army_units) {
+  this->armies = army_units;
+}
+
+int Territory::removeArmyUnits(int removed) {
+  if(removed < 0){ throw std::runtime_error("Cannot remove a negative amount of army units."); }
+  int total = this->armies - removed;
+  if(total < 0){ throw std::runtime_error("Cannot remove more armies than the territory currently has."); }
+  this->armies = total;
+  return total;
+}
+
+int Territory::addArmyUnits(int added) {
+  if(added < 0){ throw std::runtime_error("Cannot add a negative amount of army units."); }
+  int total = this->armies + added;
+  this->armies = total;
+  return total;
 }

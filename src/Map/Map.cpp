@@ -163,7 +163,7 @@ std::ostream &operator<<(std::ostream &stream, const Map &other) {
 }
 
 Map::Map(const Map &other)
-: name(other.name), author(other.author), warn(other.warn), scroll(other.scroll), image(other.image), wrap(other.wrap)
+: name(other.name), author(other.author), warn(other.warn), scroll(other.scroll), image(other.image), wrap(other.wrap), game(other.game)
 {
   // deep copy
   for(auto t : territories){
@@ -192,7 +192,13 @@ Map &Map::operator=(const Map &other) {
   this->continents = other.continents;
   this->territories = other.territories;
 
+  this->game = other.game;
+
   return *this;
 }
 
-Map::Map() = default;
+Map::Map(GameEngine* game)
+  :game(game)
+{
+  if(game == nullptr){throw std::runtime_error("Map::Error | Cannot set map Game Engine to null");}
+}

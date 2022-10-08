@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "OrdersList.h"
-#include "UserInputOrder.h"
+#include "Orders/OrdersList/OrdersList.h"
+#include "Orders/UserInputOrder/UserInputOrder.h"
 
 TEST(OrdersListSuite, listInitialized)
 {
@@ -9,7 +9,7 @@ TEST(OrdersListSuite, listInitialized)
   // act
   list = OrdersList();
   // assert
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
   EXPECT_EQ(orders->size(), 0);
 }
 
@@ -25,7 +25,7 @@ TEST(OrdersListSuite, listAddOrders)
   list.add(UserInputOrder::create("Airlift"));
   list.add(UserInputOrder::create("Negotiate"));
   // assert
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
   EXPECT_EQ(orders->size(), 6);
 }
 
@@ -39,7 +39,7 @@ TEST(OrdersListSuite, listRemoveOrder)
   list.add(UserInputOrder::create("Airlift"));
   list.remove(0);
   // assert
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
 
   EXPECT_EQ(orders->size(), 2);
   EXPECT_EQ(orders->at(0)->getLabel(), "Advance");
@@ -54,9 +54,9 @@ TEST(OrdersListSuite, listExecuteOrder)
   list.add(UserInputOrder::create("Deploy"));
   list.add(UserInputOrder::create("Advance"));
   list.add(UserInputOrder::create("Airlift"));
-  list.orderExecuter();
+  list.execute();
 
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
   // assert
   EXPECT_EQ(orders->size(), 0);
 }
@@ -73,7 +73,7 @@ TEST(OrdersListSuite, listMoveOrder)
 
   list.move(2, 0);
 
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
   // assert
   EXPECT_EQ(orders->size(), 4);
   EXPECT_EQ(orders->at(0)->getLabel(), "Airlift");
