@@ -23,7 +23,7 @@ public:
   // Run user orders and remove them from order list
   void orderExecuter();
 
-  std::vector<Order *>* getOrdersList();
+  std::vector<Order *>* getList();
 
 private:
   friend std::ostream &operator<<(std::ostream &, const OrdersList &);

@@ -4,7 +4,7 @@
 using namespace std;
 
 //Card constructor with a type parameter
-Card::Card(CardType& type, GameEngine* game)
+Card::Card(const CardType& type, GameEngine* game)
 : cardType(type), game(game)
 {
   if(game == nullptr){throw std::runtime_error("Card::Error | Cannot set Card Game Engine to null");}

@@ -9,7 +9,7 @@ void testOrdersLists()
   auto player = new Player(gameEngine, new Hand());
   gameEngine->addPlayer(player);
 
-  auto orderList = player->getOrdersList();
+  auto orderList = player->getOrdersListObject();
   std::cout << "-> Order Addition" << std::endl;
   orderList->add(UserInputOrder::create("Deploy"));
   orderList->add(UserInputOrder::create("Advance"));

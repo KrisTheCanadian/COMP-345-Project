@@ -9,7 +9,7 @@ TEST(OrdersListSuite, listInitialized)
   // act
   list = OrdersList();
   // assert
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
   EXPECT_EQ(orders->size(), 0);
 }
 
@@ -25,7 +25,7 @@ TEST(OrdersListSuite, listAddOrders)
   list.add(UserInputOrder::create("Airlift"));
   list.add(UserInputOrder::create("Negotiate"));
   // assert
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
   EXPECT_EQ(orders->size(), 6);
 }
 
@@ -39,7 +39,7 @@ TEST(OrdersListSuite, listRemoveOrder)
   list.add(UserInputOrder::create("Airlift"));
   list.remove(0);
   // assert
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
 
   EXPECT_EQ(orders->size(), 2);
   EXPECT_EQ(orders->at(0)->getLabel(), "Advance");
@@ -56,7 +56,7 @@ TEST(OrdersListSuite, listExecuteOrder)
   list.add(UserInputOrder::create("Airlift"));
   list.orderExecuter();
 
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
   // assert
   EXPECT_EQ(orders->size(), 0);
 }
@@ -73,7 +73,7 @@ TEST(OrdersListSuite, listMoveOrder)
 
   list.move(2, 0);
 
-  auto orders = list.getOrdersList();
+  auto orders = list.getList();
   // assert
   EXPECT_EQ(orders->size(), 4);
   EXPECT_EQ(orders->at(0)->getLabel(), "Airlift");

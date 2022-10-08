@@ -17,14 +17,6 @@ Hand::~Hand()
   handCards.clear();
 }
 
-void Hand::setPlayerID(int playerId) {
-  playerID = playerId;
-}
-
-int Hand::getPlayerID() const {
-  return playerID;
-}
-
 std::vector<Card *> *Hand::getCards() {
   return &this->handCards;
 }
@@ -52,4 +44,8 @@ Card* Hand::removeCard(CardType type) {
     }
   }
   return nullptr;
+}
+
+Hand::Hand() {
+  handCards = vector<Card*>();
 }

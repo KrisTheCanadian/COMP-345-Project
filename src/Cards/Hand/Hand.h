@@ -12,18 +12,16 @@ enum CardType: int;
 class Hand
 {
 private:
-  int playerID = -1;
   //hand pointer vector
-  std::vector<Card *> handCards;
+
 public:
+  std::vector<Card *> handCards;
   //default constructor
-  Hand() = default;
+  Hand();
   //destruct
   ~Hand();
   //hand copy constructor
   Hand(const Hand &initial);
-  void setPlayerID(int playerId);
-  int getPlayerID() const;
   // getter handCards
   std::vector<Card *>* getCards();
   // get card from handCards

@@ -5,8 +5,8 @@ Order* OrdersFactory::CreateOrder(CardType cardType) {
     case CT_Bomb:
       return new Bomb();
     case CT_Reinforcement:
-      // TODO: Assignment 2
-      return nullptr;
+      // TODO: Assignment 2 -> remove deploy and add new logic
+      return new Deploy();
     case CT_Blockade:
       return new Blockade();
     case CT_Airlift:

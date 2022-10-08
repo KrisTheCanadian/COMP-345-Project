@@ -3,6 +3,7 @@
 Player::Player(GameEngine* game, Hand* cards)
   : game(game), hand(cards)
 {
+  game->addPlayer(this);
   orders = OrdersList();
 }
 
@@ -49,9 +50,7 @@ void Player::removeTerritory(Territory& territory) {
 }
 
 Player::~Player() {
-  for(auto c : *hand->getCards()){
-    delete c;
-  }
+  delete hand;
 };
 
 Player &Player::operator=(const Player &other) {
@@ -87,6 +86,6 @@ Hand *Player::getHand() {
   return hand;
 }
 
-OrdersList *Player::getOrdersList() {
+OrdersList *Player::getOrdersListObject() {
   return &orders;
 }

@@ -48,7 +48,7 @@ public:
   // Getters
   // --------------------------------
   Hand* getHand();
-  OrdersList* getOrdersList();
+  OrdersList* getOrdersListObject();
   std::vector<Territory*>* getTerritories();
 
 public:

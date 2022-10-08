@@ -30,7 +30,7 @@ public:
   // play
   void play();
   //constructor
-  explicit Card(CardType& type, GameEngine* game);
+  explicit Card(const CardType& type, GameEngine* game);
   //destruct
   ~Card();
   void setCardType(CardType& type);

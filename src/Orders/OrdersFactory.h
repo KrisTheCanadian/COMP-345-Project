@@ -5,6 +5,7 @@
 #include "Orders/OrderTypes/Blockade/Blockade.h"
 #include "Orders/OrderTypes/Airlift/Airlift.h"
 #include "Orders/OrderTypes/Negotiate/Negotiate.h"
+#include "Orders/OrderTypes/Deploy/Deploy.h"
 #include "Cards/Cards.h"
 
 enum CardType : int;

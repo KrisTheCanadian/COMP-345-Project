@@ -62,7 +62,7 @@ void GameEngine::addPlayer(Player* player) {
   if(player == nullptr){
     throw std::runtime_error("GameEngine::Error | Cannot add player to game (nullptr)");
   }
-  if(state < GE_Players_Added){
+  if(state > GE_Players_Added){
     throw std::runtime_error("GameEngine::ASSERT | Cannot add player to game. Game is already in progress.");
   }
   this->players.push_back(player);

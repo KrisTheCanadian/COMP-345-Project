@@ -121,6 +121,6 @@ std::ostream &operator<<(std::ostream &stream, const OrdersList &ol)
   return stream;
 }
 
-std::vector<Order *> *OrdersList::getOrdersList() {
+std::vector<Order *> *OrdersList::getList() {
   return &this->orders;
 }

@@ -4,7 +4,6 @@ void testPlayers(){
 
   auto gameEngine = new GameEngine();
   auto p = new Player(gameEngine, new Hand());
-  gameEngine->addPlayer(p);
 
   gameEngine->loadMap("res/TestMap1_valid.map");
   auto map_territories = gameEngine->getMap()->getTerritories();
@@ -53,5 +52,9 @@ void testPlayers(){
   std::cout << "Testing stream insertion overload " << std::endl;
   std::cout << p << std::endl;
 
-  delete p;
+  std::cout << "\n " << std::endl;
+  std::cout << "Testing player issueOrder Airlift" << std::endl;
+  p->issueOrder(CT_Airlift);
+  auto orders = p->getOrdersListObject()->getList();
+  std::cout << orders->at(0) << std::endl;
 }
