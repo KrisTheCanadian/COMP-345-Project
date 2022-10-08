@@ -11,6 +11,9 @@ class Player;
 class Map;
 class Deck;
 
+// ----------------------------------------
+// Public GameEngine State Enum
+// ----------------------------------------
 enum GameEngineState {
   GE_Start = 0,
   GE_Map_Loaded,
@@ -24,6 +27,7 @@ enum GameEngineState {
 
 class GameEngine {
 private:
+  // current state
   GameEngineState state = GE_Start;
   // Players
   unsigned int playerTurn = 0;
@@ -33,23 +37,35 @@ private:
   // Map
   Map* map = nullptr;
 public:
+  // ----------------------------------------
   // Constructors
+  // ----------------------------------------
   GameEngine();
   explicit GameEngine(GameEngineState state);
 
+  // ----------------------------------------
   // Modifications + setters
+  // ----------------------------------------
   void setCurrentState(GameEngineState engineState);
 
+  // ----------------------------------------
   // Destructor
+  // ----------------------------------------
   ~GameEngine();
 
+  // ----------------------------------------
   // add players to game
+  // ----------------------------------------
   void addPlayer(Player* player);
 
+  // ----------------------------------------
   // load game map
+  // ----------------------------------------
   void loadMap(const std::string& path);
 
-  // MISC
+  // ----------------------------------------
+  // convert current state to string
+  // ----------------------------------------
   std::string getCurrentStateToString();
 
 private:

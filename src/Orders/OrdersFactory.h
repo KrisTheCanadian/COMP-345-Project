@@ -9,7 +9,9 @@
 #include "Cards/Cards.h"
 
 enum CardType : int;
-
+// --------------------------------
+// Static Class : OrdersFactory to create order subclasses according to card type enum
+// --------------------------------
 class OrdersFactory {
 
 public:

@@ -9,6 +9,9 @@
 #include "Player/Player.h"
 using namespace std;
 
+// --------------------------------
+// enum for type of card (public)
+// --------------------------------
 enum CardType: int {
   CT_Bomb = 0,
   CT_Reinforcement,
@@ -27,16 +30,30 @@ private:
   GameEngine* game;
 
 public:
-  // play
+  // --------------------------------
+  // Play Card
+  // --------------------------------
   void play();
-  //constructor
+
+  // --------------------------------
+  // Constructors
+  // --------------------------------
   explicit Card(const CardType& type, GameEngine* game);
-  //destruct
-  ~Card();
-  void setCardType(CardType& type);
-  CardType getCardType();
-  //hand copy constructor
   Card(const Card &initial);
 
-static std::string CardTypeToString(CardType& c);
+  // --------------------------------
+  // Destructor
+  // --------------------------------
+  ~Card();
+
+  // --------------------------------
+  // Setters + Getters
+  // --------------------------------
+  void setCardType(CardType& type);
+  CardType getCardType();
+
+  // --------------------------------
+  // Static Method to Map CardType Enum to String
+  // --------------------------------
+  static std::string CardTypeToString(CardType& c);
 };

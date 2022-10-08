@@ -15,10 +15,12 @@ class GameEngine;
 
 class Player {
 private:
+  static int nextId;
+  int id;
+  int army = 0;
   std::vector<Territory*> territories;
   Hand* hand;
   OrdersList orders;
-
   GameEngine* game;
 
 public:
@@ -50,6 +52,7 @@ public:
   Hand* getHand();
   OrdersList* getOrdersListObject();
   std::vector<Territory*>* getTerritories();
+  int getId() const;
 
 public:
   friend std::ostream& operator <<(std::ostream &out, const Player &player);

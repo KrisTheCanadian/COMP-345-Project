@@ -1,7 +1,9 @@
 #include "Player.h"
 
+int Player::nextId = 0;
+
 Player::Player(GameEngine* game, Hand* cards)
-  : game(game), hand(cards)
+  : game(game), hand(cards), id(nextId++)
 {
   game->addPlayer(this);
   orders = OrdersList();
@@ -37,6 +39,7 @@ void Player::issueOrder(CardType cardType){
 }
 
 void Player::addTerritory(Territory& territory) {
+  territory.setOwnerId(this->id);
   territories.push_back(&territory);
 }
 
@@ -44,6 +47,7 @@ void Player::removeTerritory(Territory& territory) {
   auto end = territories.end();
   for(auto it = territories.begin(); it != end; it++){
     if(territory.getName() == (*it)->getName()){
+      territory.setOwnerId(-1);
       territories.erase(it);
     }
   }
@@ -88,4 +92,8 @@ Hand *Player::getHand() {
 
 OrdersList *Player::getOrdersListObject() {
   return &orders;
+}
+
+int Player::getId() const {
+  return id;
 }
