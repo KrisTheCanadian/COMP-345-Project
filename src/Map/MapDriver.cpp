@@ -16,7 +16,8 @@ void testLoadMaps() {
 
   // let's load all the maps and check to see if they are valid.
   for(const std::string& p : map_files){
-    Map* map;
+    GameEngine gameEngine = GameEngine();
+    auto map = gameEngine.getMap();
 
     // we make sure to catch our own std::runtime errors for invalid maps
     try {

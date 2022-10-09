@@ -28,29 +28,29 @@ void testCards() {
   deck->shuffleDeck();
 
   //getting the hand obj
-  Hand player_hand = *player->getHand();
+  Hand* player_hand = player->getHand();
 
   cout << "-> player draws 4 cards" << endl;
   // Draw deck of hand for players hand
-  deck->draw(player_hand);
-  deck->draw(player_hand);
-  deck->draw(player_hand);
-  deck->draw(player_hand);
+  deck->draw(*player_hand);
+  deck->draw(*player_hand);
+  deck->draw(*player_hand);
+  deck->draw(*player_hand);
 
   cout << "-> Card in player's hand" << endl;
 
-  for (auto handCard : player_hand.getHandCards()) {
+  for (auto handCard : player_hand->getHandCards()) {
       cout << handCard->getCardType() << endl;
   }
 
   cout << "-> Number of Cards in Deck: " << deck->getDeckCards()->size() << endl;
-  cout << "-> Number of Cards in Player's hand: " << player_hand.getHandCards().size() << endl;
+  cout << "-> Number of Cards in Player's hand: " << player_hand->getHandCards().size() << endl;
 
   cout << "-> Player Plays a card" << endl;
   // play most left hand size card
-  player_hand.getHandCards().at(0)->play();
+  player_hand->getHandCards().at(0)->play();
 
   cout << "-> Number of Cards in Deck: " << deck->getDeckCards()->size() << endl;
-  cout << "-> Number of Cards in Player's hand: " << player_hand.getHandCards().size() << endl;
+  cout << "-> Number of Cards in Player's hand: " << player_hand->getHandCards().size() << endl;
 
 }
