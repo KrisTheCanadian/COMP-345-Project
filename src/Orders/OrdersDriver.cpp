@@ -17,7 +17,7 @@ void testOrdersLists()
   orderList->add(UserInputOrder::create("Airlift"));
   orderList->add(UserInputOrder::create("Negotiate"));
 
-  std::cout << "-> Move 4 with 2" << std::endl;
+  std::cout << "-> Move 4 with 2 and remove the new 2" << std::endl;
   orderList->move(4, 2);
   orderList->remove(2);
 
