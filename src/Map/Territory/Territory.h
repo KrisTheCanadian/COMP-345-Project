@@ -17,7 +17,7 @@ private:
 
     int armies = 0;
     int ownerId = -1;
-    Player* player = nullptr;
+    Player* player;
 
     int x = -1;
     int y = -1;

@@ -3,7 +3,7 @@
 #include <utility>
 
 Territory::Territory(std::string name)
-  : name(std::move(name)), continent(nullptr)
+  : name(std::move(name)), continent(nullptr), player(nullptr)
 {}
 
 void Territory::addAdjacentTerritory(Territory* territory)
@@ -64,6 +64,7 @@ Territory& Territory::operator=(const Territory &other) {
 
   this->armies = other.armies;
   this->ownerId = other.ownerId;
+  this->player = other.player;
 
   this->x = other.x;
   this->y = other.y;
