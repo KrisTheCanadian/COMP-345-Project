@@ -10,6 +10,7 @@
 
 
 #include "GameEngine/GameEngine.h"
+#include "Player/Player.h"
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -21,6 +22,7 @@
 
 class Continent;
 class GameEngine;
+class Player;
 
 class Territory
 {
@@ -31,6 +33,7 @@ private:
 
   int armies = 0;
   int ownerId = -1;
+  Player* player;
 
   int x = -1;
   int y = -1;
@@ -52,6 +55,9 @@ public:
 
   int getArmies() const;
   void setArmies(int);
+
+  Player* getPlayer();
+  void setPlayer(Player*);
 
   int getX() const;
   int getY() const;

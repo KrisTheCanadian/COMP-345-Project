@@ -329,6 +329,14 @@ int Territory::addArmyUnits(int added) {
   return total;
 }
 
+Player *Territory::getPlayer() {
+  return this->player;
+}
+
+void Territory::setPlayer(Player* p) {
+  this->player = p;
+}
+
 
 
 // -----------------------------------------------------------------------------------------------------------------

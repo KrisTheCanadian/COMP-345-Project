@@ -39,11 +39,14 @@ void Player::issueOrder(CardType cardType){
 }
 
 void Player::addTerritory(Territory& territory) {
+  territory.setPlayer(this);
   territory.setOwnerId(this->id);
   territories.push_back(&territory);
 }
 
 void Player::removeTerritory(Territory& territory) {
+  territory.setPlayer(nullptr);
+  territory.setOwnerId(-1);
   auto end = territories.end();
   for(auto it = territories.begin(); it != end; it++){
     if(territory.getName() == (*it)->getName()){
