@@ -6,6 +6,7 @@
 #include <utility>
 
 class Continent;
+class Player;
 
 class Territory
 {
@@ -16,6 +17,7 @@ private:
 
     int armies = 0;
     int ownerId = -1;
+    Player* player = nullptr;
 
     int x = -1;
     int y = -1;
@@ -34,6 +36,9 @@ public:
   // ----------------------------------------
   void setOwnerId(int id);
   int getOwnerId() const;
+
+  Player* getPlayer();
+  void setPlayer(Player*);
 
   int getArmies() const;
   void setArmies(int);
