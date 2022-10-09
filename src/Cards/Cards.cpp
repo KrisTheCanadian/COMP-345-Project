@@ -99,8 +99,9 @@ void Hand::addToHand(Card *card) {
 }
 
 Card* Hand::removeCard(CardType type) {
+
   for(int i = 0; i < handCards.size(); i++){
-    if(handCards[i]->getCardType() == type){
+    if(handCards.at(i)->getCardType() == type){
       Card* card = handCards.at(i);
       handCards.erase(handCards.begin() + i);
       return card;

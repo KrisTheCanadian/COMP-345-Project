@@ -93,7 +93,7 @@ public:
   // remove & delete from handCards (once the card is used, it should be deleted)
   Card* removeCard(CardType);
 
-  std::vector<Card *>& getHandCards() { return handCards; }
+  std::vector<Card *>* getHandCards() { return &handCards; }
 };
 
 

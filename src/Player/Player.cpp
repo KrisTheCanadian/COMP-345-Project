@@ -5,8 +5,8 @@ int Player::nextId = 0;
 Player::Player(GameEngine* game, Hand* cards)
   : game(game), hand(cards), id(nextId++)
 {
-  game->addPlayer(this);
   orders = new OrdersList();
+  game->addPlayer(this);
 }
 
 // default copy constructor

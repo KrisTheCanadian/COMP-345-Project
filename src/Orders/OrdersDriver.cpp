@@ -21,9 +21,10 @@ void testOrdersLists()
   orderList->move(4, 2);
   orderList->remove(2);
 
-  std::cout << "-> List order execution" << std::endl;
-  orderList->execute();
-
+  auto list = *orderList->getList();
   std::cout << "-> Orders can be validated" << std::endl;
   std::cout << "Example: First Order is valid: " << (orderList->getList()->at(0)->validate() ? "True": "False") << endl;
+
+  std::cout << "-> List order execution" << std::endl;
+  orderList->execute();
 }
