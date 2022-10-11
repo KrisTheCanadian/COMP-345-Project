@@ -1,17 +1,17 @@
 #pragma once
 
-#include "Orders/OrdersList/OrdersList.h"
-#include "Orders/OrdersFactory.h"
-#include "Map/Territory/Territory.h"
-#include "Cards/Deck/Deck.h"
 #include "GameEngine/GameEngine.h"
-#include "Cards/Hand/Hand.h"
 #include "Cards/Cards.h"
+#include "Orders/Orders.h"
+#include "Map/Map.h"
 
 #include <vector>
 
-class Hand;
+class Territory;
+enum CardType : int;
 class GameEngine;
+class Hand;
+class OrdersList;
 
 class Player {
 private:
@@ -19,7 +19,7 @@ private:
   int id;
   std::vector<Territory*> territories;
   Hand* hand;
-  OrdersList orders;
+  OrdersList* orders;
   GameEngine* game;
 
 public:

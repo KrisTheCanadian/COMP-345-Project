@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "Map/Loader/MapLoader.h"
+#include "Map/Map.h"
 
 void testLoadMaps() {
 
@@ -13,12 +13,10 @@ void testLoadMaps() {
     "res/TestMap4_valid.map",
     "res/TestMap5_invalid_format.map"
   };
-
   // let's load all the maps and check to see if they are valid.
   for(const std::string& p : map_files){
     GameEngine gameEngine = GameEngine();
     auto map = gameEngine.getMap();
-
     // we make sure to catch our own std::runtime errors for invalid maps
     try {
       MapLoader::load(p, map);
@@ -26,6 +24,5 @@ void testLoadMaps() {
     } catch (const std::runtime_error& error) {
       std::cout << "Map Format is Invalid: " << error.what() << std::endl;
     }
-
   }
 }

@@ -5,8 +5,8 @@ int Player::nextId = 0;
 Player::Player(GameEngine* game, Hand* cards)
   : game(game), hand(cards), id(nextId++)
 {
+  orders = new OrdersList();
   game->addPlayer(this);
-  orders = OrdersList();
 }
 
 // default copy constructor
@@ -35,18 +35,19 @@ std::vector<Territory *> Player::toAttack() {
 // Type of order
 void Player::issueOrder(CardType cardType){
   auto order = OrdersFactory::CreateOrder(cardType);
-  orders.add(order);
+  orders->add(order);
 }
 
 void Player::addTerritory(Territory& territory) {
+  territory.setPlayer(this);
   territory.setOwnerId(this->id);
   territory.setPlayer(this);
   territories.push_back(&territory);
 }
 
 void Player::removeTerritory(Territory& territory) {
-  territory.setOwnerId(-1);
   territory.setPlayer(nullptr);
+  territory.setOwnerId(-1);
   auto end = territories.end();
   for(auto it = territories.begin(); it != end; it++){
     if(territory.getName() == (*it)->getName()){
@@ -58,6 +59,7 @@ void Player::removeTerritory(Territory& territory) {
 
 Player::~Player() {
   delete hand;
+  delete orders;
 };
 
 Player &Player::operator=(const Player &other) {
@@ -94,7 +96,7 @@ Hand *Player::getHand() {
 }
 
 OrdersList *Player::getOrdersListObject() {
-  return &orders;
+  return orders;
 }
 
 int Player::getId() const {
