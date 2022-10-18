@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "GameEngine/GameEngine.h"
+#include "Player/Player.h"
 
 TEST(PlayerTestSuite, PlayerAddTerritories)
 {

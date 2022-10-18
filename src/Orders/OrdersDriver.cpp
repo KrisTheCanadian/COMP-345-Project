@@ -1,6 +1,5 @@
 #include "Orders.h"
 #include "OrdersDriver.h"
-#include "Orders/UserInputOrder/UserInputOrder.h"
 #include "GameEngine/GameEngine.h"
 
 void testOrdersLists()
@@ -18,10 +17,11 @@ void testOrdersLists()
   orderList->add(UserInputOrder::create("Airlift"));
   orderList->add(UserInputOrder::create("Negotiate"));
 
-  std::cout << "-> Move 4 with 2" << std::endl;
+  std::cout << "-> Move 4 with 2 and remove the new 2" << std::endl;
   orderList->move(4, 2);
   orderList->remove(2);
 
+  auto list = *orderList->getList();
   std::cout << "-> Orders can be validated" << std::endl;
   std::cout << "Example: First Order is valid: " << (orderList->getList()->at(0)->validate() ? "True": "False") << endl;
 

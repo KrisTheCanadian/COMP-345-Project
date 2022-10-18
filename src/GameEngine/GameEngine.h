@@ -4,8 +4,7 @@
 #include <stdexcept>
 #include <vector>
 #include "Player/Player.h"
-#include "Map/Loader/MapLoader.h"
-#include "Cards/Deck/Deck.h"
+#include "Map/Map.h"
 
 class Player;
 class Map;
