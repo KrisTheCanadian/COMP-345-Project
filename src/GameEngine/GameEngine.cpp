@@ -58,6 +58,11 @@ Map* GameEngine::getMap() {
   return this->map;
 }
 
+void GameEngine::addPlayer(const std::string& name) {
+  auto* p = new Player(this, new Hand());
+  this->players.push_back(p);
+}
+
 void GameEngine::addPlayer(Player* player) {
   if(player == nullptr){
     throw std::runtime_error("GameEngine::Error | Cannot add player to game (nullptr)");
@@ -83,5 +88,36 @@ GameEngine::GameEngine() {
 }
 
 void GameEngine::loadMap(const std::string& path) {
+  if(state >= GE_Map_Loaded && state != GE_Win){ throw runtime_error("Map is already loaded."); }
   MapLoader::load(path, this->map);
+  state = GE_Map_Loaded;
+}
+
+bool GameEngine::validateMap() {
+  if(state != GE_Map_Loaded){ throw runtime_error("ASSERT: Cannot Validate Map Before Loading Map."); }
+  if(map == nullptr){ throw runtime_error("ASSERT: Map is null."); }
+  state = GE_Map_Validated;
+  return map->validate();
+}
+
+void GameEngine::gameStart() {
+  // Loading the map
+  while(this->state != GE_Map_Loaded){
+    std::string mapPath;
+    std::cout << "Enter the path for the map: ";
+    std::cin >> mapPath;
+    std::cout << std::endl;
+    try{
+      loadMap(mapPath);
+    } catch (const runtime_error& error){
+      std::cout << "Error: " << error.what() << endl;
+      std::cout << "Please Try Again." << error.what() << endl;
+    }
+
+    std::cout << "Validating Map..." << std::endl;
+    std::cout << "Map is " << (validateMap() ? "Valid":"Invalid") << std::endl;
+  }
+
+
+
 }

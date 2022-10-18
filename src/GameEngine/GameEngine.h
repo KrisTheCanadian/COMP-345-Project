@@ -58,9 +58,24 @@ public:
   void addPlayer(Player* player);
 
   // ----------------------------------------
+  // creates and adds the player to the game
+  // ----------------------------------------
+  void addPlayer(const std::string& name);
+
+  // ----------------------------------------
   // load game map
   // ----------------------------------------
   void loadMap(const std::string& path);
+
+  // ----------------------------------------
+  // Validate game map
+  // ----------------------------------------
+  bool validateMap();
+
+  // ----------------------------------------
+  // gameStart
+  // ----------------------------------------
+  void gameStart();
 
   // ----------------------------------------
   // convert current state to string
