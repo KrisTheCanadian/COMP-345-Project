@@ -58,6 +58,7 @@ set(GAME_LIB_SRCS
     src/GameEngine/GameEngineDriver.h
     src/GameEngine/GameEngine.cpp
     src/GameEngine/GameEngine.h
+    src/Logger/LogObserver.cpp src/Logger/LogObserver.h src/Logger/LoggingObserverDriver.cpp src/Logger/LoggingObserverDriver.h)
 
     # CommandProcessing
     src/GameEngine/Command/Command.cpp

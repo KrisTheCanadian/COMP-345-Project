@@ -24,7 +24,7 @@ enum GameEngineState {
   GE_Win
 };
 
-class GameEngine {
+class GameEngine : public Subject, ILoggable {
 private:
   // current state
   GameEngineState state = GE_Start;
@@ -50,7 +50,7 @@ public:
   // ----------------------------------------
   // Destructor
   // ----------------------------------------
-  ~GameEngine();
+  ~GameEngine() override;
 
   // ----------------------------------------
   // add players to game
@@ -66,6 +66,11 @@ public:
   // convert current state to string
   // ----------------------------------------
   std::string getCurrentStateToString();
+
+  // ----------------------------------------
+  // convert current state to string
+  // ----------------------------------------
+  std::string stringToLog() override;
 
 private:
   // player increment turn

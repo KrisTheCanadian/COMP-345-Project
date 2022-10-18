@@ -1,7 +1,10 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
+
 #include "Cards/Cards.h"
+#include "Logger/LogObserver.h"
 
 class Card;
 enum CardType : int;
@@ -24,7 +27,7 @@ public:
   // validates order
   virtual bool validate() const = 0;
   // executes order
-  virtual void execute() const = 0;
+  virtual void execute() = 0;
   // destructor
   virtual ~Order() = 0;
   // cloner (copy)
@@ -50,7 +53,7 @@ private:
 
 
 
-class OrdersList
+class OrdersList : public Subject, ILoggable
 {
 private:
   // vector of Order pointers
@@ -61,7 +64,7 @@ public:
   // Constructors + destructors
   // --------------------------------
   OrdersList() = default;
-  ~OrdersList();
+  ~OrdersList() override;
   OrdersList(const OrdersList &);
 
   // --------------------------------
@@ -84,6 +87,9 @@ public:
   // --------------------------------
   std::vector<Order *>* getList();
 
+  // Logging
+  std::string stringToLog() override;
+
 private:
   // --------------------------------
   // ostream overload
@@ -103,13 +109,15 @@ private:
 
 
 
-class Advance : public Order
+class Advance : public Order, Subject, ILoggable
 {
 public:
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   ~Advance() override;
+
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
@@ -128,13 +136,15 @@ private:
 
 
 
-class Airlift : public Order
+class Airlift : public Order, Subject, ILoggable
 {
 public:
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   ~Airlift() override;
+
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
@@ -154,13 +164,15 @@ private:
 
 
 
-class Blockade : public Order
+class Blockade : public Order, Subject, ILoggable
 {
 public:
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   ~Blockade() override;
+
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
@@ -178,13 +190,15 @@ private:
 
 
 
-class Bomb : public Order
+class Bomb : public Order, Subject, ILoggable
 {
 public:
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   ~Bomb() override;
+
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
@@ -203,13 +217,15 @@ private:
 
 
 
-class Deploy : public Order
+class Deploy : public Order, Subject, ILoggable
 {
 public:
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   ~Deploy() override;
+
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
@@ -228,13 +244,15 @@ private:
 // -----------------------------------------------------------------------------------------------------------------
 
 
-class Negotiate : public Order
+class Negotiate : public Order, Subject, ILoggable
 {
 public:
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   ~Negotiate() override;
+
+  std::string stringToLog() override;
 
 private:
   const static std::string label;

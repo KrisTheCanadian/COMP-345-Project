@@ -39,6 +39,7 @@ OrdersList::OrdersList(const OrdersList &oldList)
 void OrdersList::add(Order *o)
 {
   if(o){ orders.push_back(o); } else { throw std::runtime_error("Inserting a nullptr in OrderList."); }
+  Subject::notify(this);
 }
 
 // method that removes an order
@@ -149,6 +150,13 @@ std::vector<Order *> *OrdersList::getList() {
   return &this->orders;
 }
 
+std::string OrdersList::stringToLog() {
+  std::stringstream ss;
+  ss << "Order List Added Following Order: ";
+  ss << *orders.end();
+  return ss.str();
+}
+
 
 
 
@@ -177,12 +185,20 @@ bool Advance::validate() const
   return true;
 }
 
-void Advance::execute() const
+void Advance::execute()
 {
   if (validate()) { std::cout << "Advance execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Advance::clone() const { return new Advance(*this); }
+
+std::string Advance::stringToLog() {
+  std::stringstream ss;
+  ss << "Order Executed: ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -216,12 +232,20 @@ bool Airlift::validate() const
   return true;
 }
 
-void Airlift::execute() const
+void Airlift::execute()
 {
   if (validate()) { std::cout << "Airlift execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Airlift::clone() const { return new Airlift(*this); }
+
+std::string Airlift::stringToLog() {
+  std::stringstream ss;
+  ss << "Order Executed: ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -257,12 +281,20 @@ bool Blockade::validate() const
   return true;
 }
 
-void Blockade::execute() const
+void Blockade::execute()
 {
   if (validate()) { std::cout << "Blockade execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Blockade::clone() const { return new Blockade(*this); }
+
+std::string Blockade::stringToLog() {
+  std::stringstream ss;
+  ss << "Order Executed: ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -295,12 +327,20 @@ bool Bomb::validate() const
   return true;
 }
 
-void Bomb::execute() const
+void Bomb::execute()
 {
   if (validate()) { std::cout << "Bomb execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Bomb::clone() const { return new Bomb(*this); }
+
+std::string Bomb::stringToLog() {
+  std::stringstream ss;
+  ss << "Order Executed: ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -332,12 +372,20 @@ bool Deploy::validate() const
   return true;
 }
 
-void Deploy::execute() const
+void Deploy::execute()
 {
   if (validate()) { std::cout << "Deploy execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Deploy::clone() const { return new Deploy(*this); }
+
+std::string Deploy::stringToLog() {
+  std::stringstream ss;
+  ss << "Order Executed: ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -369,9 +417,9 @@ bool Negotiate::validate() const
   return true;
 }
 
-void Negotiate::execute() const
-{
+void Negotiate::execute() {
   if (validate()) { std::cout << "Negotiate execution." << std::endl; }
+  Subject::notify(this);
 }
 
 
@@ -379,6 +427,13 @@ Order *Negotiate::clone() const { return new Negotiate(*this); }
 
 std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
   return ostream << "-> Negotiate order.";
+}
+
+std::string Negotiate::stringToLog() {
+  std::stringstream ss;
+  ss << "Order Executed: ";
+  ss << *this;
+  return ss.str();
 }
 
 

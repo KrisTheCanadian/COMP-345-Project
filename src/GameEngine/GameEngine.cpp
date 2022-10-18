@@ -85,3 +85,12 @@ GameEngine::GameEngine() {
 void GameEngine::loadMap(const std::string& path) {
   MapLoader::load(path, this->map);
 }
+
+std::string GameEngine::stringToLog() {
+  std::stringstream ss;
+  ss << "Transition Occurred: ";
+  // TODO: Transition Data
+  // TEMP
+  ss << getCurrentStateToString();
+  return ss.str();
+}
