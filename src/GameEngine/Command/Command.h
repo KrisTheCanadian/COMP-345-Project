@@ -1,25 +1,20 @@
 #pragma once
 #include <iostream>
 
+using namespace std;
+
 class Command{
 
     private:
-        std::string command;
-        std::string effect;    
+        string command;
+        string effect;    
 
     public:
-
-        //Constructors
-        Command(std::string _command);
+        Command(string _command);
+        ~Command();
         Command(const Command &c);
+        void saveEffect(string effect);
+        string getEffect();
+        string getCommand();
 
-        //Getters & Setters 
-        void saveEffect(std::string effect);
-        std::string getEffect();
-        std::string getCommand();
-        void setCommand(std::string _command);
-
-        //Operator Overloading
-        friend std::ostream & operator << (std::ostream &out, const Command &c);
-        Command& operator=(const Command& other);
 };

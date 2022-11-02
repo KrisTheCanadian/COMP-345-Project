@@ -18,31 +18,10 @@ void Command::saveEffect(string _effect){
     effect = _effect;
 }
 
-string Command::getEffect(){
-    return effect;
-}
+// string getEffect(){
+//     return effect;
+// }
 
-string Command::getCommand(){
-    return command;
-}
-
-void Command::setCommand(string _command){
-    command = _command;
-}
-
-ostream & operator << (ostream &out, const Command &c)
-{
-    out << c.command << " : " << c.effect << endl;
-    return out;
-}
-
-Command& Command::operator=(const Command &other) {
-  if(this == &other){
-    return *this;
-  }
-
-  this->command = other.command;
-  this->effect = other.effect;
-
-  return *this;
-}
+// string getCommand(){
+//     return command;
+// }

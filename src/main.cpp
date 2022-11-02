@@ -9,11 +9,11 @@ using namespace std;
 
 int main()
 {
-//  testCommandProcessor();
-//  testLoadMaps();
-  testGameStates();
-//  testOrdersLists();
-//  testCards();
-//  testPlayers();
+  testCommandProcessor();
+  // testLoadMaps();
+  // testGameStates();
+  // testOrdersLists();
+  // testCards();
+  // testPlayers();
   return 0;
 }
