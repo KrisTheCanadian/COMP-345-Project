@@ -4,6 +4,8 @@
 #include "Cards/Cards.h"
 
 class Card;
+class Player;
+class Territory;
 enum CardType : int;
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -25,10 +27,17 @@ public:
   virtual bool validate() const = 0;
   // executes order
   virtual void execute() const = 0;
+  Order();
+  explicit Order(Player &);
   // destructor
   virtual ~Order() = 0;
+private:
   // cloner (copy)
   virtual Order *clone() const = 0;
+protected:
+    Player *currentPlayer;
+    bool enabled;
+  
 
 private:
   // --------------------------------
@@ -102,21 +111,27 @@ private:
 
 
 
+namespace AdvanceOrder{
+  class Advance : public Order
+  {
+  public:
+    Advance();
+    Advance(Territory &, Territory &, Player &, int); // Src, dest, current player, amount
+    ~Advance() override;
+    std::string getLabel() const override;
+    bool validate() const override;
+    void execute() const override;
 
-class Advance : public Order
-{
-public:
-  std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
-  ~Advance() override;
+  private:
+    const static std::string label;
+    Order *clone() const override;
+    std::ostream &orderCout(std::ostream &) const override;
 
-private:
-  const static std::string label;
-  Order *clone() const override;
-  std::ostream &orderCout(std::ostream &) const override;
-};
-
+    Territory *source;
+    Territory *target;
+    int *amount;
+  };
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -131,15 +146,21 @@ private:
 class Airlift : public Order
 {
 public:
+  Airlift();
+  Airlift(Territory &, Territory &, Player &, int); // Source, target, current player, amount
+  ~Airlift() override;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
-  ~Airlift() override;
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
+
+  Territory *source;
+  Territory *target;
+  int *amount;
 };
 
 
@@ -157,15 +178,19 @@ private:
 class Blockade : public Order
 {
 public:
+  Blockade();
+  Blockade(Territory &, Player &); // Target, current player
+  ~Blockade() override;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
-  ~Blockade() override;
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
+
+  Territory *target;
 };
 
 
@@ -181,15 +206,18 @@ private:
 class Bomb : public Order
 {
 public:
+  Bomb();
+  Bomb(Territory &, Player &); // Target territory to bomb, current player
+  ~Bomb() override;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
-  ~Bomb() override;
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
+  Territory *target;
 };
 
 
@@ -206,15 +234,19 @@ private:
 class Deploy : public Order
 {
 public:
-  std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
-  ~Deploy() override;
+    Deploy();
+    Deploy(Territory &, Player &, int); // Target territory, current player, amount
+    ~Deploy() override;
+    std::string getLabel() const override;
+    bool validate() const override;
+    void execute() const override;
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
+  Territory *target; // Target territory to deploy at
+  int *amount; // Amount of armies to deploy
 };
 
 
@@ -231,15 +263,19 @@ private:
 class Negotiate : public Order
 {
 public:
-  std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
-  ~Negotiate() override;
+    Negotiate();
+    Negotiate(Player &, Player &);
+    ~Negotiate() override;
+    std::string getLabel() const override;
+    bool validate() const override;
+    void execute() const override;  
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
+
+  Player *targetPlayer;
 };
 
 // -----------------------------------------------------------------------------------------------------------------

@@ -1,4 +1,16 @@
+#include <iomanip> // To format output.
+#include <cstdlib>
 #include "Orders.h"
+#include "Orders.h"
+#include "Map.h"
+#include "Player.h"
+#include "Cards.h"
+using std::ostream;
+using std::setw;
+using std::setfill;
+using std::left;
+using std::cout;
+using std::endl;
 
 // -----------------------------------------------------------------------------------------------------------------
 //
@@ -7,7 +19,24 @@
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-Order::~Order() = default;
+
+Order::Order()
+{
+    currentPlayer = nullptr;
+    enabled = true;
+}
+Order::Order(Player& currentPlayer)
+{
+    this->currentPlayer = &currentPlayer;
+    enabled = true;
+}
+/**
+ * Destructor
+ */
+Order::~Order()
+{
+    currentPlayer = nullptr;
+}
 std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderCout(stream); }
 
 
@@ -21,9 +50,14 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
 // -----------------------------------------------------------------------------------------------------------------
 
 
+/**
+ * Default constructor
+ */
+OrdersList::OrdersList(){}
 
-
-
+/**
+ * Destructor
+ */
 OrdersList::~OrdersList(){ for(auto order: orders){ delete order; } }
 
 // Copy constructor to make deep copy of the order list
@@ -161,13 +195,35 @@ std::vector<Order *> *OrdersList::getList() {
 
 
 
+AdvanceOrder::advance::advance() : Order()
+{
+    source = nullptr;
+    target = nullptr;
+    amount = nullptr;
+}
 
 
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
 
-std::string Advance::getLabel() const { return label; }
+std::string AdvanceOrder::Advance::getLabel() const { return label; }
 
-Advance::~Advance() = default;
+AdvanceOrder::advance::advance(Territory& source, Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
+{
+    this->source = &source;
+    this->target = &target;
+    int* copiedAmount = new int(amount);
+    this->amount = copiedAmount;
+}
+
+A/**
+ * Destructor
+ */
+AdvanceOrder::advance::~advance()
+{
+    source = nullptr;
+    target = nullptr;
+    delete amount;
+}
 
 const std::string Advance::label = "Advance";
 
@@ -277,13 +333,18 @@ Order *Blockade::clone() const { return new Blockade(*this); }
 // -----------------------------------------------------------------------------------------------------------------
 
 
-
-
-
+bomb::bomb() : Order()
+{target = nullptr;}
+bomb::bomb(Territory& target, Player& currentPlayer) : Order(currentPlayer)
+{this->target = &target;}
 
 const std::string Bomb::label = "Bomb";
 
-Bomb::~Bomb() = default;
+/**
+ * Destructor
+ */
+bomb::~bomb()
+{target = nullptr;}
 
 std::string Bomb::getLabel() const { return label; }
 
@@ -315,12 +376,27 @@ Order *Bomb::clone() const { return new Bomb(*this); }
 // -----------------------------------------------------------------------------------------------------------------
 
 
-
-
+deploy::deploy() : Order()
+{
+    target = nullptr;
+    amount = nullptr;
+}
 
 const std::string Deploy::label = "Deploy";
 
-Deploy::~Deploy() = default;
+deploy::deploy(Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
+{
+    this->target = &target;
+    int* copiedAmount = new int(amount); // Because our data member is an int pointer.
+    this->amount = copiedAmount;
+}
+
+deploy::~deploy()
+{
+    target = nullptr;
+    currentPlayer = nullptr;
+    delete amount;
+}
 
 std::string Deploy::getLabel() const { return label; }
 
