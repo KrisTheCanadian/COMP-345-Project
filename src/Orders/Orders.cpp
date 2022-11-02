@@ -194,19 +194,18 @@ std::vector<Order *> *OrdersList::getList() {
 
 
 
-AdvanceOrder::advance::advance() : Order()
+Advance::Advance() : Order()
 {
     source = nullptr;
     target = nullptr;
     amount = nullptr;
 }
 
-
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
 
-std::string AdvanceOrder::Advance::getLabel() const { return label; }
+std::string Advance::getLabel() const { return label; }
 
-AdvanceOrder::advance::advance(Territory& source, Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
+Advance::Advance(Territory& source, Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
 {
     this->source = &source;
     this->target = &target;
@@ -217,7 +216,7 @@ AdvanceOrder::advance::advance(Territory& source, Territory& target, Player& cur
 /**
  * Destructor
  */
-AdvanceOrder::advance::~advance()
+Advance::~Advance()
 {
     source = nullptr;
     target = nullptr;
