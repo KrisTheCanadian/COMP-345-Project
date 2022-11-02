@@ -31,13 +31,12 @@ public:
   explicit Order(Player &);
   // destructor
   virtual ~Order() = 0;
-private:
   // cloner (copy)
   virtual Order *clone() const = 0;
+
 protected:
     Player *currentPlayer;
     bool enabled;
-  
 
 private:
   // --------------------------------
@@ -108,29 +107,31 @@ private:
 //                                                Advance
 //
 // -----------------------------------------------------------------------------------------------------------------
+namespace AdvanceOrder {
+    class Advance : public Order {
+    public:
+        Advance();
 
+        Advance(Territory &, Territory &, Player &, int); // Src, dest, current player, amount
+        ~Advance() override;
 
+        std::string getLabel() const override;
 
-namespace AdvanceOrder{
-  class Advance : public Order
-  {
-  public:
-    Advance();
-    Advance(Territory &, Territory &, Player &, int); // Src, dest, current player, amount
-    ~Advance() override;
-    std::string getLabel() const override;
-    bool validate() const override;
-    void execute() const override;
+        bool validate() const override;
 
-  private:
-    const static std::string label;
-    Order *clone() const override;
-    std::ostream &orderCout(std::ostream &) const override;
+        void execute() const override;
 
-    Territory *source;
-    Territory *target;
-    int *amount;
-  };
+    private:
+        const static std::string label;
+
+        Order *clone() const override;
+
+        std::ostream &orderCout(std::ostream &) const override;
+
+        Territory *source;
+        Territory *target;
+        int *amount;
+    };
 }
 
 

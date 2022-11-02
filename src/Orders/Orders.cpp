@@ -1,10 +1,9 @@
 #include <iomanip> // To format output.
 #include <cstdlib>
 #include "Orders.h"
-#include "Orders.h"
-#include "Map.h"
-#include "Player.h"
-#include "Cards.h"
+#include "Map/Map.h"
+#include "Player/Player.h"
+#include "Cards/Cards.h"
 using std::ostream;
 using std::setw;
 using std::setfill;
@@ -53,7 +52,7 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
 /**
  * Default constructor
  */
-OrdersList::OrdersList(){}
+//OrdersList::OrdersList(){}
 
 /**
  * Destructor
@@ -215,7 +214,7 @@ AdvanceOrder::advance::advance(Territory& source, Territory& target, Player& cur
     this->amount = copiedAmount;
 }
 
-A/**
+/**
  * Destructor
  */
 AdvanceOrder::advance::~advance()
