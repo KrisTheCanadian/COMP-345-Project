@@ -8,11 +8,11 @@ using namespace std;
 
 int main()
 {
-  testLoadMaps();
-  testGameStates();
+  //testLoadMaps();
+  //testGameStates();
   testOrdersLists();
-  testCards();
-  testPlayers();
+  //testCards();
+  //testPlayers();
   return 0;
 }
 

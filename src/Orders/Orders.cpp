@@ -253,12 +253,31 @@ Order *Advance::clone() const { return new Advance(*this); }
 
 
 
-
-
+Airlift::Airlift() : Order()
+{
+    source = nullptr;
+    target = nullptr;
+    amount = nullptr;
+}
+Airlift::Airlift(Territory& source, Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
+{
+    this->source = &source;
+    this->target = &target;
+    int* copiedAmount = new int(amount);
+    this->amount = copiedAmount;
+}
 
 const std::string Airlift::label = "Airlift";
 
-Airlift::~Airlift() = default;
+/**
+ * Destructor
+ */
+Airlift::~Airlift()
+    {
+        source = nullptr;
+        target = nullptr;
+        delete amount;
+    }
 
 std::string Airlift::getLabel() const { return label; }
 
@@ -293,13 +312,20 @@ Order *Airlift::clone() const { return new Airlift(*this); }
 
 
 
+Blockade::Blockade() : Order()
+    {target = nullptr;}
 
-
-
+Blockade::Blockade(Territory& target, Player& currentPlayer) : Order(currentPlayer)
+{
+    this->target = &target;
+}
 
 const std::string Blockade::label = "Blockade";
 
-Blockade::~Blockade() = default;
+/**
+ * Destructor
+ */
+Blockade::~Blockade() {target = nullptr;}
 
 std::string Blockade::getLabel() const { return label; }
 
@@ -331,9 +357,9 @@ Order *Blockade::clone() const { return new Blockade(*this); }
 // -----------------------------------------------------------------------------------------------------------------
 
 
-bomb::bomb() : Order()
+Bomb::Bomb() : Order()
 {target = nullptr;}
-bomb::bomb(Territory& target, Player& currentPlayer) : Order(currentPlayer)
+Bomb::Bomb(Territory& target, Player& currentPlayer) : Order(currentPlayer)
 {this->target = &target;}
 
 const std::string Bomb::label = "Bomb";
@@ -341,7 +367,7 @@ const std::string Bomb::label = "Bomb";
 /**
  * Destructor
  */
-bomb::~bomb()
+Bomb::~Bomb()
 {target = nullptr;}
 
 std::string Bomb::getLabel() const { return label; }
@@ -374,7 +400,7 @@ Order *Bomb::clone() const { return new Bomb(*this); }
 // -----------------------------------------------------------------------------------------------------------------
 
 
-deploy::deploy() : Order()
+Deploy::Deploy() : Order()
 {
     target = nullptr;
     amount = nullptr;
@@ -382,14 +408,14 @@ deploy::deploy() : Order()
 
 const std::string Deploy::label = "Deploy";
 
-deploy::deploy(Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
+Deploy::Deploy(Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
 {
     this->target = &target;
     int* copiedAmount = new int(amount); // Because our data member is an int pointer.
     this->amount = copiedAmount;
 }
 
-deploy::~deploy()
+Deploy::~Deploy()
 {
     target = nullptr;
     currentPlayer = nullptr;
@@ -427,13 +453,23 @@ Order *Deploy::clone() const { return new Deploy(*this); }
 
 
 
-
+Negotiate::Negotiate() : Order()
+{
+    targetPlayer = nullptr;
+}
+Negotiate::Negotiate(Player& targetPlayer, Player& currentPlayer) : Order(currentPlayer)
+{
+    this->targetPlayer = &targetPlayer;
+}
 
 
 
 const std::string Negotiate::label = "Negotiate";
 
-Negotiate::~Negotiate() = default;
+Negotiate::~Negotiate()
+    {
+        targetPlayer = nullptr;
+    }
 
 std::string Negotiate::getLabel() const { return label; }
 

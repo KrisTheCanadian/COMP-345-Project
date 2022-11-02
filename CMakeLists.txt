@@ -29,40 +29,40 @@ endif()
 # ---------------------------------------------------------
 
 set(GAME_LIB_SRCS
-    # Map
-    src/Map/Map.cpp
-    src/Map/Map.h
-    src/Map/MapDriver.cpp
-    src/Map/MapDriver.h
+        # Map
+        src/Map/Map.cpp
+        src/Map/Map.h
+        src/Map/MapDriver.cpp
+        src/Map/MapDriver.h
 
-    # Player
-    src/Player/Player.cpp
-    src/Player/Player.h
-    src/Player/PlayerDriver.cpp
-    src/Player/PlayerDriver.h
+        # Player
+        src/Player/Player.cpp
+        src/Player/Player.h
+        src/Player/PlayerDriver.cpp
+        src/Player/PlayerDriver.h
 
-    # Orders
-    src/Orders/Orders.cpp
-    src/Orders/Orders.h
-    src/Orders/OrdersDriver.cpp
-    src/Orders/OrdersDriver.h
+        # Orders
+        src/Orders/Orders.cpp
+        src/Orders/Orders.h
+        src/Orders/OrdersDriver.cpp
+        src/Orders/OrdersDriver.h
 
-    # Cards
-    src/Cards/CardsDriver.cpp
-    src/Cards/CardsDriver.h
-    src/Cards/Cards.cpp
-    src/Cards/Cards.h
+        # Cards
+        src/Cards/CardsDriver.cpp
+        src/Cards/CardsDriver.h
+        src/Cards/Cards.cpp
+        src/Cards/Cards.h
 
-    # GameEngine
-    src/GameEngine/GameEngineDriver.cpp
-    src/GameEngine/GameEngineDriver.h
-    src/GameEngine/GameEngine.cpp
-    src/GameEngine/GameEngine.h
-    )
+        # GameEngine
+        src/GameEngine/GameEngineDriver.cpp
+        src/GameEngine/GameEngineDriver.h
+        src/GameEngine/GameEngine.cpp
+        src/GameEngine/GameEngine.h
+        )
 add_library(Game STATIC ${GAME_LIB_SRCS})
 target_include_directories(Game PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-)
+        ${CMAKE_CURRENT_SOURCE_DIR}/src
+        )
 
 
 
@@ -71,6 +71,8 @@ target_include_directories(Game PUBLIC
 # ---------------------------------------------------------
 add_executable(MainDriver src/main.cpp)
 target_link_libraries(MainDriver Game)
+find_package(CURL REQUIRED)
+include_directories(${CURL_INCLUDE_DIR})
 
 
 
