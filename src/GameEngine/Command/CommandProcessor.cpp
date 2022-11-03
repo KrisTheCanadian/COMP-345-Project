@@ -2,85 +2,127 @@
 #include "Command.h"
 #include <iostream>
 #include <vector>
+#include <regex>
+
+using namespace std;
+
+GameEngineState current_game_state = GE_Start;
+std::regex regexRuleLoadMap("loadmap .+.map$");
+std::regex regexRulePlayerAdd("addplayer .+");
 
 CommandProcessor::CommandProcessor(){
     commandCollection = {};
 }
 
+CommandProcessor::CommandProcessor(const CommandProcessor &c){
+    commandCollection = {};
+    for(int i = 0; i < c.commandCollection.size(); i++){
+        commandCollection.push_back(new Command(*c.commandCollection[i]));
+    }
+}
+
 void CommandProcessor::getCommand(){
     string userInput = readCommand();
-    Command* temp = validate(userInput);
-    saveCommand(temp);
+    Command* currentCommand = validate(userInput);
+    saveCommand(currentCommand);
 }
 
 string CommandProcessor::readCommand(){
     string userInput;
     cout << "Please enter a command: " << endl;
-    cin >> userInput;
+    getline(cin, userInput);
+    cout << endl;
     return userInput;
 }
 
-void CommandProcessor::saveCommand(Command* c){
-    commandCollection.push_back(c);
+void CommandProcessor::saveCommand(Command* _currentCommand){
+    commandCollection.push_back(_currentCommand);
 }
 
-Command* validate(string userInputCommand){
+Command* CommandProcessor::validate(string _userInput){
 
-    Command *temp;
-    Command tempCommandObject = Command(userInputCommand);
-    temp = &tempCommandObject;
+    Command *currentCommandObj = new Command(_userInput);
 
     switch(current_game_state){
         case GE_Start:
-            if (userInputCommand == "loadmap"){current_game_state = GE_Map_Loaded;};
-            temp->saveEffect("Map successfully loaded");
-            return temp;
+            if (std::regex_match(_userInput, regexRuleLoadMap)){
+                current_game_state = GE_Map_Loaded;
+                currentCommandObj->saveEffect("Map successfully loaded");
+                return currentCommandObj;
+            };
+            break;
 
         case GE_Map_Loaded:
-            if (userInputCommand == "validatemap"){current_game_state = GE_Map_Validated;};
-            temp->saveEffect("Map successfully validated");
-            return temp;
+            if (_userInput == "validatemap"){
+                current_game_state = GE_Map_Validated;
+                currentCommandObj->saveEffect("Map successfully validated");
+                return currentCommandObj;
+            };
+            break;
 
         case GE_Map_Validated:
-            if (userInputCommand == "addplayer"){current_game_state = GE_Players_Added;};
-            temp->saveEffect("Player successfully added");
-            return temp;
+            if (std::regex_match(_userInput, regexRulePlayerAdd)){
+                current_game_state = GE_Players_Added;
+                currentCommandObj->saveEffect("Player successfully added");
+                return currentCommandObj;
+            };
+            break;
 
         case GE_Players_Added:
-            if (userInputCommand == "addplayer"){
+            if (std::regex_match(_userInput, regexRulePlayerAdd)){
                 current_game_state = GE_Players_Added;
-                temp->saveEffect("Player successfully added");
-                return temp;
+                currentCommandObj->saveEffect("Player successfully added");
+                return currentCommandObj;
             };
-            if(userInputCommand == "gamestart"){
+            if(_userInput == "gamestart"){
                 current_game_state = GE_Reinforcement;
-                temp->saveEffect("Game successfully started");
-                return temp;
+                currentCommandObj->saveEffect("Game successfully started");
+                return currentCommandObj;
             };
+            break;
 
         case GE_Win:
-            if (userInputCommand == "replay"){
+            if (_userInput == "replay"){
                 current_game_state = GE_Start;
-                temp->saveEffect("Game successfully restarted");
-                return temp;
+                currentCommandObj->saveEffect("Game successfully restarted");
+                return currentCommandObj;
             };
-            if(userInputCommand == "quit"){
+            if(_userInput == "quit"){
                 cout << "Quit";
             };
+            break;
     }
 
-    temp->saveEffect("Error occured when trying to execute command");
-    return temp;
+    currentCommandObj->saveEffect("Invalid Command");
+    return currentCommandObj;
 
 }
 
 
-void printInvalidCommand(const std::string& command){
-  std::cout << "Incorrect Command: \"" << command << "\". Please input a correct command." << std::endl;
+void CommandProcessor::printCommandCollection(std::vector<Command*> commandCollection){
+    for(int i = 0; i < commandCollection.size(); i++){
+        cout << (*commandCollection[i]) << endl;
+    }
+    cout << "Current Game State: " << StateToString() << endl;
 }
 
-// void printCommandCollection(vector<Command*> commandCollection){
-//     for(int i = 0; i < commandCollection.size(); i++){
-//         cout << (*commandCollection[i]).getCommand() << " : " << (*commandCollection[i]).getEffect() << endl;
-//     }
-// }
+vector<Command*> CommandProcessor::getCommandCollection(){
+    return commandCollection;
+}
+
+string CommandProcessor::StateToString() {
+  switch (current_game_state) {
+    case GE_Start:
+      return "Start";
+    case GE_Map_Loaded:
+      return "Map Loaded";
+    case GE_Map_Validated:
+      return "Map Validated";
+    case GE_Players_Added:
+      return "Players Added";
+    case GE_Reinforcement:
+      return "Assign Reinforcement";
+    case GE_Win:
+      return "Win";
+  }
+}

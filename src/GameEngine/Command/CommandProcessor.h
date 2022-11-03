@@ -2,11 +2,10 @@
 #include <iostream>
 #include <vector>
 
-using namespace std;
-
 class Command;
 
-
+//Simulating a game engine
+//THIS WILL BE DELETED ONCE PART 2 IS COMPLETED
 enum GameEngineState {
   GE_Start = 0,
   GE_Map_Loaded,
@@ -16,20 +15,33 @@ enum GameEngineState {
   GE_Win
 };
 
-GameEngineState current_game_state = GE_Start;
-
 class CommandProcessor{
 
     private:
-        vector<Command*> commandCollection;
-        string readCommand();
+        //Read from CLI
+        std::string readCommand();
+
+        //Save to commandCollection
         void saveCommand(Command* c);
 
-    public:
-        void getCommand();
-        CommandProcessor();
-        Command* validate(string userInputCommand);
-        void printInvalidCommand(string& command);
-        void printCommandCollection(vector<Command*> commandCollection);
+        //Store all user commands
+        std::vector<Command*> commandCollection;
 
+        //validate a user command
+        Command* validate(std::string userInputCommand);
+
+    public:
+
+        //Constructors
+        CommandProcessor();
+        CommandProcessor(const CommandProcessor &c);
+
+
+        void getCommand();
+        
+        //Functions for CommandProcessorDriver.cpp
+        void printInvalidCommand(std::string& command);
+        void printCommandCollection(std::vector<Command*> commandCollection);
+        std::vector<Command*> getCommandCollection();
+        std::string StateToString();
 };

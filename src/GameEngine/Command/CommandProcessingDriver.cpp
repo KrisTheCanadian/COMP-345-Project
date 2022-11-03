@@ -4,5 +4,8 @@
 
 void testCommandProcessor() {
     CommandProcessor testCommandProcessor = CommandProcessor();
-    testCommandProcessor.getCommand();
+    while(true){
+        testCommandProcessor.getCommand();
+        testCommandProcessor.printCommandCollection(testCommandProcessor.getCommandCollection());
+    };
 }
