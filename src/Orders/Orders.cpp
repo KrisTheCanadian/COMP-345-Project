@@ -366,8 +366,8 @@ void Airlift::execute() const
       std::cout << "Airlift execution." << std::endl;
       if (source->getOwnerId() == target->getOwnerId()) // Transferring army to another territory
       {
-          source->setArmies(source->setArmies() - *amount);
-          target->setArmies(target->setArmies() + *amount);
+          source->setArmies(source->getArmies() - *amount);
+          target->setArmies(target->getArmies() + *amount);
       }
       else // If you try to airlift on enemy territory, considered as attack.
       {
@@ -720,10 +720,10 @@ void attackSimulation(Territory* source, Territory* target, Player* currentPlaye
     if (remainingAttackArmies > 0 && remainingDefendArmies == 0) // Win
     {
         cout << "Territory conquered! You have won this battle!\n" << endl;
-        target->getOwnerId(currentPlayer->getId()); // Current player now occupies territory
-        currentPlayer->getTerritoryList()->push_back(target);// territory added to player list
+        target->setOwnerId(currentPlayer->getId()); // Current player now occupies territory
+        currentPlayer->getTerritories()->push_back(target);// territory added to player list
         target->setArmies(remainingAttackArmies); // Attackers advance to conquered territory
-        currentPlayer->getGE()->Notify(); // Notify stats observer since a player conquered a territory
+        //currentPlayer->getGE()->Notify(); // Notify stats observer since a player conquered a territory
     }
 
     else // Lose. A draw is considered a loss. If any, attackers retreat. If any, defenders retreat.

@@ -314,3 +314,5 @@ public:
   static Order* CreateOrder(CardType cardType);
 
 };
+
+void attackSimulation(Territory*, Territory*, Player*, int*);

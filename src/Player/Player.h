@@ -22,6 +22,7 @@ private:
   Hand* hand;
   OrdersList* orders;
   GameEngine* game;
+  std::vector<int> friendlyPlayers; // returns all the players who you can not attack for the remainder of the turn
 
 public:
   // --------------------------------
@@ -62,12 +63,7 @@ public:
 
 public:
   friend std::ostream& operator <<(std::ostream &out, const Player &player);
-
-    bool canAttack(int i);
-
-    void getTerritoryList();
-
-    void getGE();
-
-    void addFriendly(int i);
+  bool canAttack(int);
+  GameEngine* getGE();
+  void addFriendly(int);
 };

@@ -117,18 +117,29 @@ int Player::getReinforcementPool()
     return reinforcementPool;
 }
 
-bool Player::canAttack(int i) {
-    return false;
+/**
+ * checks if the target player can be attacked
+ * @param targetPlayerID
+ * @return
+ */
+bool Player::canAttack(int targetPlayerID) {
+    int listLength = friendlyPlayers.size();
+    for(int i = 0; i < listLength; i++)
+    {
+        if (friendlyPlayers[i] == targetPlayerID)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
-void Player::getTerritoryList() {
-
+void Player::addFriendly(int targetPlayerID)
+{
+    friendlyPlayers.push_back(targetPlayerID);
 }
 
-void Player::getGE() {
-
-}
-
-void Player::addFriendly(int i) {
-
+GameEngine* Player::getGE()
+{
+    return game;
 }
