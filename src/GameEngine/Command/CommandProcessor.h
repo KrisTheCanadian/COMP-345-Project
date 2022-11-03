@@ -44,4 +44,8 @@ class CommandProcessor{
         void printCommandCollection(std::vector<Command*> commandCollection);
         std::vector<Command*> getCommandCollection();
         std::string StateToString();
+
+        //Operator Overloading
+        friend std::ostream & operator << (std::ostream &out, const CommandProcessor &c);
+        CommandProcessor& operator=(const CommandProcessor& other);
 };

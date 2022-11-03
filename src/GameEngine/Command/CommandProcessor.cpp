@@ -7,8 +7,8 @@
 using namespace std;
 
 GameEngineState current_game_state = GE_Start;
-std::regex regexRuleLoadMap("loadmap .+.map$");
-std::regex regexRulePlayerAdd("addplayer .+");
+regex regexRuleLoadMap("loadmap .+.map$");
+regex regexRulePlayerAdd("addplayer .+");
 
 CommandProcessor::CommandProcessor(){
     commandCollection = {};
@@ -125,4 +125,20 @@ string CommandProcessor::StateToString() {
     case GE_Win:
       return "Win";
   }
+}
+
+ostream & operator << (ostream &out, const CommandProcessor &c)
+{
+    out << "Overloaded << operator for Command Processor?" << endl;
+    return out;
+}
+
+CommandProcessor& CommandProcessor::operator=(const CommandProcessor &other) {
+  if(this == &other){
+    return *this;
+  }
+
+  this->commandCollection = other.commandCollection;
+
+  return *this;
 }
