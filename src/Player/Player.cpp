@@ -83,6 +83,15 @@ std::ostream &operator<<(std::ostream &out, const Player &player) {
   return out;
 }
 
+/*
+ * Setting player's reinforcement pool
+ */
+void Player::setReinforcementPool(int n)
+{
+    reinforcementPool = n;
+}
+
+
 // ----------------------------------------------------------------
 // Getters
 // ----------------------------------------------------------------
@@ -101,4 +110,25 @@ OrdersList *Player::getOrdersListObject() {
 
 int Player::getId() const {
   return id;
+}
+
+int Player::getReinforcementPool()
+{
+    return reinforcementPool;
+}
+
+bool Player::canAttack(int i) {
+    return false;
+}
+
+void Player::getTerritoryList() {
+
+}
+
+void Player::getGE() {
+
+}
+
+void Player::addFriendly(int i) {
+
 }

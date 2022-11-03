@@ -87,6 +87,9 @@ public:
   // Run user orders and remove them from order list
   void execute();
 
+  int getOrdersListSize();
+  Order* getOrder(int index);
+
   // --------------------------------
   // Getters
   // --------------------------------

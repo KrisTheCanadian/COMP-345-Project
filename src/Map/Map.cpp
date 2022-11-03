@@ -338,6 +338,11 @@ void Territory::setPlayer(Player* p) {
   this->player = p;
 }
 
+//@kris the is Adjacent function needs to be implemented for territories
+bool Territory::isAdjacent(Territory *pTerritory) {
+    return false;
+}
+
 
 
 // -----------------------------------------------------------------------------------------------------------------

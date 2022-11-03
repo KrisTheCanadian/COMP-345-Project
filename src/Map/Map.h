@@ -87,6 +87,8 @@ public:
   // ostream overload
   // ----------------------------------------
   friend std::ostream& operator<<(std::ostream& stream, const Territory& other);
+
+    bool isAdjacent(Territory *pTerritory);
 };
 
 // -----------------------------------------------------------------------------------------------------------------
