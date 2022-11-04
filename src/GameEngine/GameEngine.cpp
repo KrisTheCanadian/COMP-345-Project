@@ -1,5 +1,6 @@
 #include "GameEngine.h"
 
+
 void GameEngine::setCurrentState(GameEngineState engineState) {
   this->state = engineState;
 }
@@ -12,6 +13,44 @@ GameEngine::GameEngine(GameEngineState state) {
   this->state = state;
   this->deck = new Deck(this);
   this->map = new Map(this);
+}
+
+void GameEngine::startupPhase(bool cmd) {
+    if(cmd){cStartupPhase();}
+    else if(!cmd){fStartupPhase();}
+    else cout << "Please chose an input mode!";
+
+}
+
+void GameEngine::fStartupPhase() {
+    std::string command;
+    cout << "Welcome to the startup phase of the game! Here are the list of commands available to you: " << endl;
+    printCommands();
+    cout << "Please enter the command you wish to use: ";
+    cin >> command;
+
+    while(!std::equal(command.begin(), command.end(),"quit")){
+        std::vector<std::string>::iterator it = std::find(commands.begin(), commands.end(),command);
+        int cmdInd = std::distance(commands.begin(), it);
+        if(commands.at(cmdInd) != command) {
+            cout << "Please enter a valid command!" << endl;
+            return;
+        }
+        switch(cmdInd){
+
+        }
+    }
+}
+
+void GameEngine::cStartupPhase() {
+
+
+}
+
+void GameEngine::printCommands() {
+    for(string cmd : commands){
+        cout << cmd << ((std::equal(cmd.begin(), cmd.end(),"loadmap"))?" <filename>": "" )<< ((std::equal(cmd.begin(), cmd.end(),"addplayer"))?" <playername>": "" ) << endl;
+    }
 }
 
 std::string GameEngine::getCurrentStateToString() {
@@ -60,7 +99,7 @@ Map* GameEngine::getMap() {
 
 void GameEngine::addPlayer(const std::string& name) {
   auto* p = new Player(this, new Hand());
-  this->players.push_back(p);
+//  this->players.push_back(p);
 }
 
 void GameEngine::addPlayer(Player* player) {
