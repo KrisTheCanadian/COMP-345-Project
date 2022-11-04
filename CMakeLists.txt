@@ -58,6 +58,15 @@ set(GAME_LIB_SRCS
     src/GameEngine/GameEngineDriver.h
     src/GameEngine/GameEngine.cpp
     src/GameEngine/GameEngine.h
+
+    # CommandProcessing
+    src/GameEngine/Command/Command.cpp
+    src/GameEngine/Command/Command.h
+    src/GameEngine/Command/CommandProcessingDriver.cpp
+    src/GameEngine/Command/CommandProcessingDriver.h
+    src/GameEngine/Command/CommandProcessor.cpp
+    src/GameEngine/Command/CommandProcessor.h
+
     )
 add_library(Game STATIC ${GAME_LIB_SRCS})
 target_include_directories(Game PUBLIC
