@@ -85,6 +85,11 @@ public:
   // ----------------------------------------
   std::string stringToLog() override;
 
+    // ----------------------------------------
+    // reinforcement phase
+    // ----------------------------------------
+    void reinforcementPhase();
+
 private:
   // player increment turn
   void nextPlayerTurn();
