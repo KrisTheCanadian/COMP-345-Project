@@ -99,6 +99,11 @@ public:
   // ----------------------------------------
   std::string stringToLog() override;
 
+    // ----------------------------------------
+    // reinforcement phase
+    // ----------------------------------------
+    void reinforcementPhase();
+
 private:
     // ----------------------------------------
     // initiates startup phase for commands read from the console

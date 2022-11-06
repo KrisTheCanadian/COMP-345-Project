@@ -98,6 +98,8 @@ public:
 
 class Map
 {
+public:
+  std::vector<Continent*> continents;
 
 private:
   std::string name;
@@ -109,7 +111,7 @@ private:
   bool warn{};
 
   std::vector<Territory*> territories;
-  std::vector<Continent*> continents;
+
 
   // Object Owner
   GameEngine* game;
@@ -175,10 +177,12 @@ public:
 
 class Continent
 {
+public:
+    std::vector<Territory*> territories;
+
 private:
   std::string name;
   int bonus;
-  std::vector<Territory*> territories;
 
 public:
   // ----------------------------------------

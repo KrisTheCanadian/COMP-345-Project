@@ -6,6 +6,7 @@
 #include "Map/Map.h"
 
 #include <vector>
+using std::string;
 
 class Territory;
 enum CardType : int;
@@ -17,6 +18,8 @@ class Player {
 private:
   static int nextId;
   int id;
+  string phase;
+  int reinforcementPool;
   std::vector<Territory*> territories;
   Hand* hand;
   OrdersList* orders;
@@ -45,6 +48,7 @@ public:
   void issueOrder(CardType cardType);
   void addTerritory(Territory& territory);
   void removeTerritory(Territory& territory);
+  bool ownsAllTerritoryInContinent();
 
   // --------------------------------
   // Getters
@@ -54,6 +58,14 @@ public:
   std::vector<Territory*>* getTerritories();
   int getId() const;
   std::string* getPlayerName();
+  string getPhase();
+  int getReinforcementPool();
+
+  // --------------------------------
+  // Setters
+  // --------------------------------
+  void setPhase(string ph);
+  void setReinforcementPool(int i);
 
 public:
   friend std::ostream& operator <<(std::ostream &out, const Player &player);
