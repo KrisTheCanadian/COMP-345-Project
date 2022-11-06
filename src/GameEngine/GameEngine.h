@@ -84,10 +84,12 @@ public:
     //different method depending on command mode (command line/file)
 private:void cStartupPhase();
         void fStartupPhase();
+        void printCommands();
+        bool isValid(std::string strCommand);
 
         //redirects to the appropriate startup method
 public: void startupPhase(bool cmd);
-        void printCommands();
+
 
   // ----------------------------------------
   // convert current state to string

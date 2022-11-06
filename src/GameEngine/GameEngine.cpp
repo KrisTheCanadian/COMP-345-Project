@@ -1,4 +1,6 @@
 #include "GameEngine.h"
+#include "Command/CommandProcessor.h"
+#include "Command/Command.h"
 
 
 void GameEngine::setCurrentState(GameEngineState engineState) {
@@ -23,29 +25,59 @@ void GameEngine::startupPhase(bool cmd) {
 }
 
 void GameEngine::fStartupPhase() {
-    std::string command;
-    cout << "Welcome to the startup phase of the game! Here are the list of commands available to you: " << endl;
-    printCommands();
-    cout << "Please enter the command you wish to use: ";
-    cin >> command;
 
-    while(!std::equal(command.begin(), command.end(),"quit")){
-        std::vector<std::string>::iterator it = std::find(commands.begin(), commands.end(),command);
-        int cmdInd = std::distance(commands.begin(), it);
-        if(commands.at(cmdInd) != command) {
-            cout << "Please enter a valid command!" << endl;
-            return;
-        }
-        switch(cmdInd){
-
-        }
-    }
 }
 
 void GameEngine::cStartupPhase() {
+    CommandProcessor* commandProcessor = new CommandProcessor ();
+    Command* command = NULL;
+    std::string strCommand = "";
+    std::string effect = "";
+    cout << "Welcome to the startup phase of the game! Here are the list of commands available to you: " << endl;
+    printCommands();
+    do{
+        cout << "Enter the command you wish to use: ";
+        command = commandProcessor->getCommand();
+        strCommand = command->getCommand();
+        effect = command->getEffect();
 
+        if(!isValid(effect)){
+            cout << "Please enter a valid command!";
+            continue;
+        }
 
+        if(strCommand.find("loadmap") != string::npos){
+            size_t pos = strCommand.find(' ');
+            std::string mapName= strCommand.substr(pos);
+            loadMap(mapName);
+            if(state != GE_Map_Loaded) {
+                cout << "Please enter a valid map name!"<<endl;
+                continue;
+            }
+        }
+        else if(strCommand == "validatemap"){
+            if(validateMap()) cout<< "Map successfully validated!" << endl;
+        }
+        else if(strCommand.find("addplayer")!= string::npos){
+            size_t pos = strCommand.find(' ');
+            std::string playerName = strCommand.substr(pos);
+            addPlayer(playerName);
+            if(players.size() == 6){
+                cout << "Maximum number of players(6) reached! Game is ready to be started." << endl;
+                state = GE_Players_Added;
+            }
+            if(players.size() < 2){
+                cout << "Please add at least one more player! Minimum number of players required is two(2)." << endl;
+                continue;
+            }
+        }
+        else if(strCommand == "gamestart"){
+
+        }
+    }while(strCommand != "quit");
 }
+
+bool isValid(std::string strCommand){return strCommand.find("Invalid") != string::npos;}
 
 void GameEngine::printCommands() {
     for(string cmd : commands){

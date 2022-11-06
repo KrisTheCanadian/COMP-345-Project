@@ -21,10 +21,11 @@ CommandProcessor::CommandProcessor(const CommandProcessor &c){
     }
 }
 
-void CommandProcessor::getCommand(){
+Command* CommandProcessor::getCommand(){
     string userInput = readCommand();
     Command* currentCommand = validate(userInput);
     saveCommand(currentCommand);
+    return currentCommand;
 }
 
 string CommandProcessor::readCommand(){
