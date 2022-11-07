@@ -5,6 +5,7 @@
 #include <vector>
 #include "Player/Player.h"
 #include "Map/Map.h"
+#include "Logger/LogObserver.h"
 
 class Player;
 class Map;
