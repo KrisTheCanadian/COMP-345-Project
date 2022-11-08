@@ -36,6 +36,9 @@ private:
   Deck* deck = nullptr;
   // Map
   Map* map = nullptr;
+  // Logger
+  LogObserver* logObserver = nullptr;
+
 public:
   // ----------------------------------------
   // Constructors
@@ -83,5 +86,6 @@ public:
   Player* getCurrentPlayerTurn();
   Deck* getDeck();
   Map* getMap();
+  LogObserver* getLogObserver();
   GameEngineState getCurrentState();
 };

@@ -2,6 +2,7 @@
 
 void GameEngine::setCurrentState(GameEngineState engineState) {
   this->state = engineState;
+  Subject::notify(this);
 }
 
 GameEngineState GameEngine::getCurrentState() {
@@ -12,6 +13,7 @@ GameEngine::GameEngine(GameEngineState state) {
   this->state = state;
   this->deck = new Deck(this);
   this->map = new Map(this);
+  this->logObserver = new LogObserver(this);
 }
 
 std::string GameEngine::getCurrentStateToString() {
@@ -58,6 +60,10 @@ Map* GameEngine::getMap() {
   return this->map;
 }
 
+LogObserver* GameEngine::getLogObserver() {
+    return this->logObserver;
+}
+
 void GameEngine::addPlayer(Player* player) {
   if(player == nullptr){
     throw std::runtime_error("GameEngine::Error | Cannot add player to game (nullptr)");
@@ -71,6 +77,7 @@ void GameEngine::addPlayer(Player* player) {
 GameEngine::~GameEngine() {
   delete deck;
   delete map;
+  delete logObserver;
 
   for(auto player : players){
     delete player;
@@ -80,6 +87,7 @@ GameEngine::~GameEngine() {
 GameEngine::GameEngine() {
   this->map = new Map(this);
   this->deck = new Deck(this);
+  this->logObserver = new LogObserver(this);
 }
 
 void GameEngine::loadMap(const std::string& path) {
@@ -88,9 +96,8 @@ void GameEngine::loadMap(const std::string& path) {
 
 std::string GameEngine::stringToLog() {
   std::stringstream ss;
-  ss << "Transition Occurred: ";
-  // TODO: Transition Data
-  // TEMP
+  ss << "GAME ENGINE: ";
+  ss << "State transition to ";
   ss << getCurrentStateToString();
   return ss.str();
 }

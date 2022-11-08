@@ -152,7 +152,8 @@ std::vector<Order *> *OrdersList::getList() {
 
 std::string OrdersList::stringToLog() {
   std::stringstream ss;
-  ss << "Order List Added Following Order: ";
+  ss << "ORDER LIST: ";
+  ss << "Order List Added Following Order ";
   ss << *orders.end();
   return ss.str();
 }
@@ -195,7 +196,8 @@ Order *Advance::clone() const { return new Advance(*this); }
 
 std::string Advance::stringToLog() {
   std::stringstream ss;
-  ss << "Order Executed: ";
+    ss << "ORDER: ";
+    ss << "Order Executed ";
   ss << *this;
   return ss.str();
 }
@@ -242,7 +244,8 @@ Order *Airlift::clone() const { return new Airlift(*this); }
 
 std::string Airlift::stringToLog() {
   std::stringstream ss;
-  ss << "Order Executed: ";
+    ss << "ORDER: ";
+    ss << "Order Executed ";
   ss << *this;
   return ss.str();
 }
@@ -291,7 +294,8 @@ Order *Blockade::clone() const { return new Blockade(*this); }
 
 std::string Blockade::stringToLog() {
   std::stringstream ss;
-  ss << "Order Executed: ";
+    ss << "ORDER: ";
+    ss << "Order Executed ";
   ss << *this;
   return ss.str();
 }
@@ -337,7 +341,8 @@ Order *Bomb::clone() const { return new Bomb(*this); }
 
 std::string Bomb::stringToLog() {
   std::stringstream ss;
-  ss << "Order Executed: ";
+    ss << "ORDER: ";
+    ss << "Order Executed ";
   ss << *this;
   return ss.str();
 }
@@ -382,7 +387,8 @@ Order *Deploy::clone() const { return new Deploy(*this); }
 
 std::string Deploy::stringToLog() {
   std::stringstream ss;
-  ss << "Order Executed: ";
+    ss << "ORDER: ";
+    ss << "Order Executed ";
   ss << *this;
   return ss.str();
 }
@@ -431,7 +437,8 @@ std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
 
 std::string Negotiate::stringToLog() {
   std::stringstream ss;
-  ss << "Order Executed: ";
+  ss << "ORDER: ";
+  ss << "Order Executed ";
   ss << *this;
   return ss.str();
 }

@@ -7,6 +7,7 @@
 #include <fstream>
 
 class ILogObserver;
+class GameEngine;
 
 // -----------------------------------------------------------------------------------------------------------------
 //
@@ -78,8 +79,11 @@ public:
 // ----------------------------------------------------------------------------------------------------------------
 
 class LogObserver : ILogObserver {
+private:
+    // Object Owner
+    GameEngine* game;
 public:
-  LogObserver() = default;
-  ~LogObserver() override = default;
-  void update(ILoggable*) override;
+    explicit LogObserver(GameEngine*);
+    ~LogObserver() override = default;
+    void update(ILoggable*) override;
 };

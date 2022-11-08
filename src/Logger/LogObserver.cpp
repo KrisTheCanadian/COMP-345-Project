@@ -34,6 +34,13 @@ void Subject::notify(ILoggable* loggable) {
 //
 // ----------------------------------------------------------------------------------------------------------------
 
+// Default constructor
+LogObserver::LogObserver(GameEngine* game)
+        :game(game)
+{
+    if(game == nullptr){throw std::runtime_error("LogObserver::Error | Cannot set observer Game Engine to null");}
+}
+
 void LogObserver::update(ILoggable* loggable) {
     std::fstream file;
     try {

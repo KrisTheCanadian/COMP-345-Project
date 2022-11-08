@@ -8,9 +8,9 @@ void testLoggingObserver(){
   auto player = new Player(gameEngine, new Hand());
   gameEngine->addPlayer(player);
   auto orderList = player->getOrdersListObject();
+  auto observer = gameEngine->getLogObserver();
 
   auto order = (Bomb*) OrdersFactory::CreateOrder(CardType::CT_Bomb);
-  auto observer = new LogObserver();
   ((Subject*)order)->attach((ILogObserver*)observer);
   orderList->add(order);
   orderList->execute();
