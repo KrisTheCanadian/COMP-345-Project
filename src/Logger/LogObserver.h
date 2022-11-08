@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <fstream>
 
 class ILogObserver;
 
@@ -51,7 +52,6 @@ public:
   void attach(ILogObserver* observer) override;
   void detach(ILogObserver* observer) override;
   void notify(ILoggable*) override;
-
 
 };
 

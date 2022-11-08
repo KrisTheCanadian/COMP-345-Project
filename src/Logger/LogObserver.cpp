@@ -1,4 +1,5 @@
 #include "LogObserver.h"
+#include <iostream>
 
 // -----------------------------------------------------------------------------------------------------------------
 //
@@ -36,5 +37,6 @@ void Subject::notify(ILoggable* loggable) {
 
 void LogObserver::update(ILoggable* loggable) {
   // log the string
+  std::cout << "test" << std::endl;
 }
 
