@@ -11,6 +11,7 @@ void testOrderExecution()
     auto orderList = player->getOrdersListObject();
 
     cout << "-> Order Addition" << endl;
+    //TODO: change the null pointers to actual values
     orderList->add(factory.createOrder("deploy", nullptr, nullptr, nullptr, nullptr, nullptr));
     orderList->add(factory.createOrder("advance", nullptr, nullptr, nullptr, nullptr, nullptr));
     orderList->add(factory.createOrder("bomb", nullptr, nullptr, nullptr, nullptr, nullptr));
