@@ -137,7 +137,7 @@ bool Player::ownsAllTerritoryInContinent()
 
         for(int j = 0; j < territories.size(); j++)
         {
-            if(territories.at(j)->getContinent() == game->getMap()->continents[i]->getName())
+            if(territories.at(j)->getContinentName() == game->getMap()->continents[i]->getName())
             {
                 playerTerritoryIsInContinentCount++;
             }

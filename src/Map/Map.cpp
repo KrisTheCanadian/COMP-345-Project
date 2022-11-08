@@ -270,6 +270,16 @@ void Territory::setContinent(Continent* c)
   this->continent = c;
 }
 
+std::string Territory::getContinentName()
+{
+    return *pContinentName;
+}
+
+void Territory::setContinentName(std::string continent)
+{
+    *pContinentName = continent;
+}
+
 // avoid deep copy (due to other territories being only pointers)
 Territory::Territory(const Territory &other)= default;
 
