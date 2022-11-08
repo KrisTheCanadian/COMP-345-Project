@@ -1,5 +1,4 @@
 #include "LogObserver.h"
-#include <iostream>
 
 // -----------------------------------------------------------------------------------------------------------------
 //
@@ -36,7 +35,15 @@ void Subject::notify(ILoggable* loggable) {
 // ----------------------------------------------------------------------------------------------------------------
 
 void LogObserver::update(ILoggable* loggable) {
-  // log the string
-  std::cout << "test" << std::endl;
+    std::fstream file;
+    try {
+        file.open("gamelog.txt", std::fstream::out | std::fstream::app);
+        file << loggable->stringToLog();
+        file << '\n';
+    }
+    catch(const std::fstream::failure& e){
+        std::cout << "Exception opening/writing to file" << std::endl;
+    }
+    file.close();
 }
 
