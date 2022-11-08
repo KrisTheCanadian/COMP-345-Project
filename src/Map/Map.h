@@ -30,6 +30,7 @@ private:
   Continent* continent;
   std::string name;
   std::vector<Territory*> adjacentTerritories;
+  std::string *pContinentName; // pointer to a continent name
 
   int armies = 0;
   int ownerId = -1;
@@ -65,7 +66,10 @@ public:
   void setX(int x);
   void setY(int y);
 
-  // ----------------------------------------
+  std::string getContinentName();//to get the continent name that this territory belongs to
+  void setContinentName(std::string c);
+
+    // ----------------------------------------
   // adders and removers
   // ----------------------------------------
 
