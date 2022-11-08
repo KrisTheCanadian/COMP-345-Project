@@ -304,15 +304,10 @@ public:
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-
-// --------------------------------
-// Static Class : OrdersFactory to create order subclasses according to card type enum
-// --------------------------------
-class OrdersFactory {
-
+class OrdersFactory
+{
 public:
-  static Order* CreateOrder(CardType cardType);
-
+    Order *createOrder(const std::string &, Territory *, Territory *, Player *, Player *, int *) const;
 };
 
 void attackSimulation(Territory*, Territory*, Player*, int*);

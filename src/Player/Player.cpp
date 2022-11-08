@@ -33,6 +33,7 @@ std::vector<Territory *> Player::toAttack() {
 }
 
 // Type of order
+//TODO: Please change this method to createOrder from the OrdersFactory class
 void Player::issueOrder(CardType cardType){
   auto order = OrdersFactory::CreateOrder(cardType);
   orders->add(order);

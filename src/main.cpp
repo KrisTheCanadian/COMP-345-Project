@@ -10,7 +10,7 @@ int main()
 {
   //testLoadMaps();
   //testGameStates();
-  testOrdersLists();
+  testOrderExecution();
   //testCards();
   //testPlayers();
   return 0;

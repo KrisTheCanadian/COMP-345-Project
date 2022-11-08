@@ -247,7 +247,8 @@ bool Advance::validate() const
         cout << "The source territory is not your own!\n" << endl;
         return false;
     }
-    else if (!source->isAdjacent(target))
+
+    else if (!(std::find(source->getAdjacentTerritories()->begin(), source->getAdjacentTerritories()->end(), target) != source->getAdjacentTerritories()->end()))
     {
         cout << "The target territory is not adjacent to the source territory!\n" << endl;
         return false;
@@ -627,28 +628,6 @@ std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
 
 
 
-
-// -----------------------------------------------------------------------------------------------------------------
-//
-//
-//                                                UserInputOrder - For Driver
-//
-// -----------------------------------------------------------------------------------------------------------------
-
-
-
-Order* UserInputOrder::create(const std::string& orderType)
-{
-  if (orderType == "Deploy") { return new Deploy; }
-  else if (orderType == "Advance") { return new Advance; }
-  else if (orderType == "Bomb") { return new Bomb(); }
-  else if (orderType == "Blockade") { return new Blockade(); }
-  else if (orderType == "Airlift") { return new Airlift(); }
-  else if (orderType == "Negotiate") { return new Negotiate(); }
-  else { throw std::runtime_error("Unexpected OrderType: " + orderType ); }
-}
-
-
 // -----------------------------------------------------------------------------------------------------------------
 //
 //
@@ -656,24 +635,14 @@ Order* UserInputOrder::create(const std::string& orderType)
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-
-
-Order* OrdersFactory::CreateOrder(CardType cardType) {
-  switch(cardType){
-    case CT_Bomb:
-      return new Bomb();
-    case CT_Reinforcement:
-      // TODO: Assignment 2 -> remove deploy and add new logic
-      return new Deploy();
-    case CT_Blockade:
-      return new Blockade();
-    case CT_Airlift:
-      return new Airlift();
-    case CT_Diplomacy:
-      return new Negotiate();
-    default:
-      throw std::runtime_error("ASSERT: Unhandled CardType Value");
-  }
+Order* OrdersFactory::createOrder(const std::string& orderType, Territory* source, Territory* target, Player* currentPlayer, Player* targetPlayer, int* amount ) const
+{
+    if (orderType == "deploy") { return new Deploy(*target, *currentPlayer, *amount); }
+    if (orderType == "advance") { return new Advance(*source, *target, *currentPlayer, *amount); }
+    if (orderType == "bomb") { return new Bomb(*target, *currentPlayer); }
+    if (orderType == "blockade") { return new Blockade(*target, *currentPlayer); }
+    if (orderType == "airlift") { return new Airlift(*source, *target, *currentPlayer, *amount); }
+    if (orderType == "negotiate") { return new Negotiate(*targetPlayer, *currentPlayer); }
 }
 
 void attackSimulation(Territory* source, Territory* target, Player* currentPlayer, int* amount)
