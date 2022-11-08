@@ -34,21 +34,18 @@ void GameEngine::cStartupPhase() {
     cout << "Welcome to the startup phase of the game! Here are the list of commands available to you: " << endl;
     printCommands();
     do{
-//        cout << "Enter the command you wish to use: ";
         command = commandProcessor->getCommand();
         strCommand = command->getCommand();
         effect = command->getEffect();
 
         if(!isValid(effect)){
-            cout << effect << endl;
             cout << "The command or its argument is invalid" << endl;
             continue;
         }
 
         if(strCommand.find("loadmap") != string::npos){
             size_t pos = strCommand.find(' ');
-            std::string mapName= "res/" + MapLoader::trim(strCommand.substr(pos));
-            cout << "Map Name:" << mapName << endl;
+            std::string mapName = "res/" + MapLoader::trim(strCommand.substr(pos));
             loadMap(mapName);
             if(state != GE_Map_Loaded) {
                 cout << "Please enter a valid map name!"<<endl;
@@ -66,14 +63,13 @@ void GameEngine::cStartupPhase() {
             }
         }
         else if(strCommand.find("addplayer")!= string::npos){
-            if(players.size() == 6){
-                cout << "Maximum number of players(6) reached! Game is ready to be started with command gamestart." << endl;
-                continue;
-            }
             size_t pos = strCommand.find(' ');
             std::string playerName = strCommand.substr(pos);
             addPlayer(playerName);
-
+            if(players.size() == 6){
+                cout << "Maximum number of players(6) reached! Game is ready to be started." << endl;
+                state = GE_Players_Added;
+            }
             if(players.size() < 2){
                 cout << "Please add at least one more player! Minimum number of players required is two(2)." << endl;
                 continue;
@@ -81,11 +77,8 @@ void GameEngine::cStartupPhase() {
             state = GE_Players_Added;
         }
         else if(strCommand == "gamestart"){
-            cout << "gamestart"<< endl;
             distributeTerritories();
-            cout << "territories distr"<< endl;
             playerOrder();
-            cout << "players ord"<< endl;
             //each player draws 2 cards
 //            for(Player* player : playersOrder){
 //                //add 50 units to reinforcement pool
@@ -122,7 +115,6 @@ void GameEngine::distributeTerritories(){
         if(remainingTerr > 0){
                 territoriesDistr[i] +=1;
                 remainingTerr--;
-
         }
     }
     cout << "num of territories: " << territories->size()<< endl;
@@ -135,7 +127,6 @@ void GameEngine::distributeTerritories(){
             player = players.at(currPlayer);
             tempTerr = 0;
         }
-        cout << "FUCK " << endl;
         t->setOwnerId(player->getId());
         t->setPlayer(player);
         player->addTerritory(*t);
@@ -162,11 +153,15 @@ void GameEngine::playerOrder(){
 bool GameEngine::isValid(std::string strCommand){return strCommand.find("Invalid") == string::npos;}
 
 void GameEngine::printCommands() {
-    for(string cmd : commands){
-        cout << cmd << ((std::equal(cmd.begin(), cmd.end(),"loadmap"))?" <filename>": "" )<< ((std::equal(cmd.begin(), cmd.end(),"addplayer"))?" <playername>": "" ) << " ";
+    for (string cmd: commands) {
+        cout << cmd << ((std::equal(cmd.begin(), cmd.end(), "loadmap")) ? " <filename>" : "")
+             << ((std::equal(cmd.begin(), cmd.end(), "addplayer")) ? " <playername>" : "") << " ";
     }
-    cout << endl;
 }
+
+bool isValid(std::string strCommand){return strCommand.find("Invalid") == string::npos;}
+
+
 
 std::string GameEngine::getCurrentStateToString() {
   switch (this->state) {
@@ -271,5 +266,4 @@ void GameEngine::gameStart() {
     std::cout << "Validating Map..." << std::endl;
     std::cout << "Map is " << (validateMap() ? "Valid":"Invalid") << std::endl;
   }
-
 }
