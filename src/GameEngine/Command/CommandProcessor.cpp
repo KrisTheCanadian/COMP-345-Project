@@ -1,5 +1,6 @@
 #include "CommandProcessor.h"
 #include "Command.h"
+#include "../GameEngine.h"
 #include <iostream>
 #include <vector>
 #include <regex>

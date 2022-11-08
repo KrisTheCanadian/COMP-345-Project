@@ -31,6 +31,7 @@ private:
   // Players
   unsigned int playerTurn = 0;
   std::vector<Player*> players;
+  std::vector<Player*> playersOrder;
   std::vector<std::string> commands = {"loadmap", "validatemap", "addplayer", "gamestart", "replay", "quit"};
   // Deck
   Deck* deck = nullptr;
@@ -86,6 +87,8 @@ private:void cStartupPhase();
         void fStartupPhase();
         void printCommands();
         bool isValid(std::string strCommand);
+        void distributeTerritories();
+        void playerOrder();
 
         //redirects to the appropriate startup method
 public: void startupPhase(bool cmd);
