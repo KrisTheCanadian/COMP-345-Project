@@ -310,10 +310,5 @@ public:
     static Order* CreateOrder(CardType cardType);
 
 };
-//class OrdersFactory
-//{
-//public:
-//    Order *createOrder(const std::string &, Territory *, Territory *, Player *, Player *, int *) const;
-//};
 
 void attackSimulation(Territory*, Territory*, Player*, int*);

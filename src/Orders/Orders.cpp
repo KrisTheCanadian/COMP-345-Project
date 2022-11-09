@@ -653,16 +653,6 @@ Order* OrdersFactory::CreateOrder(CardType cardType) {
     }
 }
 
-//Order* OrdersFactory::createOrder(const std::string& orderType, Territory* source, Territory* target, Player* currentPlayer, Player* targetPlayer, int* amount ) const
-//{
-//    if (orderType == "deploy") { return new Deploy(*target, *currentPlayer, *amount); }
-//    if (orderType == "advance") { return new Advance(*source, *target, *currentPlayer, *amount); }
-//    if (orderType == "bomb") { return new Bomb(*target, *currentPlayer); }
-//    if (orderType == "blockade") { return new Blockade(*target, *currentPlayer); }
-//    if (orderType == "airlift") { return new Airlift(*source, *target, *currentPlayer, *amount); }
-//    if (orderType == "negotiate") { return new Negotiate(*targetPlayer, *currentPlayer); }
-//}
-
 void attackSimulation(Territory* source, Territory* target, Player* currentPlayer, int* amount)
 {
     source->setArmies(source->getArmies() - *amount); // Attackers leave home territory
@@ -710,7 +700,6 @@ void attackSimulation(Territory* source, Territory* target, Player* currentPlaye
         target->setOwnerId(currentPlayer->getId()); // Current player now occupies territory
         currentPlayer->getTerritories()->push_back(target);// territory added to player list
         target->setArmies(remainingAttackArmies); // Attackers advance to conquered territory
-        //currentPlayer->getGE()->Notify(); // Notify stats observer since a player conquered a territory
     }
 
     else // Lose. A draw is considered a loss. If any, attackers retreat. If any, defenders retreat.
