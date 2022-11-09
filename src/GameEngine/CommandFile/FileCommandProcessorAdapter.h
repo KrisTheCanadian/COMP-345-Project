@@ -2,7 +2,7 @@
 #include "../Command/CommandProcessor.h"
 #include "FileLineReader.h"
 
-class FileCommandProcessorAdapter : public CommandProcessor{
+class FileCommandProcessorAdapter : public CommandProcessor {
     
     private:
         FileLineReader *flr;

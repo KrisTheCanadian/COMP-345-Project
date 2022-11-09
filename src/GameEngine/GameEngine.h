@@ -6,10 +6,12 @@
 #include "Player/Player.h"
 #include "Map/Map.h"
 #include "Logger/LogObserver.h"
+#include "GameEngine/Command/CommandProcessor.h"
 
 class Player;
 class Map;
 class Deck;
+class CommandProcessor;
 
 // ----------------------------------------
 // Public GameEngine State Enum
@@ -29,15 +31,22 @@ class GameEngine : public Subject, ILoggable {
 private:
   // current state
   GameEngineState state = GE_Start;
+
   // Players
   unsigned int playerTurn = 0;
   std::vector<Player*> players;
+
   // Deck
   Deck* deck = nullptr;
+
   // Map
   Map* map = nullptr;
+
   // Logger
   LogObserver* logObserver = nullptr;
+
+  // Command Processor
+  CommandProcessor* commandProcessor = nullptr;
 
 public:
   // ----------------------------------------
@@ -87,5 +96,6 @@ public:
   Deck* getDeck();
   Map* getMap();
   LogObserver* getLogObserver();
+  CommandProcessor* getCommandProcessor();
   GameEngineState getCurrentState();
 };

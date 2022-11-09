@@ -17,7 +17,8 @@ void testCommandProcessor() {
     FileCommandProcessorAdapter adapter;
 
     // Initializing command line reading class
-    CommandProcessor cpr;
+    GameEngine *gameEngine = new GameEngine;
+    CommandProcessor cpr = CommandProcessor(gameEngine);
 
 
     // Get user input (command line or file)

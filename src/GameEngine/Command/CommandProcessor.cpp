@@ -9,9 +9,8 @@ using namespace std;
 regex regexRuleLoadMap("loadmap .+.map$");
 regex regexRulePlayerAdd("addplayer .+");
 
-CommandProcessor::CommandProcessor(GameEngine* gameEngine){
+CommandProcessor::CommandProcessor(GameEngine* game) :game(game){
     commandCollection = {};
-    this->gameEngine = gameEngine;
 }
 
 CommandProcessor::CommandProcessor(const CommandProcessor &c){
@@ -19,6 +18,7 @@ CommandProcessor::CommandProcessor(const CommandProcessor &c){
     for(int i = 0; i < c.commandCollection.size(); i++){
         commandCollection.push_back(new Command(*c.commandCollection[i]));
     }
+    this->game = c.game;
 }
 
 void CommandProcessor::getCommand(){
@@ -41,19 +41,19 @@ void CommandProcessor::saveCommand(Command* _currentCommand){
 }
 
 int CommandProcessor::getCurrentState(){
-    return gameEngine->getCurrentState();
+    return game->getCurrentState();
 }
 
 Command* CommandProcessor::validate(string _userInput){
 
     Command *currentCommandObj = new Command(_userInput);
-    currentCommandObj->attach((ILogObserver*)gameEngine->getLogObserver());
-    GameEngineState current_game_state = gameEngine->getCurrentState();
+    currentCommandObj->attach((ILogObserver*)game->getLogObserver());
+    GameEngineState current_game_state = game->getCurrentState();
 
     switch(current_game_state){
         case GE_Start:
             if (std::regex_match(_userInput, regexRuleLoadMap)){
-                gameEngine->setCurrentState(GE_Map_Loaded);
+                game->setCurrentState(GE_Map_Loaded);
                 currentCommandObj->saveEffect("Map successfully loaded");
                 return currentCommandObj;
             };
@@ -61,7 +61,7 @@ Command* CommandProcessor::validate(string _userInput){
 
         case GE_Map_Loaded:
             if (_userInput == "validatemap"){
-                gameEngine->setCurrentState(GE_Map_Validated);
+                game->setCurrentState(GE_Map_Validated);
                 currentCommandObj->saveEffect("Map successfully validated");
                 return currentCommandObj;
             };
@@ -74,7 +74,7 @@ Command* CommandProcessor::validate(string _userInput){
 
         case GE_Map_Validated:
             if (std::regex_match(_userInput, regexRulePlayerAdd)){
-                gameEngine->setCurrentState(GE_Players_Added);
+                game->setCurrentState(GE_Players_Added);
                 currentCommandObj->saveEffect("Player successfully added");
                 return currentCommandObj;
             };
@@ -82,12 +82,12 @@ Command* CommandProcessor::validate(string _userInput){
 
         case GE_Players_Added:
             if (std::regex_match(_userInput, regexRulePlayerAdd)){
-                gameEngine->setCurrentState(GE_Players_Added);
+                game->setCurrentState(GE_Players_Added);
                 currentCommandObj->saveEffect("Player successfully added");
                 return currentCommandObj;
             };
             if(_userInput == "gamestart"){
-                gameEngine->setCurrentState(GE_Reinforcement);
+                game->setCurrentState(GE_Reinforcement);
                 currentCommandObj->saveEffect("Game successfully started");
                 return currentCommandObj;
             };
@@ -95,7 +95,7 @@ Command* CommandProcessor::validate(string _userInput){
 
         case GE_Win:
             if (_userInput == "replay"){
-                gameEngine->setCurrentState(GE_Start);
+                game->setCurrentState(GE_Start);
                 currentCommandObj->saveEffect("Game successfully restarted");
                 return currentCommandObj;
             };
@@ -123,7 +123,7 @@ vector<Command*> CommandProcessor::getCommandCollection(){
 }
 
 string CommandProcessor::StateToString() {
-    switch (gameEngine->getCurrentState()) {
+    switch (game->getCurrentState()) {
         case GE_Start:
             return "Start";
         case GE_Map_Loaded:

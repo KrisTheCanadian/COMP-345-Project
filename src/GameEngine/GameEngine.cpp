@@ -14,6 +14,7 @@ GameEngine::GameEngine(GameEngineState state) {
   this->deck = new Deck(this);
   this->map = new Map(this);
   this->logObserver = new LogObserver(this);
+  this->commandProcessor = new CommandProcessor(this);
 }
 
 std::string GameEngine::getCurrentStateToString() {
@@ -52,7 +53,7 @@ Player* GameEngine::getCurrentPlayerTurn() {
   return players.at(playerTurn);
 }
 
-Deck *GameEngine::getDeck() {
+Deck* GameEngine::getDeck() {
   return this->deck;
 }
 
@@ -62,6 +63,10 @@ Map* GameEngine::getMap() {
 
 LogObserver* GameEngine::getLogObserver() {
     return this->logObserver;
+}
+
+CommandProcessor* GameEngine::getCommandProcessor() {
+    return this->commandProcessor;
 }
 
 void GameEngine::addPlayer(Player* player) {
@@ -78,6 +83,7 @@ GameEngine::~GameEngine() {
   delete deck;
   delete map;
   delete logObserver;
+  delete commandProcessor;
 
   for(auto player : players){
     delete player;
@@ -88,6 +94,7 @@ GameEngine::GameEngine() {
   this->map = new Map(this);
   this->deck = new Deck(this);
   this->logObserver = new LogObserver(this);
+  this->commandProcessor = new CommandProcessor(this);
   Subject::attach((ILogObserver*)logObserver);
 }
 

@@ -84,6 +84,7 @@ private:
     GameEngine* game;
 public:
     explicit LogObserver(GameEngine*);
+    LogObserver(LogObserver*);
     ~LogObserver() override = default;
     void update(ILoggable*) override;
 };

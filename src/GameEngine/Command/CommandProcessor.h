@@ -17,7 +17,8 @@ private:
     //Store all user commands
     std::vector<Command*> commandCollection;
 
-    GameEngine* gameEngine;
+    // Object Owner
+    GameEngine* game;
 
     //validate a user command
     Command* validate(std::string userInputCommand);
@@ -25,6 +26,7 @@ private:
 public:
 
     //Constructors
+    CommandProcessor() = default;
     CommandProcessor(GameEngine*);
     CommandProcessor(const CommandProcessor &c);
 

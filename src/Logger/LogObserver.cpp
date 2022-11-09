@@ -40,6 +40,9 @@ LogObserver::LogObserver(GameEngine* game)
 {
     if(game == nullptr){throw std::runtime_error("LogObserver::Error | Cannot set observer Game Engine to null");}
 }
+LogObserver::LogObserver(LogObserver *observer) {
+    this->game = observer->game;
+}
 
 void LogObserver::update(ILoggable* loggable) {
     std::fstream file;
