@@ -12,7 +12,7 @@ int main()
 {
   testCommandProcessor();
   testLoadMaps();
-  testGameStates();
+//  testGameStates();
   testOrdersLists();
   testCards();
   testPlayers();
