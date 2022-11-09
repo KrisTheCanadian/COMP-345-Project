@@ -117,6 +117,7 @@ private:
 
 public:
   //default constructor
+  Deck();
   explicit Deck(GameEngine*);
   //destruct
   ~Deck();

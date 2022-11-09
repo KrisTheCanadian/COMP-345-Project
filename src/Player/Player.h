@@ -19,6 +19,7 @@ private:
   int id;
   int reinforcementPool;
   std::vector<Territory*> territories;
+  vector<Player*> players;
   Hand* hand;
   OrdersList* orders;
   GameEngine* game;
@@ -28,7 +29,9 @@ public:
   // --------------------------------
   // Constructors
   // --------------------------------
+  Player();
   Player(GameEngine* game, Hand* cards);
+  Player(int id, int reinforcementPool, vector<Territory*> territories, Hand* cards, OrdersList* orders); //constructor for the OrdersDriver
   ~Player();
   Player(const Player &p);
 
@@ -66,4 +69,6 @@ public:
   bool canAttack(int);
   GameEngine* getGE();
   void addFriendly(int);
+  void addPlayer(Player* p);
+  vector<Player*> getListOfPlayers();
 };

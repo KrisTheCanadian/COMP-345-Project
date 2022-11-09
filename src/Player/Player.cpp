@@ -9,6 +9,15 @@ Player::Player(GameEngine* game, Hand* cards)
   game->addPlayer(this);
 }
 
+Player::Player(int playerID, int reinforcementPool, vector<Territory*> territoryList, Hand* cards, OrdersList* orderlist)
+{
+    this->id = playerID;
+    this->reinforcementPool = reinforcementPool;
+    this->territories = territoryList;
+    this->hand = cards;
+    this->orders = orderlist;
+}
+
 // default copy constructor
 Player::Player(const Player &p) = default;
 
@@ -34,8 +43,8 @@ std::vector<Territory *> Player::toAttack() {
 
 // Type of order
 //TODO: Please change this method to createOrder from the OrdersFactory class
-void Player::issueOrder(CardType cardType){
-  auto order = OrdersFactory::createOrder(cardType);
+void Player::issueOrder(const std::string& orderType, Territory* source, Territory* target, Player* currentPlayer, Player* targetPlayer, int* amount){
+  auto order = OrdersFactory::createOrder(orderType, source, target, currentPlayer, targetPlayer, amount );
   orders->add(order);
 }
 
@@ -143,4 +152,14 @@ void Player::addFriendly(int targetPlayerID)
 GameEngine* Player::getGE()
 {
     return game;
+}
+
+void Player::addPlayer(Player* p)
+{
+    players.push_back(p);
+}
+
+vector<Player*> Player::getListOfPlayers()
+{
+    return players;
 }
