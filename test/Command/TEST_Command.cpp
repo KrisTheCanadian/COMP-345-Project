@@ -2,7 +2,6 @@
 #include <gtest/gtest.h>
 #include "GameEngine/CommandFile/FileCommandProcessorAdapter.h"
 #include "GameEngine/CommandFile/FileLineReader.h"
-#include <iostream>
 
 TEST(FileCommandTestSuite, CommandFile2_invalid){
 
@@ -18,7 +17,7 @@ TEST(FileCommandTestSuite, CommandFile2_invalid){
     }
 
     final_state = adapter.getCurrentState();
-    std::cout << "TEST 2 - " << final_state << std::endl;
+
 
     EXPECT_FALSE(final_state == 4);
 }
@@ -35,7 +34,6 @@ TEST(FileCommandTestSuite, CommandFile3_invalid){
     }
 
     int final_state = adapter.getCurrentState();
-    std::cout << "TEST 3 - " << final_state << std::endl;
 
     EXPECT_FALSE(final_state == 4);
 }
@@ -54,7 +52,6 @@ TEST(FileCommandTestSuite, CommandFile5_invalid){
     }
 
     int final_state = adapter.getCurrentState();
-    std::cout << "TEST 5 - " << final_state << std::endl;
     EXPECT_FALSE(final_state == 4);
 }
 
