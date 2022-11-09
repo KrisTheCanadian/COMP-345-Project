@@ -92,7 +92,7 @@ target_link_libraries(MainDriver Game)
 # ---------------------------------------------------------
 
 # Command (File) Test
-add_executable(testRunnerCommand test/Command/Test_Command.cpp)
+add_executable(testRunnerCommand test/Command/TEST_Command.cpp)
 target_link_libraries(testRunnerCommand gtest_main gmock_main Game)
 add_test(NAME CommandTests COMMAND testRunnerCommand)
 
