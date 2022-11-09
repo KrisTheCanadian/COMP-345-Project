@@ -627,6 +627,26 @@ std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
 }
 
 
+// -----------------------------------------------------------------------------------------------------------------
+//
+//
+//                                                UserInputOrder - For Test
+//
+// -----------------------------------------------------------------------------------------------------------------
+
+
+
+Order* UserInputOrder::create(const std::string& orderType)
+{
+    if (orderType == "Deploy") { return new Deploy; }
+    else if (orderType == "Advance") { return new Advance; }
+    else if (orderType == "Bomb") { return new Bomb(); }
+    else if (orderType == "Blockade") { return new Blockade(); }
+    else if (orderType == "Airlift") { return new Airlift(); }
+    else if (orderType == "Negotiate") { return new Negotiate(); }
+    else { throw std::runtime_error("Unexpected OrderType: " + orderType ); }
+}
+
 
 // -----------------------------------------------------------------------------------------------------------------
 //
