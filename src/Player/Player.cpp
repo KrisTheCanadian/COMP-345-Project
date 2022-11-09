@@ -101,3 +101,7 @@ OrdersList *Player::getOrdersListObject() {
 int Player::getId() const {
   return id;
 }
+
+string* Player::getPlayerName() {
+  return &playerName;
+}
