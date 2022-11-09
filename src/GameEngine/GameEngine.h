@@ -104,6 +104,11 @@ public:
     // ----------------------------------------
     void reinforcementPhase();
 
+  // ----------------------------------------
+  // Issuing Orders Phase
+  // ----------------------------------------
+  void issueOrdersPhase();
+
 private:
     // ----------------------------------------
     // initiates startup phase for commands read from the console

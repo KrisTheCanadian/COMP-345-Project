@@ -59,7 +59,7 @@ public:
   int getId() const;
   std::string* getPlayerName();
   string getPhase();
-  int getReinforcementPool();
+  int getReinforcementPool() const;
 
   // --------------------------------
   // Setters
