@@ -40,11 +40,6 @@ std::string GameEngine::getCurrentStateToString() {
   throw std::runtime_error("Invalid State");
 }
 
-void GameEngine::nextPlayerTurn() {
-  playerTurn++;
-  playerTurn %= players.size();
-}
-
 std::vector<Player *> *GameEngine::getPlayers() {
   return &this->players;
 }
@@ -190,6 +185,31 @@ void GameEngine::executeOrdersPhase() {
 
     phaseTurn = phaseTurn + 1 % (int) players.size();
   }
+}
+
+void GameEngine::mainGameLoop() {
+  Player* winner = nullptr;
+  // check win state
+  while((winner = checkWinState()) == nullptr){
+    reinforcementPhase();
+    issueOrdersPhase();
+    executeOrdersPhase();
+  }
+  cout << "Congratulations" << winner->getName() << endl;
+}
+
+Player* GameEngine::checkWinState() {
+  if(map == nullptr){throw std::runtime_error("checkWinState::Assert Map is null.");}
+
+  int totalAmountOfTerritories = (int) map->getTerritories()->size();
+
+  for(auto& player: players){
+    // check if a player has all the territories
+    if(player->getTerritories()->size() == totalAmountOfTerritories){
+      return player;
+    }
+  }
+  return nullptr;
 }
 
 

@@ -100,9 +100,14 @@ public:
   // ----------------------------------------
   void executeOrdersPhase();
 
+  // ----------------------------------------
+  // Main Game Loop
+  // ----------------------------------------
+  void mainGameLoop();
+
 private:
-  // player increment turn
-  void nextPlayerTurn();
+  // check win state
+  Player* checkWinState();
 
 public:
   // getters

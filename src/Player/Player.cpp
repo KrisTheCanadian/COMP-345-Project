@@ -4,8 +4,8 @@
 
 int Player::nextId = 0;
 
-Player::Player(GameEngine* game, Hand* cards)
-  : game(game), hand(cards), id(nextId++)
+Player::Player(GameEngine* game, Hand* cards, std::string  name)
+  : game(game), hand(cards), id(nextId++), name(std::move(name)), reinforcementPool(0)
 {
   orders = new OrdersList();
   game->addPlayer(this);
@@ -205,5 +205,9 @@ bool Player::ownsAllTerritoryInContinent()
         }
     }
     return false;
+}
+
+std::string Player::getName() const {
+  return name;
 }
 

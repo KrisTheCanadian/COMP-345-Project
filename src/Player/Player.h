@@ -6,7 +6,6 @@
 #include "Map/Map.h"
 
 #include <vector>
-using std::string;
 
 class Territory;
 enum CardType : int;
@@ -24,12 +23,13 @@ private:
   Hand* hand;
   OrdersList* orders;
   GameEngine* game;
+  std::string name;
 
 public:
   // --------------------------------
   // Constructors
   // --------------------------------
-  Player(GameEngine* game, Hand* cards);
+  Player(GameEngine* game, Hand* cards, std::string  name);
   ~Player();
   Player(const Player &p);
 
@@ -56,13 +56,14 @@ public:
   OrdersList* getOrdersListObject();
   std::vector<Territory*>* getTerritories();
   int getId() const;
-  string getPhase();
+  std::string getPhase();
   int getReinforcementPool() const;
+  std::string getName() const;
 
   // --------------------------------
   // Setters
   // --------------------------------
-  void setPhase(string ph);
+  void setPhase(std::string ph);
   void setReinforcementPool(int i);
 
 public:
