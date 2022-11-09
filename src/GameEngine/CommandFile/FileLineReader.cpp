@@ -1,9 +1,9 @@
 #include "FileLineReader.h"
 #include <fstream>
 #include <iostream>
+#include <limits>
+#include <utility>
 
-
-FileLineReader::FileLineReader(){}
 
 FileLineReader::FileLineReader(const FileLineReader &flr){
     fileName = flr.fileName;
@@ -39,7 +39,7 @@ std::ifstream& FileLineReader::GotoLine(std::ifstream& file, unsigned int num){
     return file;
 }
 
-int FileLineReader::maxNumberOfLines(std::string _fileName){
+int FileLineReader::maxNumberOfLines(const std::string& _fileName){
   std::ifstream temp(_fileName);
   int lines_count = 0;
   std::string line;
@@ -50,7 +50,7 @@ int FileLineReader::maxNumberOfLines(std::string _fileName){
 }
 
 void FileLineReader::setFile(std::string _fileName){
-  fileName = _fileName;
+  fileName = std::move(_fileName);
 }
 
 bool FileLineReader::getReadComplete(){

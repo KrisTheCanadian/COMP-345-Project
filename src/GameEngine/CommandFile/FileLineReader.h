@@ -12,7 +12,7 @@ class FileLineReader{
     public:
     
         // Default constructor
-        FileLineReader();
+        FileLineReader() = default;
 
         // Copy constructor
         FileLineReader(const FileLineReader &flr);
@@ -24,7 +24,7 @@ class FileLineReader{
         std::ifstream& GotoLine(std::ifstream& file, unsigned int num);
         
         // Return maximum number of lines in _fileName
-        int maxNumberOfLines(std::string _fileName);
+        int maxNumberOfLines(const std::string& _fileName);
         
         // Relevant getters and setters
         void setFile(std::string _fileName);
