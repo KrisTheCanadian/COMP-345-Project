@@ -150,15 +150,39 @@ std::vector<Order *> *OrdersList::getList() {
   return &this->orders;
 }
 
-std::string OrdersList::stringToLog() {
-  std::stringstream ss;
-  ss << "ORDER LIST: ";
-  ss << "Order List Added Following Order ";
-  ss << *orders.end();
-  return ss.str();
+
+std::string OrdersList::castOrderType(Order * o){
+    if(Advance *order = dynamic_cast<Advance*>(o)){
+        return order->getLabel();
+    }
+    else if(Airlift *order = dynamic_cast<Airlift*>(o)){
+        return order->getLabel();
+    }
+    else if(Blockade *order = dynamic_cast<Blockade*>(o)){
+        return order->getLabel();
+    }
+    else if(Bomb *order = dynamic_cast<Bomb*>(o)){
+        return order->getLabel();
+    }
+    else if(Deploy *order = dynamic_cast<Deploy*>(o)){
+        return order->getLabel();
+    }
+    else if(Negotiate *order = dynamic_cast<Negotiate*>(o)){
+        return order->getLabel();
+    }
+    throw std::runtime_error("OrderList::Error Order is null");
 }
 
+std::string OrdersList::stringToLog() {
+    Order &o = *orders.back();
+    std::string orderType = castOrderType(&o);
 
+    std::stringstream ss;
+    ss << "ORDER LIST: ";
+    ss << "Order List Added ";
+    ss << orderType;
+    return ss.str();
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------

@@ -88,6 +88,7 @@ GameEngine::GameEngine() {
   this->map = new Map(this);
   this->deck = new Deck(this);
   this->logObserver = new LogObserver(this);
+  Subject::attach((ILogObserver*)logObserver);
 }
 
 void GameEngine::loadMap(const std::string& path) {

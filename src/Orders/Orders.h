@@ -88,6 +88,7 @@ public:
   std::vector<Order *>* getList();
 
   // Logging
+  std::string castOrderType(Order * o);
   std::string stringToLog() override;
 
 private:

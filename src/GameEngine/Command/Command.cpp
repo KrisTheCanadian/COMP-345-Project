@@ -51,7 +51,8 @@ Command& Command::operator=(const Command &other) {
 std::string Command::stringToLog() {
     std::stringstream ss;
     ss << "COMMAND: ";
-    ss << "Saved Effect ";
+    ss << "Saved Effect \"";
     ss << getEffect();
+    ss << "\"";
     return ss.str();
 }

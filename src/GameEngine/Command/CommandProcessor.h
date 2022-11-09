@@ -3,7 +3,7 @@
 #include <sstream>
 #include <vector>
 #include "Logger/LogObserver.h"
-#include "./GameEngine/GameEngine.h"
+#include "GameEngine/GameEngine.h"
 
 class Command;
 
@@ -14,9 +14,10 @@ protected:
     void saveCommand(Command* c);
 
 private:
-
     //Store all user commands
     std::vector<Command*> commandCollection;
+
+    GameEngine* gameEngine;
 
     //validate a user command
     Command* validate(std::string userInputCommand);
@@ -24,7 +25,7 @@ private:
 public:
 
     //Constructors
-    CommandProcessor();
+    CommandProcessor(GameEngine*);
     CommandProcessor(const CommandProcessor &c);
 
     void getCommand();
