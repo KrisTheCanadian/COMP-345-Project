@@ -296,10 +296,10 @@ void testOrderExecution()
 //    negotiate->execute();
 
 
-    deploy->~Deploy();
-    advance->~Advance();
-    bomb->~Bomb();
-    blockade->~Blockade();
-    airlift->~Airlift();
+//    deploy->~Deploy();
+//    advance->~Advance();
+//    bomb->~Bomb();
+//    blockade->~Blockade();
+//    airlift->~Airlift();
 
 }
