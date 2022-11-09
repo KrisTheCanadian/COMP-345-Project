@@ -1,29 +1,18 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "./GameEngine/GameEngine.h"
 
 class Command;
 
-//Simulating a game engine
-//THIS WILL BE DELETED ONCE PART 2 IS COMPLETED
-enum GameEngineState {
-  GE_Start = 0,
-  GE_Map_Loaded,
-  GE_Map_Validated,
-  GE_Players_Added,
-  GE_Reinforcement,
-  GE_Win
-};
-
 class CommandProcessor{
 
+    protected:
+      virtual std::string readCommand();
+      void saveCommand(Command* c);
+
     private:
-        //Read from CLI
-        std::string readCommand();
-
-        //Save to commandCollection
-        void saveCommand(Command* c);
-
+    
         //Store all user commands
         std::vector<Command*> commandCollection;
 
@@ -38,6 +27,7 @@ class CommandProcessor{
 
 
         void getCommand();
+        int getCurrentState();
         
         //Functions for CommandProcessorDriver.cpp
         void printInvalidCommand(std::string& command);

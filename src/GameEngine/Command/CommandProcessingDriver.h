@@ -1,4 +1,4 @@
 #pragma once
+#include "CommandProcessor.h"
 
-// test for driver
 void testCommandProcessor();

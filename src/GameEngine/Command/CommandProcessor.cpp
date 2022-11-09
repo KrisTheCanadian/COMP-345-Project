@@ -39,6 +39,10 @@ void CommandProcessor::saveCommand(Command* _currentCommand){
     commandCollection.push_back(_currentCommand);
 }
 
+int CommandProcessor::getCurrentState(){
+    return current_game_state;
+}
+
 Command* CommandProcessor::validate(string _userInput){
 
     Command *currentCommandObj = new Command(_userInput);
@@ -58,6 +62,11 @@ Command* CommandProcessor::validate(string _userInput){
                 currentCommandObj->saveEffect("Map successfully validated");
                 return currentCommandObj;
             };
+            if (std::regex_match(_userInput, regexRuleLoadMap)){
+                current_game_state = GE_Map_Loaded;
+                currentCommandObj->saveEffect("Map successfully loaded");
+                return currentCommandObj;
+            }
             break;
 
         case GE_Map_Validated:
