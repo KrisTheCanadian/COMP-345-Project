@@ -109,6 +109,11 @@ public:
   // ----------------------------------------
   void issueOrdersPhase();
 
+  // ----------------------------------------
+  // Execute Orders Phase
+  // ----------------------------------------
+  void executeOrdersPhase();
+
 private:
     // ----------------------------------------
     // initiates startup phase for commands read from the console

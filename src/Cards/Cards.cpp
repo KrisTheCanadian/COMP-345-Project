@@ -30,7 +30,9 @@ CardType Card::getCardType()
 void Card::play() {
   // check to see whose turn it is
   Player* currentPlayer = game->getCurrentPlayerTurn();
-  currentPlayer->issueOrder(cardType);
+  auto orders = currentPlayer->getOrdersListObject();
+  orders->add(OrdersFactory::CreateOrder(cardType));
+
   Card* card = currentPlayer->getHand()->removeCard(cardType);
 
   if(card == nullptr){ throw std::runtime_error(&"Hand did not contain card type: " [cardType]); }

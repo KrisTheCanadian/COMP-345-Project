@@ -354,8 +354,49 @@ void GameEngine::reinforcementPhase()
 /*
 * ISSUE ORDERS PHASE
 */
-void GameEngine::issueOrdersPhase() {
 
+void GameEngine::issueOrdersPhase() {
+  int phaseTurn = 0;
+  vector<bool> completed(players.size());
+  for(auto& player : players){ player->setPhase("Issue Orders"); }
+
+  while(std::all_of(completed.begin(), completed.end(), [](bool v) { return v; })){
+    auto currentPlayer = players[phaseTurn];
+
+    // when no more orders need to be issued
+    if(currentPlayer->getReinforcementPool() == 0 && currentPlayer->getHand()->getHandCards()->empty()){
+      completed[phaseTurn] = true;
+    }
+
+    currentPlayer->issueOrder();
+
+    phaseTurn = phaseTurn + 1 % (int) players.size();
+  }
+}
+
+/*
+* Execute Orders PHASE
+*/
+
+void GameEngine::executeOrdersPhase() {
+  int phaseTurn = 0;
+  vector<bool> completed(players.size());
+  for(auto& player : players){ player->setPhase("Execute Orders Phase"); }
+  while(std::all_of(completed.begin(), completed.end(), [](bool v) { return v; })){
+    auto currentPlayer = players[phaseTurn];
+    auto currentPlayerOrders = currentPlayer->getOrdersListObject()->getList();
+    // when no more orders need to be issued
+    if(currentPlayerOrders->empty()){
+      completed[phaseTurn] = true;
+    }
+
+    auto topOrder = currentPlayerOrders->at(0);
+    topOrder->execute();
+    currentPlayerOrders->erase(currentPlayerOrders->cbegin());
+    delete topOrder;
+
+    phaseTurn = phaseTurn + 1 % (int) players.size();
+  }
 }
 
 

@@ -45,7 +45,7 @@ public:
   std::vector<Territory *> toDefend();
   std::vector<Territory *> toAttack();
 
-  void issueOrder(CardType cardType);
+  void issueOrder();
   void addTerritory(Territory& territory);
   void removeTerritory(Territory& territory);
   bool ownsAllTerritoryInContinent();
