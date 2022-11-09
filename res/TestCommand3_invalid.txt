@@ -1,0 +1,7 @@
+loadmap error
+loadmap test.map
+loadmap error
+loadmap test2.map
+validatemap
+validatemap
+gamestart

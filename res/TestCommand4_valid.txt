@@ -1,0 +1,12 @@
+loadmap test.map
+loadmap test2.map
+validatemap
+addplayer zafir
+addplayer kris
+addplayer raisa
+addplayer valentina
+addplayer alexia
+addplayer kim
+loadmap test3.map
+validatemap
+gamestart
