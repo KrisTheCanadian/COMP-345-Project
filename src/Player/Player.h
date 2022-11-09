@@ -17,7 +17,7 @@ class Player {
 private:
   static int nextId;
   int id;
-  string phase;
+  std::string phase;
   int reinforcementPool;
   std::vector<Territory*> territories;
   Hand* hand;
