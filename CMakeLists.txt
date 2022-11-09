@@ -59,12 +59,11 @@ set(GAME_LIB_SRCS
         src/GameEngine/GameEngine.cpp
         src/GameEngine/GameEngine.h
         )
+
 add_library(Game STATIC ${GAME_LIB_SRCS})
 target_include_directories(Game PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         )
-
-
 
 # ---------------------------------------------------------
 # Main Driver
@@ -79,6 +78,11 @@ include_directories(${CURL_INCLUDE_DIR})
 # ---------------------------------------------------------
 # Tests
 # ---------------------------------------------------------
+
+# Command (File) Test
+add_executable(testRunnerCommand test/Command/TEST_Command.cpp)
+target_link_libraries(testRunnerCommand gtest_main gmock_main Game)
+add_test(NAME CommandTests COMMAND testRunnerCommand)
 
 # Game Engine Test
 add_executable(testRunnerGameEngine test/GameEngine/TEST_GameEngine.cpp)
@@ -104,6 +108,8 @@ add_test(NAME PlayerTests COMMAND testRunnerPlayer)
 add_executable(testRunnerMap test/Map/TEST_MapLoader.cpp)
 target_link_libraries(testRunnerMap gtest_main gmock_main Game)
 add_test(NAME MapTests COMMAND testRunnerMap)
+
+
 
 
 

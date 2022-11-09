@@ -3,16 +3,17 @@
 #include "Orders/OrdersDriver.h"
 #include "Cards/CardsDriver.h"
 #include "Player/PlayerDriver.h"
+#include "GameEngine/Command/CommandProcessingDriver.h"
 
 using namespace std;
 
 int main()
 {
-  //testLoadMaps();
-  //testGameStates();
+  testCommandProcessor();
+  testLoadMaps();
+  testGameStates();
   testOrderExecution();
-  //testCards();
-  //testPlayers();
+  testCards();
+  testPlayers();
   return 0;
 }
-
