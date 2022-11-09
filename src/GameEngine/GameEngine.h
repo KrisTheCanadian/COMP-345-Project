@@ -114,11 +114,18 @@ public:
   // ----------------------------------------
   void executeOrdersPhase();
 
+  // ----------------------------------------
+  // Main Game Loop
+  // ----------------------------------------
+  void mainGameLoop();
+
 private:
     // ----------------------------------------
     // initiates startup phase for commands read from the console
     // ----------------------------------------
     void startupPhase();
+  // check win state
+  Player* checkWinState();
 
     // ----------------------------------------
     // prints all the commands available for the user to use
