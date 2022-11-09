@@ -427,8 +427,8 @@ void Blockade::execute() const
 {
   if (validate()) {
       std::cout << "Blockade execution." << std::endl;
-      target->setArmies(target->getArmies() * 2);
-      target->setOwnerId(-1); // Transfer to neutral player.
+      target->setArmies(target->getArmies() * 3);
+      target->setOwnerId(-1); // Transfer to neutral
   }
 }
 
@@ -635,15 +635,33 @@ std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-Order* OrdersFactory::createOrder(const std::string& orderType, Territory* source, Territory* target, Player* currentPlayer, Player* targetPlayer, int* amount ) const
-{
-    if (orderType == "deploy") { return new Deploy(*target, *currentPlayer, *amount); }
-    if (orderType == "advance") { return new Advance(*source, *target, *currentPlayer, *amount); }
-    if (orderType == "bomb") { return new Bomb(*target, *currentPlayer); }
-    if (orderType == "blockade") { return new Blockade(*target, *currentPlayer); }
-    if (orderType == "airlift") { return new Airlift(*source, *target, *currentPlayer, *amount); }
-    if (orderType == "negotiate") { return new Negotiate(*targetPlayer, *currentPlayer); }
+Order* OrdersFactory::CreateOrder(CardType cardType) {
+    switch(cardType){
+        case CT_Bomb:
+            return new Bomb();
+        case CT_Reinforcement:
+            // TODO: Assignment 2 -> remove deploy and add new logic
+            return new Deploy();
+        case CT_Blockade:
+            return new Blockade();
+        case CT_Airlift:
+            return new Airlift();
+        case CT_Diplomacy:
+            return new Negotiate();
+        default:
+            throw std::runtime_error("ASSERT: Unhandled CardType Value");
+    }
 }
+
+//Order* OrdersFactory::createOrder(const std::string& orderType, Territory* source, Territory* target, Player* currentPlayer, Player* targetPlayer, int* amount ) const
+//{
+//    if (orderType == "deploy") { return new Deploy(*target, *currentPlayer, *amount); }
+//    if (orderType == "advance") { return new Advance(*source, *target, *currentPlayer, *amount); }
+//    if (orderType == "bomb") { return new Bomb(*target, *currentPlayer); }
+//    if (orderType == "blockade") { return new Blockade(*target, *currentPlayer); }
+//    if (orderType == "airlift") { return new Airlift(*source, *target, *currentPlayer, *amount); }
+//    if (orderType == "negotiate") { return new Negotiate(*targetPlayer, *currentPlayer); }
+//}
 
 void attackSimulation(Territory* source, Territory* target, Player* currentPlayer, int* amount)
 {

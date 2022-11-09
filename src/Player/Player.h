@@ -19,19 +19,19 @@ private:
   int id;
   int reinforcementPool;
   std::vector<Territory*> territories;
-  vector<Player*> players;
+  std::vector<Player*> players;
   Hand* hand;
   OrdersList* orders;
   GameEngine* game;
   std::vector<int> friendlyPlayers; // returns all the players who you can not attack for the remainder of the turn
-
+  //std::vector<int> friendlyPlayerID;
 public:
   // --------------------------------
   // Constructors
   // --------------------------------
   Player();
   Player(GameEngine* game, Hand* cards);
-  Player(int id, int reinforcementPool, vector<Territory*> territories, Hand* cards, OrdersList* orders); //constructor for the OrdersDriver
+  Player(int id, int reinforcementPool, std::vector<Territory*> territories, Hand* cards, OrdersList* orders); //constructor for the OrdersDriver
   ~Player();
   Player(const Player &p);
 
@@ -70,5 +70,5 @@ public:
   GameEngine* getGE();
   void addFriendly(int);
   void addPlayer(Player* p);
-  vector<Player*> getListOfPlayers();
+  std::vector<Player*> getListOfPlayers();
 };
