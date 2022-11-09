@@ -15,8 +15,8 @@ CommandProcessor::CommandProcessor(GameEngine* game) :game(game){
 
 CommandProcessor::CommandProcessor(const CommandProcessor &c){
     commandCollection = {};
-    for(int i = 0; i < c.commandCollection.size(); i++){
-        commandCollection.push_back(new Command(*c.commandCollection[i]));
+    for(auto i : c.commandCollection){
+        commandCollection.push_back(new Command(*i));
     }
     this->game = c.game;
 }
@@ -44,7 +44,7 @@ int CommandProcessor::getCurrentState(){
     return game->getCurrentState();
 }
 
-Command* CommandProcessor::validate(string _userInput){
+Command* CommandProcessor::validate(const string& _userInput){
 
     Command *currentCommandObj = new Command(_userInput);
     currentCommandObj->attach((ILogObserver*)game->getLogObserver());
@@ -111,9 +111,9 @@ Command* CommandProcessor::validate(string _userInput){
 }
 
 
-void CommandProcessor::printCommandCollection(std::vector<Command*> commandCollection){
-    for(int i = 0; i < commandCollection.size(); i++){
-        cout << (*commandCollection[i]) << endl;
+void CommandProcessor::printCommandCollection(const std::vector<Command*>& commandCollection){
+    for(auto & i : commandCollection){
+        cout << (*i) << endl;
     }
     cout << "Current Game State: " << StateToString() << endl;
 }
