@@ -28,6 +28,7 @@ class CommandProcessor{
 
         void getCommand();
         int getCurrentState();
+
         
         //Functions for CommandProcessorDriver.cpp
         void printInvalidCommand(std::string& command);

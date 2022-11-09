@@ -58,5 +58,4 @@ void testCommandProcessor() {
     else {
         throw std::runtime_error("Invalid User Input");
     }
-
 }
