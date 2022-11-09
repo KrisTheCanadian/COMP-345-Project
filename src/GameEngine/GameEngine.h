@@ -90,6 +90,11 @@ public:
     // ----------------------------------------
     void reinforcementPhase();
 
+  // ----------------------------------------
+  // Issuing Orders Phase
+  // ----------------------------------------
+  void issueOrdersPhase();
+
 private:
   // player increment turn
   void nextPlayerTurn();

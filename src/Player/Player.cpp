@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include <utility>
+
 int Player::nextId = 0;
 
 Player::Player(GameEngine* game, Hand* cards)
@@ -110,10 +112,10 @@ string Player::getPhase()
 
 void Player::setPhase(string ph)
 {
-    phase = ph;
+    phase = std::move(ph);
 }
 
-int Player::getReinforcementPool()
+int Player::getReinforcementPool() const
 {
     return reinforcementPool;
 }
@@ -125,19 +127,19 @@ void Player::setReinforcementPool(int i)
 
 /* For every Continent vector in Map obj, it will store its size and while iterating through player's territory list,
  * checks whether a territory's continent owned by a player matches the Continent name Continents[i] of map obj,
- * if so we increment the playerTerritoryInContinentCount and then we check if it matches with Map Continent[i]'s size
+ * if so we increment the playerTerritoryInContinentCount, and then we check if it matches with Map Continent[i]'s size
  * if so then we can conclude that a player owns all territories in a particular continent and gains bonus power!
  */
 bool Player::ownsAllTerritoryInContinent()
 {
-    for(int i = 0; i < game->getMap()->continents.size(); i++)
+    for(auto & continent : game->getMap()->continents)
     {
-        int numOfTerritoriesInContinentMap = game->getMap()->continents[i]->territories.size();
+        int numOfTerritoriesInContinentMap = (int) continent->territories.size();
         int playerTerritoryIsInContinentCount;
 
-        for(int j = 0; j < territories.size(); j++)
+        for(auto & territory : territories)
         {
-            if(territories.at(j)->getContinentName() == game->getMap()->continents[i]->getName())
+            if(territory->getContinentName() == continent->getName())
             {
                 playerTerritoryIsInContinentCount++;
             }

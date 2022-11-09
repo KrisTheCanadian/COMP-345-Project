@@ -115,31 +115,40 @@ std::string GameEngine::stringToLog() {
 */
 void GameEngine::reinforcementPhase()
 {
-    for (int i = 0; i < players.size(); i++)
+    for (auto & player : players)
     {
-        players[i]->setPhase("Reinforcement");
-        cout << "Player No: " << players[i]->getId() << "'s old Reinforcement Pool Looks Like----> "<< players[i]->getReinforcementPool();
+        player->setPhase("Reinforcement");
+        cout << "Player No: " << player->getId() << "'s old Reinforcement Pool Looks Like----> "<< player->getReinforcementPool();
         // if (number of territories owned) / 3 is less than 3, assigns 3 to the player reinforcement pool
-        if(((players[i]->getTerritories()->size()) / 3) < 3) // removed round
+        if(((player->getTerritories()->size()) / 3) < 3) // removed round
         {
-            cout << "| Player: " << players[i]->getId() << "'s updated Reinforcement Pool Looks Like----> ";
-            players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 3);
-            cout << players[i]->getReinforcementPool() << endl;
+            cout << "| Player: " << player->getId() << "'s updated Reinforcement Pool Looks Like----> ";
+            player->setReinforcementPool(player->getReinforcementPool() + 3);
+            cout << player->getReinforcementPool() << endl;
         }
 
-        //check if players owned number of territories matches a continent that hold n amount of territories in order to gain control bonus
-        else if (players[i]->ownAllTerritoryInContinent())
+        // check if players owned number of territories matches a continent that hold n amount of territories in order to gain control bonus
+        else if (player->ownsAllTerritoryInContinent())
         {
-            cout << "| Player: " << players[i]->getId() << "'s updated Reinforcement Pool Looks Like----> ";
-            players[i]->setReinforcementPool(players[i]->getReinforcementPool() + 10);
-            cout << players[i]->getReinforcementPool() << endl;
+            cout << "| Player: " << player->getId() << "'s updated Reinforcement Pool Looks Like----> ";
+            player->setReinforcementPool(player->getReinforcementPool() + 10);
+            cout << player->getReinforcementPool() << endl;
         }
 
         else
         {
-            cout << "| Player: " << players[i]->getId() << "'s updated Reinforcement Pool Looks Like----> ";
-            players[i]->setReinforcementPool(players[i]->getReinforcementPool() + ((players[i]->getTerritories()->size()) / 3)); // removed round
-            cout << players[i]->getReinforcementPool() << endl;
+            cout << "| Player: " << player->getId() << "'s updated Reinforcement Pool Looks Like----> ";
+            player->setReinforcementPool(player->getReinforcementPool() + (int)((player->getTerritories()->size()) / 3)); // removed round
+            cout << player->getReinforcementPool() << endl;
         }
     }
 }
+
+/*
+* ISSUE ORDERS PHASE
+*/
+void GameEngine::issueOrdersPhase() {
+
+}
+
+

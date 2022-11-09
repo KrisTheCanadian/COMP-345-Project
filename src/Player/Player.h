@@ -57,7 +57,7 @@ public:
   std::vector<Territory*>* getTerritories();
   int getId() const;
   string getPhase();
-  int getReinforcementPool();
+  int getReinforcementPool() const;
 
   // --------------------------------
   // Setters
