@@ -233,13 +233,13 @@ GameEngine::GameEngine() {
 void GameEngine::loadMap(const std::string& path) {
   if(state >= GE_Map_Loaded && state != GE_Win){ throw runtime_error("Map is already loaded."); }
   MapLoader::load(path, this->map);
-  state = GE_Map_Loaded;
+  setCurrentState(GE_Map_Loaded);
 }
 
 bool GameEngine::validateMap() {
   if(state != GE_Map_Loaded){ throw runtime_error("ASSERT: Cannot Validate Map Before Loading Map."); }
   if(map == nullptr){ throw runtime_error("ASSERT: Map is null."); }
-  state = GE_Map_Validated;
+  setCurrentState(GE_Map_Validated);
   return map->validate();
 }
 
