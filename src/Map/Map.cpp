@@ -417,8 +417,7 @@ void MapLoader::load(const std::string& path, Map* out_map)
   // check if file is open
   if (!input_file.is_open())
   {
-      cout<< "Invalid map name" << endl;
-    //throw std::runtime_error("Could not open file: " + path);
+    throw std::runtime_error("Could not open file: " + path);
   }
 
   MapLoaderState state;

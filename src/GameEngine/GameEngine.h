@@ -31,8 +31,7 @@ private:
   // Players
   unsigned int playerTurn = 0;
   std::vector<Player*> players;
-  std::vector<Player*> playersOrder;
-  std::vector<std::string> commands = {"loadmap", "validatemap", "addplayer", "gamestart", "replay", "quit"};
+  std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
   // Deck
   Deck* deck = nullptr;
   // Map
@@ -79,19 +78,42 @@ public:
   // ----------------------------------------
   void gameStart();
 
+private:
+    // ----------------------------------------
+    // initiates startup phase for commands read from the console
+    // ----------------------------------------
+    void cStartupPhase();
+
+    // ----------------------------------------
+    // initiates startup phase for commands read from a text file
+    // ----------------------------------------
+    void fStartupPhase();
+
     // ----------------------------------------
     // initiates startup phase
     // ----------------------------------------
-    //different method depending on command mode (command line/file)
-private:void cStartupPhase();
-        void fStartupPhase();
-        void printCommands();
-        bool isValid(std::string strCommand);
-        void distributeTerritories();
-        void playerOrder();
+    void printCommands();
 
-        //redirects to the appropriate startup method
-public: void startupPhase(bool cmd);
+    // ----------------------------------------
+    // checks whether a command is valid or not
+    // ----------------------------------------
+    bool isValid(std::string strCommand);
+
+    // ----------------------------------------
+    // distributes all territories evenly between the players
+    // ----------------------------------------
+    void distributeTerritories();
+
+    // ----------------------------------------
+    // determines a random order of play for players
+    // ----------------------------------------
+    void playerOrder();
+
+public:
+    // ----------------------------------------
+    // redirects to the appropriate startup method
+    // ----------------------------------------
+    void startupPhase(bool cmd);
 
 
   // ----------------------------------------
