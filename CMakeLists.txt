@@ -58,20 +58,33 @@ set(GAME_LIB_SRCS
         src/GameEngine/GameEngineDriver.h
         src/GameEngine/GameEngine.cpp
         src/GameEngine/GameEngine.h
-        )
 
+        # CommandProcessing
+        src/GameEngine/Command/Command.cpp
+        src/GameEngine/Command/Command.h
+        src/GameEngine/Command/CommandProcessingDriver.cpp
+        src/GameEngine/Command/CommandProcessingDriver.h
+        src/GameEngine/Command/CommandProcessor.cpp
+        src/GameEngine/Command/CommandProcessor.h
+        src/GameEngine/CommandFile/FileCommandProcessorAdapter.cpp
+        src/GameEngine/CommandFile/FileCommandProcessorAdapter.h
+        src/GameEngine/CommandFile/FileLineReader.cpp
+        src/GameEngine/CommandFile/FileLineReader.h
+
+
+        )
 add_library(Game STATIC ${GAME_LIB_SRCS})
 target_include_directories(Game PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
         )
+
+
 
 # ---------------------------------------------------------
 # Main Driver
 # ---------------------------------------------------------
 add_executable(MainDriver src/main.cpp)
 target_link_libraries(MainDriver Game)
-find_package(CURL REQUIRED)
-include_directories(${CURL_INCLUDE_DIR})
 
 
 
