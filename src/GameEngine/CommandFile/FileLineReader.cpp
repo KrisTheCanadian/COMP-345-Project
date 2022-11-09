@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iostream>
 
-int currentLine = 1;
 
 FileLineReader::FileLineReader(){}
 
@@ -18,12 +17,12 @@ std::string FileLineReader::readLineFromFile(){
     std::string line;
     
     if (fileInputStream.is_open() && !readComplete){
-      GotoLine(fileInputStream, currentLine);
+      GotoLine(fileInputStream, getCurrentLine());
       getline(fileInputStream, line);
-      if (currentLine == maxLines){
+      if (getCurrentLine() == maxLines){
         this->readComplete = true;
       }
-      currentLine++;
+      incrementCurrentLine();
       return line;
     } else {
       throw std::runtime_error("Could not open file");
@@ -56,6 +55,14 @@ void FileLineReader::setFile(std::string _fileName){
 
 bool FileLineReader::getReadComplete(){
   return this->readComplete;
+}
+
+int FileLineReader::getCurrentLine(){
+  return this->currentLine;
+}
+
+void FileLineReader::incrementCurrentLine(){
+  currentLine++;
 }
 
 std::ostream & operator << (std::ostream &out, const FileLineReader &flr)

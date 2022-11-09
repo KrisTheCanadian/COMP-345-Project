@@ -7,6 +7,7 @@ class FileLineReader{
     private:
         std::string fileName;
         bool readComplete = false;
+        int currentLine = 1;
 
     public:
     
@@ -28,6 +29,9 @@ class FileLineReader{
         // Relevant getters and setters
         void setFile(std::string _fileName);
         bool getReadComplete();
+        int getCurrentLine();
+        
+        void incrementCurrentLine();
 
         //Operator Overloading
         friend std::ostream & operator << (std::ostream &out, const FileLineReader &flr);
