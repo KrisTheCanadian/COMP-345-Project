@@ -59,11 +59,6 @@ public:
   void addPlayer(Player* player);
 
   // ----------------------------------------
-  // creates and adds the player to the game
-  // ----------------------------------------
-  void addPlayer(const std::string& name);
-
-  // ----------------------------------------
   // load game map
   // ----------------------------------------
   void loadMap(const std::string& path);
@@ -97,7 +92,7 @@ private:
     // ----------------------------------------
     // checks whether a command is valid or not
     // ----------------------------------------
-    bool isValid(std::string strCommand);
+    bool isValid(const std::string strCommand);
 
     // ----------------------------------------
     // distributes all territories evenly between the players
@@ -109,27 +104,21 @@ private:
     // ----------------------------------------
     void playerOrder();
 
+    // ----------------------------------------
+    // convert current state to string
+    // ----------------------------------------
+    std::string getCurrentStateToString();
+
 public:
     // ----------------------------------------
     // redirects to the appropriate startup method
     // ----------------------------------------
     void startupPhase(bool cmd);
 
-
-  // ----------------------------------------
-  // convert current state to string
-  // ----------------------------------------
-  std::string getCurrentStateToString();
-
-private:
-  // player increment turn
-  void nextPlayerTurn();
-
-public:
-  // getters
-  std::vector<Player*>* getPlayers();
-  Player* getCurrentPlayerTurn();
-  Deck* getDeck();
-  Map* getMap();
-  GameEngineState getCurrentState();
+    // getters
+    std::vector<Player*>* getPlayers();
+    Player* getCurrentPlayerTurn();
+    Deck* getDeck();
+    Map* getMap();
+    GameEngineState getCurrentState();
 };

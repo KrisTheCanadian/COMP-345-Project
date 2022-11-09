@@ -158,7 +158,7 @@ void GameEngine::playerOrder(){
     tempPlayer = nullptr;
 }
 
-bool GameEngine::isValid(std::string strCommand){return strCommand.find("Invalid") == string::npos;}
+bool GameEngine::isValid(const std::string strCommand){return strCommand.find("Invalid") == string::npos;}
 
 void GameEngine::printCommands() {
     for (string cmd: commands) {
@@ -190,11 +190,6 @@ std::string GameEngine::getCurrentStateToString() {
   throw std::runtime_error("Invalid State");
 }
 
-void GameEngine::nextPlayerTurn() {
-  playerTurn++;
-  playerTurn %= players.size();
-}
-
 std::vector<Player *> *GameEngine::getPlayers() {
   return &this->players;
 }
@@ -209,11 +204,6 @@ Deck *GameEngine::getDeck() {
 
 Map* GameEngine::getMap() {
   return this->map;
-}
-
-void GameEngine::addPlayer(const std::string& name) {
-  auto* p = new Player(this, new Hand());
-//  this->players.push_back(p);
 }
 
 void GameEngine::addPlayer(Player* player) {
