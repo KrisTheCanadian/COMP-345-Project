@@ -35,9 +35,63 @@ std::vector<Territory *> Player::toAttack() {
 }
 
 // Type of order
-void Player::issueOrder(CardType cardType){
-  auto order = OrdersFactory::CreateOrder(cardType);
-  orders->add(order);
+void Player::issueOrder() {
+
+  // for now, only 1 attack and only 1 defend
+  static bool attacked = false;
+  static bool defended = false;
+
+  // they can do advance order to own territory (defend)
+  if(!defended){
+    orders->add(new Advance());
+    defended = true;
+  }
+
+  // they can also advance to enemy territory (attack)
+  if(!attacked){
+    orders->add(new Advance());
+    attacked = true;
+  }
+
+  // randomly create
+
+  // if army units in reinforcement pool, then can only create deploy orders
+  if(reinforcementPool > 0){
+    orders->add(new Deploy());
+    // deploy a random amount
+    std::random_device dev1;
+    std::mt19937 rng1(dev1());
+    std::uniform_int_distribution<std::mt19937::result_type> randomAmount(1, reinforcementPool);
+
+    // deploy to a random friendly territory
+    int deploymentAmount = (int) randomAmount(rng1);
+
+    std::random_device dev2;
+    std::mt19937 rng2(dev2());
+    std::uniform_int_distribution<std::mt19937::result_type> distRandomIndexTerritory(0, territories.size() - 1);
+    int randomIndex = (int) distRandomIndexTerritory(rng2);
+
+    Territory* randomTerritory = territories.at(randomIndex);
+    randomTerritory->setArmies(deploymentAmount);
+    reinforcementPool -= deploymentAmount;
+    return;
+  }
+
+  // then they can create any cards they have
+  auto cards = hand->getHandCards();
+  if(!cards->empty()){
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> uniformIntDistribution(0, cards->size() - 1);
+    int randomIndex = (int) uniformIntDistribution(rng);
+
+    auto randomCard = cards->at(randomIndex);
+    // play this card
+    randomCard->play();
+    return;
+  }
+
 }
 
 void Player::addTerritory(Territory& territory) {

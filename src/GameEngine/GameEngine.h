@@ -95,6 +95,11 @@ public:
   // ----------------------------------------
   void issueOrdersPhase();
 
+  // ----------------------------------------
+  // Execute Orders Phase
+  // ----------------------------------------
+  void executeOrdersPhase();
+
 private:
   // player increment turn
   void nextPlayerTurn();
