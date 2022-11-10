@@ -9,11 +9,11 @@ class Command;
 
 class CommandProcessor: public Subject, ILoggable {
 
-protected:
+  protected:
     virtual std::string readCommand();
     void saveCommand(Command* c);
 
-private:
+  private:
     //Store all user commands
     std::vector<Command*> commandCollection;
 
@@ -23,7 +23,7 @@ private:
     //validate a user command
     Command* validate(std::string userInputCommand);
 
-public:
+  public:
 
     //Constructors
     CommandProcessor() = default;

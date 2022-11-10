@@ -38,21 +38,21 @@ ostream & operator << (ostream &out, const Command &c)
 }
 
 Command& Command::operator=(const Command &other) {
-    if(this == &other){
-        return *this;
-    }
-
-    this->command = other.command;
-    this->effect = other.effect;
-
+  if(this == &other){
     return *this;
+  }
+
+  this->command = other.command;
+  this->effect = other.effect;
+
+  return *this;
 }
 
 std::string Command::stringToLog() {
-    std::stringstream ss;
-    ss << "COMMAND: ";
-    ss << "Saved Effect \"";
-    ss << getEffect();
-    ss << "\"";
-    return ss.str();
+  std::stringstream ss;
+  ss << "COMMAND: ";
+  ss << "Saved Effect \"";
+  ss << getEffect();
+  ss << "\"";
+  return ss.str();
 }

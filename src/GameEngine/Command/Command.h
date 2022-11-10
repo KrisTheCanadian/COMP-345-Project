@@ -5,11 +5,11 @@
 
 class Command: public Subject, ILoggable{
 
-private:
+  private:
     std::string command;
     std::string effect;
 
-public:
+  public:
 
     //Constructors
     Command(std::string _command);

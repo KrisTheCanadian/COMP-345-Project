@@ -123,43 +123,43 @@ vector<Command*> CommandProcessor::getCommandCollection(){
 }
 
 string CommandProcessor::StateToString() {
-    switch (game->getCurrentState()) {
-        case GE_Start:
-            return "Start";
-        case GE_Map_Loaded:
-            return "Map Loaded";
-        case GE_Map_Validated:
-            return "Map Validated";
-        case GE_Players_Added:
-            return "Players Added";
-        case GE_Reinforcement:
-            return "Assign Reinforcement";
-        case GE_Win:
-            return "Win";
-    }
+  switch (game->getCurrentState()) {
+    case GE_Start:
+        return "Start";
+    case GE_Map_Loaded:
+        return "Map Loaded";
+    case GE_Map_Validated:
+        return "Map Validated";
+    case GE_Players_Added:
+        return "Players Added";
+    case GE_Reinforcement:
+        return "Assign Reinforcement";
+    case GE_Win:
+        return "Win";
+  }
 }
 
 ostream & operator << (ostream &out, const CommandProcessor &c)
 {
-    out << "Overloaded << operator for Command Processor?" << endl;
-    return out;
+  out << "Overloaded << operator for Command Processor?" << endl;
+  return out;
 }
 
 CommandProcessor& CommandProcessor::operator=(const CommandProcessor &other) {
-    if(this == &other){
-        return *this;
-    }
+  if(this == &other){
+      return *this;
+  }
 
-    this->commandCollection = other.commandCollection;
+  this->commandCollection = other.commandCollection;
 
-    return *this;
+  return *this;
 }
 
 std::string CommandProcessor::stringToLog() {
-    std::stringstream ss;
-    ss << "COMMAND PROCESSOR: ";
-    ss << "Saved command \"";
-    ss << commandCollection.back()->getEffect();
-    ss << "\"";
-    return ss.str();
+  std::stringstream ss;
+  ss << "COMMAND PROCESSOR: ";
+  ss << "Saved command \"";
+  ss << commandCollection.back()->getEffect();
+  ss << "\"";
+  return ss.str();
 }
