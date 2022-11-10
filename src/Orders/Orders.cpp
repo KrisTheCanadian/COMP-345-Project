@@ -48,12 +48,6 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-
-/**
- * Default constructor
- */
-//OrdersList::OrdersList(){}
-
 /**
  * Destructor
  */
