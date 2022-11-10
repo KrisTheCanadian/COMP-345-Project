@@ -17,12 +17,19 @@ TEST(OrdersListSuite, listAddOrders)
   // arrange
   OrdersList list{};
   // act
-  list.add(UserInputOrder::create("Deploy"));
-  list.add(UserInputOrder::create("Advance"));
-  list.add(UserInputOrder::create("Bomb"));
-  list.add(UserInputOrder::create("Blockade"));
-  list.add(UserInputOrder::create("Airlift"));
-  list.add(UserInputOrder::create("Negotiate"));
+    Deploy *deploy = new Deploy();
+    Advance *advance = new Advance();
+    Bomb *bomb = new Bomb();
+    Blockade *blockade = new Blockade();
+    Airlift *airlift = new Airlift();
+    Negotiate *negotiate = new Negotiate();
+
+  list.add(deploy);
+  list.add(advance);
+  list.add(bomb);
+  list.add(blockade);
+  list.add(airlift);
+  list.add(negotiate);
   // assert
   auto orders = list.getList();
   EXPECT_EQ(orders->size(), 6);
@@ -33,9 +40,16 @@ TEST(OrdersListSuite, listRemoveOrder)
   // arrange
   OrdersList list{};
   // act
-  list.add(UserInputOrder::create("Deploy"));
-  list.add(UserInputOrder::create("Advance"));
-  list.add(UserInputOrder::create("Airlift"));
+    Deploy *deploy = new Deploy();
+    Advance *advance = new Advance();
+    Bomb *bomb = new Bomb();
+    Blockade *blockade = new Blockade();
+    Airlift *airlift = new Airlift();
+    Negotiate *negotiate = new Negotiate();
+
+    list.add(deploy);
+    list.add(advance);
+    list.add(airlift);
   list.remove(0);
   // assert
   auto orders = list.getList();
@@ -50,9 +64,17 @@ TEST(OrdersListSuite, listExecuteOrder)
   // arrange
   OrdersList list{};
   // act
-  list.add(UserInputOrder::create("Deploy"));
-  list.add(UserInputOrder::create("Advance"));
-  list.add(UserInputOrder::create("Airlift"));
+
+    Deploy *deploy = new Deploy();
+    Advance *advance = new Advance();
+    Bomb *bomb = new Bomb();
+    Blockade *blockade = new Blockade();
+    Airlift *airlift = new Airlift();
+    Negotiate *negotiate = new Negotiate();
+
+    list.add(deploy);
+    list.add(advance);
+    list.add(airlift);
   list.execute();
 
   auto orders = list.getList();
@@ -65,10 +87,16 @@ TEST(OrdersListSuite, listMoveOrder)
   // arrange
   OrdersList list{};
   // act
-  list.add(UserInputOrder::create("Deploy"));
-  list.add(UserInputOrder::create("Advance"));
-  list.add(UserInputOrder::create("Airlift"));
-  list.add(UserInputOrder::create("Bomb"));
+    Deploy *deploy = new Deploy();
+    Advance *advance = new Advance();
+    Bomb *bomb = new Bomb();
+    Blockade *blockade = new Blockade();
+    Airlift *airlift = new Airlift();
+    Negotiate *negotiate = new Negotiate();
+
+    list.add(deploy);
+    list.add(advance);
+    list.add(airlift);
 
   list.move(2, 0);
 
