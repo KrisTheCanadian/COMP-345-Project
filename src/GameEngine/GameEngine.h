@@ -6,6 +6,7 @@
 #include "Map/Map.h"
 #include "Logger/LogObserver.h"
 #include "Command/CommandProcessor.h"
+#include "Command/Command.h"
 #include "CommandFile/FileCommandProcessorAdapter.h"
 
 class Player;

@@ -17,9 +17,8 @@ GameEngine::GameEngine(GameEngineState state) {
   this->map = new Map(this);
   this->logObserver = new LogObserver(this);
   this->commandProcessor = new CommandProcessor(this);
-  this->adapter = new FileCommandProcessorAdapter();
+  this->adapter = new FileCommandProcessorAdapter(this);
   this->flr = new FileLineReader();
-  this->commandProcessor = new CommandProcessor();
 }
 
 void GameEngine::preStartupPhase() {
@@ -270,9 +269,8 @@ GameEngine::~GameEngine() {
 GameEngine::GameEngine() {
   this->map = new Map(this);
   this->deck = new Deck(this);
-  this->adapter = new FileCommandProcessorAdapter();
+  this->adapter = new FileCommandProcessorAdapter(this);
   this->flr = new FileLineReader();
-  this->commandProcessor = new CommandProcessor();
   this->logObserver = new LogObserver(this);
   this->commandProcessor = new CommandProcessor(this);
   Subject::attach((ILogObserver*)logObserver);
