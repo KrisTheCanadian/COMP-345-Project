@@ -535,15 +535,15 @@ bool Deploy::validate() const
         cout << "You do not own this territory!\n" << endl;
         return false;
     }
-//    else if (*amount > currentPlayer->getReinforcementPool())
-//    {
-//        cout << "You do not have this many armies in the reinforcement pool!\n" << endl;
-//        return false;
-//    }
-//    else if (*amount < 1)
-//    {
-//        cout << "Please enter a value that is at least 1 for this order\n" << endl;
-//    }
+    else if (*amount > currentPlayer->getReinforcementPool())
+    {
+        cout << "You do not have this many armies in the reinforcement pool!\n" << endl;
+        return false;
+    }
+    else if (*amount < 1)
+    {
+        cout << "Please enter a value that is at least 1 for this order\n" << endl;
+    }
     cout << "Your order has been validated!\n" << endl;
   return true;
 }
