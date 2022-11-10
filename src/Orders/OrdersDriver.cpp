@@ -42,7 +42,6 @@ void testOrderExecution()
 
 
     Deck* deck = new Deck();
-    //TODO: Figure out how to create a fake deck with fake cards
     deck->create_deck();
 
     Hand* hand1 = new Hand;

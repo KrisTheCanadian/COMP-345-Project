@@ -534,20 +534,25 @@ std::ostream &Deploy::orderCout(std::ostream &output) const { return output << "
 bool Deploy::validate() const
 {
   std::cout << "-> Deploy order validation check" << std::endl;
+    std::cout << target<< "target" << std::endl;
+
+    std::cout << target->getOwnerId() << std::endl;
+    std::cout << currentPlayer->getId() << std::endl;
+
     if (target->getOwnerId() != currentPlayer->getId())
     {
         cout << "You do not own this territory!\n" << endl;
         return false;
     }
-    else if (*amount > currentPlayer->getReinforcementPool())
-    {
-        cout << "You do not have this many armies in the reinforcement pool!\n" << endl;
-        return false;
-    }
-    else if (*amount < 1)
-    {
-        cout << "Please enter a value that is at least 1 for this order\n" << endl;
-    }
+//    else if (*amount > currentPlayer->getReinforcementPool())
+//    {
+//        cout << "You do not have this many armies in the reinforcement pool!\n" << endl;
+//        return false;
+//    }
+//    else if (*amount < 1)
+//    {
+//        cout << "Please enter a value that is at least 1 for this order\n" << endl;
+//    }
     cout << "Your order has been validated!\n" << endl;
   return true;
 }
