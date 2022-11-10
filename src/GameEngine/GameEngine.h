@@ -42,6 +42,8 @@ private:
   // Map
   Map* map = nullptr;
 
+  FileCommandProcessorAdapter* adapter;
+  FileLineReader* flr;
   CommandProcessor* commandProcessor;
 
 public:
@@ -88,6 +90,9 @@ private:
     // ----------------------------------------
     void startupPhase();
 
+    // ----------------------------------------
+    // prints all the commands available for the user to use
+    // ----------------------------------------
     void printCommands();
 
     // ----------------------------------------

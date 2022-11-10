@@ -16,28 +16,38 @@ GameEngine::GameEngine(GameEngineState state) {
   this->state = state;
   this->deck = new Deck(this);
   this->map = new Map(this);
+  this->adapter = new FileCommandProcessorAdapter();
+  this->flr = new FileLineReader();
+  this->commandProcessor = new CommandProcessor();
 }
 
 void GameEngine::preStartupPhase() {
-    cout << "Welcome to the startup phase of the game!"<< endl
-    << "Use \'-console\' if you want to input commands for the startup phase through the console." << endl
-    << "Use \'-file <filename>\' if you want to complete the startup phase using commands from a file." << endl;
     std::string result;
-    FileCommandProcessorAdapter* adapter;
-    FileLineReader* flr;
+    cout << "Welcome to the startup phase of the game!"<< endl;
+
+
     while(true){
+        cout <<"Use \'-console\' if you want to input commands for the startup phase through the console." << endl
+             << "Use \'-file \' if you want to complete the startup phase using commands from a file." << endl;
         cin >> result;
         if(result.find("-console") != string::npos) {
             printCommands();
             startupPhase();
         }
-        else if(std::regex_match(result, regexRuleFile)){
-            size_t pos = result.find(' ');
-            std::string fileName = "res/" + MapLoader::trim(result.substr(pos));
-            commandProcessor = adapter;
-            flr->setFile(fileName);
-            adapter->commandLineToFile(flr);
-            startupPhase();
+        else if(result.find("-file") != string::npos ){
+            cout << "Please enter the name of the file you would like to use: " << endl;
+            cin >> result;
+            std::string fileName = "res/" + MapLoader::trim(result);
+            try{
+                flr->setFile(fileName);
+                adapter->commandLineToFile(flr);
+                commandProcessor = adapter;
+                startupPhase();
+            }
+            catch(std::runtime_error err){
+                cout<< "Invalid file name or file does not exist!"<<endl;
+                continue;
+            }
         }
         else{
             cout<< "Please enter a valid command: " <<endl;
@@ -74,15 +84,21 @@ void GameEngine::startupPhase() {
             cout<<"Map successfully loaded!"<<endl;
         }
         else if(strCommand == "validatemap"){
-            if(validateMap()) {
-                cout<< "Map successfully validated!" << endl;
+            try{
+                validateMap();
             }
-            else {
-                cout << "Please first load a valid map then validate it again!" << endl;
+            catch(std::runtime_error err){
+                cout<< "Can't validate map before loading map, please load a map first."<<endl;
                 setCurrentState(GE_Start);
+                continue;
             }
+            cout<< "Map successfully validated!" << endl;
         }
         else if(strCommand.find("addplayer")!= string::npos){
+            if(getCurrentState() < GE_Map_Loaded){
+                cout <<"Please load and validate a map first!" << endl;
+                continue;
+            }
             if(players.size() == 6){
                 cout << "Maximum number of players(6) reached! Game is ready to be started." << endl;
                 setCurrentState(GE_Players_Added);
@@ -107,18 +123,18 @@ void GameEngine::startupPhase() {
 
             try{
                 for(Player* player : players){
-                    //add 50 units to reinforcement pool
+//                    player->setReinforcementPool(50);
                     Hand &hand = *player->getHand();
                     deck->draw(hand);
                     deck->draw(hand);
                 }
             }
             catch(std::runtime_error err){
-                cout << err.what() << endl;
+                cout << err.what() <<endl;
             }
             //mainGameLoop();
         }
-    }while(strCommand != "quit");
+    }while(strCommand != "quit" );
 }
 void GameEngine::distributeTerritories(){
     std::vector<Territory*>* territories = map->getTerritories();
@@ -141,7 +157,6 @@ void GameEngine::distributeTerritories(){
     for(Territory *terr : *territories){
         Territory* t = terr;
         if(tempTerr == (territoriesDistr[currPlayer])){
-            cout << "tempTerr: " << tempTerr << endl;
             currPlayer++;
             player = players.at(currPlayer);
             tempTerr = 0;
@@ -169,7 +184,6 @@ void GameEngine::playerOrder(){
         players.at(i) = tempPlayer;
     }
     delete tempPlayer;
-    tempPlayer = nullptr;
 }
 
 bool GameEngine::isValid(const std::string strCommand){return strCommand.find("Invalid") == string::npos;}
@@ -234,6 +248,9 @@ void GameEngine::addPlayer(Player* player) {
 GameEngine::~GameEngine() {
   delete deck;
   delete map;
+  delete adapter;
+  delete flr;
+  delete commandProcessor;
 
   for(auto player : players){
     delete player;
@@ -243,6 +260,9 @@ GameEngine::~GameEngine() {
 GameEngine::GameEngine() {
   this->map = new Map(this);
   this->deck = new Deck(this);
+  this->adapter = new FileCommandProcessorAdapter();
+  this->flr = new FileLineReader();
+  this->commandProcessor = new CommandProcessor();
 }
 
 void GameEngine::loadMap(const std::string& path) {

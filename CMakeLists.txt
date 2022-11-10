@@ -66,7 +66,10 @@ set(GAME_LIB_SRCS
     src/GameEngine/Command/CommandProcessingDriver.h
     src/GameEngine/Command/CommandProcessor.cpp
     src/GameEngine/Command/CommandProcessor.h
-
+    src/GameEngine/CommandFile/FileCommandProcessorAdapter.cpp
+    src/GameEngine/CommandFile/FileCommandProcessorAdapter.h
+    src/GameEngine/CommandFile/FileLineReader.cpp
+    src/GameEngine/CommandFile/FileLineReader.h
     )
 add_library(Game STATIC ${GAME_LIB_SRCS})
 target_include_directories(Game PUBLIC
@@ -86,6 +89,11 @@ target_link_libraries(MainDriver Game)
 # ---------------------------------------------------------
 # Tests
 # ---------------------------------------------------------
+
+# Command (File) Test
+add_executable(testRunnerCommand test/Command/TEST_Command.cpp)
+target_link_libraries(testRunnerCommand gtest_main gmock_main Game)
+add_test(NAME CommandTests COMMAND testRunnerCommand)
 
 # Game Engine Test
 add_executable(testRunnerGameEngine test/GameEngine/TEST_GameEngine.cpp)
