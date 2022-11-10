@@ -29,7 +29,7 @@ public:
   // --------------------------------
   // Constructors
   // --------------------------------
-  Player();
+  Player() = default;;
   Player(GameEngine* game, Hand* cards);
   Player(int id, int reinforcementPool, std::vector<Territory*> territories, Hand* cards, OrdersList* orders); //constructor for the OrdersDriver
   ~Player();

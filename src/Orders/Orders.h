@@ -291,8 +291,7 @@ private:
 
 class OrdersFactory {
 
-public:
-    static Order* CreateOrder(CardType cardType);
+public:static Order* CreateOrder(CardType cardType);
 
 };
 
