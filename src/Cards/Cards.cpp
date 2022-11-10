@@ -186,7 +186,7 @@ void Deck::create_deck() {
     // Assign 40 cards in deck vector, each type has 8 cards, 5 types
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 5; j++) {
-            cardPtr = new Card();
+            Card *cardPtr = new Card();
 
             // Type 1 = Bomb
             if (j == 0) {

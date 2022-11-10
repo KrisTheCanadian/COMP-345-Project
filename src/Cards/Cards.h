@@ -112,7 +112,6 @@ class Deck
 private:
   //deck pointer vector
   std::vector<Card *> deckCards;
-  Card* cardPtr;	// pointer to card
   // Object Owner
   GameEngine* game;
 

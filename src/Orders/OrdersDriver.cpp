@@ -228,7 +228,7 @@ void testOrderExecution()
 
 
     // --------------------------------
-    // BLOCKADE EXECUTION WITH PLAYER 1
+    // BLOCKADE EXECUTION WITH PLAYER 2
     // --------------------------------
     if(userChoice == 4) {
         cout << "-> Blockade execution with player 2" << endl;
