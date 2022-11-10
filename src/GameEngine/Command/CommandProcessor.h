@@ -21,20 +21,19 @@ class CommandProcessor: public Subject, ILoggable {
     GameEngine* game;
 
     //validate a user command
-    Command* validate(std::string userInputCommand);
+    Command *validate(const std::string &_userInput);
 
   public:
 
     //Constructors
-    CommandProcessor(GameEngine*);
+    explicit CommandProcessor(GameEngine*);
     CommandProcessor(const CommandProcessor &c);
 
     void getCommand();
     int getCurrentState();
 
     //Functions for CommandProcessorDriver.cpp
-    void printInvalidCommand(std::string& command);
-    void printCommandCollection(std::vector<Command*> commandCollection);
+    void printCommandCollection(const std::vector<Command *> &collection);
     std::vector<Command*> getCommandCollection();
     std::string StateToString();
 
@@ -44,4 +43,6 @@ class CommandProcessor: public Subject, ILoggable {
 
     // Logging
     std::string stringToLog() override;
+
+
 };

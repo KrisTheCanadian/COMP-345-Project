@@ -6,7 +6,7 @@
 void testLoggingObserver(){
 
   auto gameEngine = new GameEngine;
-  auto player = new Player(gameEngine, new Hand());
+  auto player = new Player(gameEngine, new Hand(), "Bob");
   gameEngine->addPlayer(player);
   auto observer = gameEngine->getLogObserver();
 
