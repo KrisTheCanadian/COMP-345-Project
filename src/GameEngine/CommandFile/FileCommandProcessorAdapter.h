@@ -3,7 +3,7 @@
 #include "../Command/CommandProcessor.h"
 #include "FileLineReader.h"
 
-class FileCommandProcessorAdapter : public CommandProcessor{
+class FileCommandProcessorAdapter : public CommandProcessor {
     
     private:
         FileLineReader *flr;
@@ -11,13 +11,11 @@ class FileCommandProcessorAdapter : public CommandProcessor{
         void commandLineToFile(FileLineReader* _flr);
         std::string readCommand();
 
-        FileCommandProcessorAdapter();
+        FileCommandProcessorAdapter(GameEngine* game);
 
         // Copy constructor
-        FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpA);
-
-
-
+        FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpA, GameEngine* game);
+        
         //Operator Overloading
         friend std::ostream & operator << (std::ostream &out, const FileCommandProcessorAdapter &ffcpAr);
         FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& other);

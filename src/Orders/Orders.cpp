@@ -39,6 +39,7 @@ OrdersList::OrdersList(const OrdersList &oldList)
 void OrdersList::add(Order *o)
 {
   if(o){ orders.push_back(o); } else { throw std::runtime_error("Inserting a nullptr in OrderList."); }
+  Subject::notify(this);
 }
 
 // method that removes an order
@@ -150,6 +151,38 @@ std::vector<Order *> *OrdersList::getList() {
 }
 
 
+std::string OrdersList::castOrderType(Order * o){
+  if(Advance *order = dynamic_cast<Advance*>(o)){
+      return order->getLabel();
+  }
+  else if(Airlift *order = dynamic_cast<Airlift*>(o)){
+      return order->getLabel();
+  }
+  else if(Blockade *order = dynamic_cast<Blockade*>(o)){
+      return order->getLabel();
+  }
+  else if(Bomb *order = dynamic_cast<Bomb*>(o)){
+      return order->getLabel();
+  }
+  else if(Deploy *order = dynamic_cast<Deploy*>(o)){
+      return order->getLabel();
+  }
+  else if(Negotiate *order = dynamic_cast<Negotiate*>(o)){
+      return order->getLabel();
+  }
+  throw std::runtime_error("OrderList::Error Order is null");
+}
+
+std::string OrdersList::stringToLog() {
+  Order &o = *orders.back();
+  std::string orderType = castOrderType(&o);
+
+  std::stringstream ss;
+  ss << "ORDER LIST: ";
+  ss << "Order List Added ";
+  ss << orderType;
+  return ss.str();
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -177,12 +210,21 @@ bool Advance::validate() const
   return true;
 }
 
-void Advance::execute() const
+void Advance::execute()
 {
   if (validate()) { std::cout << "Advance execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Advance::clone() const { return new Advance(*this); }
+
+std::string Advance::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -216,12 +258,21 @@ bool Airlift::validate() const
   return true;
 }
 
-void Airlift::execute() const
+void Airlift::execute()
 {
   if (validate()) { std::cout << "Airlift execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Airlift::clone() const { return new Airlift(*this); }
+
+std::string Airlift::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -257,12 +308,21 @@ bool Blockade::validate() const
   return true;
 }
 
-void Blockade::execute() const
+void Blockade::execute()
 {
   if (validate()) { std::cout << "Blockade execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Blockade::clone() const { return new Blockade(*this); }
+
+std::string Blockade::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -295,12 +355,21 @@ bool Bomb::validate() const
   return true;
 }
 
-void Bomb::execute() const
+void Bomb::execute()
 {
   if (validate()) { std::cout << "Bomb execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Bomb::clone() const { return new Bomb(*this); }
+
+std::string Bomb::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -332,12 +401,21 @@ bool Deploy::validate() const
   return true;
 }
 
-void Deploy::execute() const
+void Deploy::execute()
 {
   if (validate()) { std::cout << "Deploy execution." << std::endl; }
+  Subject::notify(this);
 }
 
 Order *Deploy::clone() const { return new Deploy(*this); }
+
+std::string Deploy::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -369,9 +447,9 @@ bool Negotiate::validate() const
   return true;
 }
 
-void Negotiate::execute() const
-{
+void Negotiate::execute() {
   if (validate()) { std::cout << "Negotiate execution." << std::endl; }
+  Subject::notify(this);
 }
 
 
@@ -381,29 +459,13 @@ std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
   return ostream << "-> Negotiate order.";
 }
 
-
-
-
-// -----------------------------------------------------------------------------------------------------------------
-//
-//
-//                                                UserInputOrder - For Driver
-//
-// -----------------------------------------------------------------------------------------------------------------
-
-
-
-Order* UserInputOrder::create(const std::string& orderType)
-{
-  if (orderType == "Deploy") { return new Deploy; }
-  else if (orderType == "Advance") { return new Advance; }
-  else if (orderType == "Bomb") { return new Bomb(); }
-  else if (orderType == "Blockade") { return new Blockade(); }
-  else if (orderType == "Airlift") { return new Airlift(); }
-  else if (orderType == "Negotiate") { return new Negotiate(); }
-  else { throw std::runtime_error("Unexpected OrderType: " + orderType ); }
+std::string Negotiate::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
 }
-
 
 // -----------------------------------------------------------------------------------------------------------------
 //

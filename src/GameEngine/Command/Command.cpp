@@ -16,6 +16,7 @@ Command::Command(const Command &c){
 
 void Command::saveEffect(string _effect){
     effect = _effect;
+    Subject::notify(this);
 }
 
 string Command::getEffect(){
@@ -45,4 +46,13 @@ Command& Command::operator=(const Command &other) {
   this->effect = other.effect;
 
   return *this;
+}
+
+std::string Command::stringToLog() {
+  std::stringstream ss;
+  ss << "COMMAND: ";
+  ss << "Saved Effect \"";
+  ss << getEffect();
+  ss << "\"";
+  return ss.str();
 }

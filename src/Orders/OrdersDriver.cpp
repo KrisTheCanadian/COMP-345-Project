@@ -10,12 +10,11 @@ void testOrdersLists()
 
   auto orderList = player->getOrdersListObject();
   std::cout << "-> Order Addition" << std::endl;
-  orderList->add(UserInputOrder::create("Deploy"));
-  orderList->add(UserInputOrder::create("Advance"));
-  orderList->add(UserInputOrder::create("Bomb"));
-  orderList->add(UserInputOrder::create("Blockade"));
-  orderList->add(UserInputOrder::create("Airlift"));
-  orderList->add(UserInputOrder::create("Negotiate"));
+  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Reinforcement));
+  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Bomb));
+  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Blockade));
+  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Airlift));
+  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Diplomacy));
 
   std::cout << "-> Move 4 with 2 and remove the new 2" << std::endl;
   orderList->move(4, 2);
