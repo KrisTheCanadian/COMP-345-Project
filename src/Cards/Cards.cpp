@@ -119,7 +119,6 @@ Hand::Hand() {
 
 
 //Default constructor
-Deck::Deck() {}
 Deck::Deck(GameEngine* game)
     :game(game)
 {}

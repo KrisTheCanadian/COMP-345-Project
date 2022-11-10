@@ -29,7 +29,6 @@ public:
   explicit Territory(std::string name);
   Territory(const Territory &other);
 
-
   std::string getName();
   std::vector<Territory *>* getAdjacentTerritories();
   // ----------------------------------------

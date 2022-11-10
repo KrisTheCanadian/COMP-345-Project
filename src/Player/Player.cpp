@@ -132,11 +132,8 @@ int Player::getReinforcementPool()
     return reinforcementPool;
 }
 
-/**
- * checks if the target player can be attacked
- * @param targetPlayerID
- * @return
- */
+//checks if the target player can be attacked
+
 bool Player::canAttack(int targetPlayerID) {
     int listLength = friendlyPlayers.size();
     for(int i = 0; i < listLength; i++)

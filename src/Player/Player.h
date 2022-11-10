@@ -24,7 +24,7 @@ private:
   OrdersList* orders;
   GameEngine* game;
   std::vector<int> friendlyPlayers; // returns all the players who you can not attack for the remainder of the turn
-  //std::vector<int> friendlyPlayerID;
+
 public:
   // --------------------------------
   // Constructors

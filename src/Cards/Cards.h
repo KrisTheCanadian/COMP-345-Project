@@ -44,7 +44,7 @@ public:
   // --------------------------------
   // Constructors
   // --------------------------------
-  Card();
+  Card() = default;
   explicit Card(const CardType& type, GameEngine* game);
   Card(const Card &initial);
 
@@ -118,7 +118,7 @@ private:
 
 public:
   //default constructor
-  Deck();
+  Deck() = default;
   explicit Deck(GameEngine*);
   //destruct
   ~Deck();

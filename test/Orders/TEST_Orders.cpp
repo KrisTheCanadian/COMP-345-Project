@@ -159,10 +159,8 @@ TEST(OrdersListSuite, listExecuteOrder)
     }
 
         cout << "Which territory do you wish to deploy to?" << endl;
-        //cin >> targetTerritory;
         targetTerritory = "t1";
         cout << "How many units from reinforcement pool do you wish to deploy?" << endl;
-        //cin >> nbArmies;
         nbArmies= 5;
 
         for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
@@ -170,14 +168,12 @@ TEST(OrdersListSuite, listExecuteOrder)
             {
                 if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == targetTerritory) {
                     deploy = new Deploy(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *player1, nbArmies);
-                    //deploy->execute();
                 }
             }
         }
     deploy->execute();
          temp = t1->getArmies();
     }
-    deploy -> ~Deploy();
   // assert
   EXPECT_EQ(temp, 15);
 }
