@@ -121,8 +121,10 @@ Hand::Hand() {
 
 //Default constructor
 Deck::Deck(GameEngine* game)
-    :game(game)
-{}
+        :game(game)
+{
+    if(game == nullptr){throw std::runtime_error("Deck::Error | Cannot set deck Game Engine to null");}
+}
 
 //Destructor
 Deck::~Deck()

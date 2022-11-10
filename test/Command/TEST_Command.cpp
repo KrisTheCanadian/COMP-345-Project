@@ -6,9 +6,10 @@
 TEST(FileCommandTestSuite, CommandFile2_invalid){
 
     int final_state;
+    auto game = new GameEngine;
 
     FileLineReader flr;
-    FileCommandProcessorAdapter adapter;
+    FileCommandProcessorAdapter adapter(game);
     adapter.commandLineToFile(&flr);
     flr.setFile("../res/TestCommand2_invalid.txt");
 
@@ -24,8 +25,9 @@ TEST(FileCommandTestSuite, CommandFile2_invalid){
 
 TEST(FileCommandTestSuite, CommandFile3_invalid){
 
+    auto game = new GameEngine;
     FileLineReader flr;
-    FileCommandProcessorAdapter adapter;
+    FileCommandProcessorAdapter adapter(game);
     adapter.commandLineToFile(&flr);
     flr.setFile("../res/TestCommand3_invalid.txt");
 
@@ -42,8 +44,9 @@ TEST(FileCommandTestSuite, CommandFile3_invalid){
 
 TEST(FileCommandTestSuite, CommandFile5_invalid){
 
+    auto game = new GameEngine;
     FileLineReader flr;
-    FileCommandProcessorAdapter adapter;
+    FileCommandProcessorAdapter adapter(game);
     adapter.commandLineToFile(&flr);
     flr.setFile("../res/TestCommand5_invalid_format.txt");
 
@@ -58,8 +61,9 @@ TEST(FileCommandTestSuite, CommandFile5_invalid){
 
 TEST(FileCommandTestSuite, CommandFile1_Valid){
 
+    auto game = new GameEngine;
     FileLineReader flr;
-    FileCommandProcessorAdapter adapter;
+    FileCommandProcessorAdapter adapter(game);
     adapter.commandLineToFile(&flr);
     flr.setFile("../res/TestCommand1_valid.txt");
 
@@ -74,8 +78,9 @@ TEST(FileCommandTestSuite, CommandFile1_Valid){
 
 TEST(FileCommandTestSuite, CommandFile4_valid){
 
+    auto game = new GameEngine;
     FileLineReader flr;
-    FileCommandProcessorAdapter adapter;
+    FileCommandProcessorAdapter adapter(game);
     adapter.commandLineToFile(&flr);
     flr.setFile("../res/TestCommand4_valid.txt");
 

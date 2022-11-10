@@ -1,17 +1,17 @@
 #pragma once
-#include "Player/Player.h"
-#include "Map/Map.h"
-#include "Command/CommandProcessor.h"
-#include "CommandFile/FileCommandProcessorAdapter.h"
-
 #include <string>
 #include <stdexcept>
 #include <vector>
-
+#include "Player/Player.h"
+#include "Map/Map.h"
+#include "Logger/LogObserver.h"
+#include "Command/CommandProcessor.h"
+#include "CommandFile/FileCommandProcessorAdapter.h"
 
 class Player;
 class Map;
 class Deck;
+class CommandProcessor;
 
 // ----------------------------------------
 // Public GameEngine State Enum
@@ -27,23 +27,33 @@ enum GameEngineState {
   GE_Win
 };
 
-class GameEngine {
+class GameEngine : public Subject, ILoggable {
 private:
   // current state
   GameEngineState state = GE_Start;
+
   // Players
   unsigned int playerTurn = 0;
   std::string fileName;
   std::vector<Player*> players;
+
   std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
+
   // Deck
   Deck* deck = nullptr;
+
   // Map
   Map* map = nullptr;
 
-  FileCommandProcessorAdapter* adapter = nullptr;
-  FileLineReader* flr = nullptr;
+
+  // Logger
+  LogObserver* logObserver = nullptr;
+
+  // Command Processor
   CommandProcessor* commandProcessor = nullptr;
+    FileCommandProcessorAdapter* adapter = nullptr;
+    FileLineReader* flr = nullptr;
+
 
 public:
    bool isConsole;
@@ -61,7 +71,7 @@ public:
   // ----------------------------------------
   // Destructor
   // ----------------------------------------
-  ~GameEngine();
+  ~GameEngine() override;
 
   // ----------------------------------------
   // add players to game
@@ -82,6 +92,11 @@ public:
   // gameStart
   // ----------------------------------------
   void gameStart();
+
+  // ----------------------------------------
+  // convert current state to string
+  // ----------------------------------------
+  std::string stringToLog() override;
 
 private:
     // ----------------------------------------
@@ -126,4 +141,7 @@ public:
     Deck* getDeck();
     Map* getMap();
     GameEngineState getCurrentState();
+    
+  LogObserver* getLogObserver();
+  CommandProcessor* getCommandProcessor();
 };
