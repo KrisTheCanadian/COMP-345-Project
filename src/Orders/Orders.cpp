@@ -67,6 +67,7 @@ OrdersList::OrdersList(const OrdersList &oldList)
 void OrdersList::add(Order *o)
 {
   if(o){ orders.push_back(o); } else { throw std::runtime_error("Inserting a nullptr in OrderList."); }
+  Subject::notify(this);
 }
 
 // method that removes an order
@@ -191,6 +192,38 @@ std::vector<Order *> *OrdersList::getList() {
 }
 
 
+std::string OrdersList::castOrderType(Order * o){
+  if(Advance *order = dynamic_cast<Advance*>(o)){
+      return order->getLabel();
+  }
+  else if(Airlift *order = dynamic_cast<Airlift*>(o)){
+      return order->getLabel();
+  }
+  else if(Blockade *order = dynamic_cast<Blockade*>(o)){
+      return order->getLabel();
+  }
+  else if(Bomb *order = dynamic_cast<Bomb*>(o)){
+      return order->getLabel();
+  }
+  else if(Deploy *order = dynamic_cast<Deploy*>(o)){
+      return order->getLabel();
+  }
+  else if(Negotiate *order = dynamic_cast<Negotiate*>(o)){
+      return order->getLabel();
+  }
+  throw std::runtime_error("OrderList::Error Order is null");
+}
+
+std::string OrdersList::stringToLog() {
+  Order &o = *orders.back();
+  std::string orderType = castOrderType(&o);
+
+  std::stringstream ss;
+  ss << "ORDER LIST: ";
+  ss << "Order List Added ";
+  ss << orderType;
+  return ss.str();
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -286,6 +319,14 @@ void Advance::execute() const
 
 Order *Advance::clone() const { return new Advance(*this); }
 
+std::string Advance::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
+
 
 
 
@@ -375,6 +416,14 @@ void Airlift::execute() const
 
 Order *Airlift::clone() const { return new Airlift(*this); }
 
+std::string Airlift::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
+
 
 
 
@@ -429,6 +478,14 @@ void Blockade::execute() const
 
 Order *Blockade::clone() const { return new Blockade(*this); }
 
+std::string Blockade::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
+
 
 
 
@@ -473,6 +530,7 @@ bool Bomb::validate() const
 
 void Bomb::execute() const
 {
+
   if (validate()) {
       if (!currentPlayer->canAttack(target->getOwnerId()))
       {
@@ -486,6 +544,14 @@ void Bomb::execute() const
 }
 
 Order *Bomb::clone() const { return new Bomb(*this); }
+
+std::string Bomb::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -559,7 +625,13 @@ void Deploy::execute() const
 
 Order *Deploy::clone() const { return new Deploy(*this); }
 
-
+std::string Deploy::stringToLog() {
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
+}
 
 
 
@@ -622,6 +694,13 @@ std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
   return ostream << "-> Negotiate order.";
 }
 
+std::string Negotiate::stringToLog() {
+    std::stringstream ss;
+    ss << "ORDER: ";
+    ss << "Order Executed ";
+    ss << *this;
+    return ss.str();
+}
 
 // -----------------------------------------------------------------------------------------------------------------
 //
@@ -658,7 +737,6 @@ void attackSimulation(Territory* source, Territory* target, Player* currentPlaye
     for (int i = 1; i <= *amount; i++) // Attacking Phase
     {
         int roll = rand() % 100 + 1;
-
         if (roll <= 60)
         {
             successAttack++;

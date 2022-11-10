@@ -4,16 +4,18 @@
 #include "Cards/CardsDriver.h"
 #include "Player/PlayerDriver.h"
 #include "GameEngine/Command/CommandProcessingDriver.h"
+#include "Logger/LoggingObserverDriver.h"
 
 using namespace std;
 
 int main()
 {
-//  testCommandProcessor();
-//  testLoadMaps();
-//  testGameStates();
+  testCommandProcessor();
+  testLoadMaps();
+  testGameStates();
   testOrderExecution();
-//  testCards();
-//  testPlayers();
+  testCards();
+  testPlayers();
+  testLoggingObserver();
   return 0;
 }

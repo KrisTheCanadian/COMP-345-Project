@@ -1,7 +1,10 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
+
 #include "Cards/Cards.h"
+#include "Logger/LogObserver.h"
 
 class Card;
 class Player;
@@ -58,7 +61,7 @@ private:
 
 
 
-class OrdersList
+class OrdersList : public Subject, ILoggable
 {
 private:
   // vector of Order pointers
@@ -69,7 +72,7 @@ public:
   // Constructors + destructors
   // --------------------------------
   OrdersList() = default;
-  ~OrdersList();
+  ~OrdersList() override;
   OrdersList(const OrdersList &);
 
   // --------------------------------
@@ -95,6 +98,10 @@ public:
   // --------------------------------
   std::vector<Order *>* getList();
 
+  // Logging
+  std::string castOrderType(Order * o);
+  std::string stringToLog() override;
+
 private:
   // --------------------------------
   // ostream overload
@@ -114,28 +121,21 @@ private:
     class Advance : public Order {
     public:
         Advance();
-
         Advance(Territory &src, Territory &dest, Player &player, int amount);
         ~Advance() override;
-
         std::string getLabel() const override;
-
         bool validate() const override;
-
         void execute() const override;
+        std::string stringToLog() override;
 
     private:
         const static std::string label;
-
         Order *clone() const override;
-
         std::ostream &orderCout(std::ostream &) const override;
-
         Territory *source;
         Territory *target;
         int *amount;
     };
-
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ private:
 
 
 
-class Airlift : public Order
+class Airlift : public Order, Subject, ILoggable
 {
 public:
   Airlift();
@@ -156,6 +156,7 @@ public:
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
@@ -179,7 +180,7 @@ private:
 
 
 
-class Blockade : public Order
+class Blockade : public Order, Subject, ILoggable
 {
 public:
   Blockade();
@@ -188,12 +189,12 @@ public:
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
-
   Territory *target;
 };
 
@@ -207,7 +208,7 @@ private:
 
 
 
-class Bomb : public Order
+class Bomb : public Order, Subject, ILoggable
 {
 public:
   Bomb();
@@ -216,6 +217,7 @@ public:
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
@@ -235,7 +237,7 @@ private:
 
 
 
-class Deploy : public Order
+class Deploy : public Order, Subject, ILoggable
 {
 public:
     Deploy();
@@ -244,6 +246,7 @@ public:
     std::string getLabel() const override;
     bool validate() const override;
     void execute() const override;
+    std::string stringToLog() override;
 
 private:
   const static std::string label;
@@ -264,7 +267,7 @@ private:
 // -----------------------------------------------------------------------------------------------------------------
 
 
-class Negotiate : public Order
+class Negotiate : public Order, Subject, ILoggable
 {
 public:
     Negotiate();
@@ -272,13 +275,13 @@ public:
     ~Negotiate() override;
     std::string getLabel() const override;
     bool validate() const override;
-    void execute() const override;  
+    void execute() const override;
+    std::string stringToLog() override;
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
-
   Player *targetPlayer;
 };
 

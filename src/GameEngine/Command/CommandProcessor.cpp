@@ -6,11 +6,10 @@
 
 using namespace std;
 
-GameEngineState current_game_state = GE_Start;
 regex regexRuleLoadMap("loadmap .+.map$");
 regex regexRulePlayerAdd("addplayer .+");
 
-CommandProcessor::CommandProcessor(){
+CommandProcessor::CommandProcessor(GameEngine* game) :game(game){
     commandCollection = {};
 }
 
@@ -19,6 +18,7 @@ CommandProcessor::CommandProcessor(const CommandProcessor &c){
     for(int i = 0; i < c.commandCollection.size(); i++){
         commandCollection.push_back(new Command(*c.commandCollection[i]));
     }
+    this->game = c.game;
 }
 
 void CommandProcessor::getCommand(){
@@ -37,20 +37,23 @@ string CommandProcessor::readCommand(){
 
 void CommandProcessor::saveCommand(Command* _currentCommand){
     commandCollection.push_back(_currentCommand);
+    Subject::notify(this);
 }
 
 int CommandProcessor::getCurrentState(){
-    return current_game_state;
+    return game->getCurrentState();
 }
 
 Command* CommandProcessor::validate(string _userInput){
 
     Command *currentCommandObj = new Command(_userInput);
+    currentCommandObj->attach((ILogObserver*)game->getLogObserver());
+    GameEngineState current_game_state = game->getCurrentState();
 
     switch(current_game_state){
         case GE_Start:
             if (std::regex_match(_userInput, regexRuleLoadMap)){
-                current_game_state = GE_Map_Loaded;
+                game->setCurrentState(GE_Map_Loaded);
                 currentCommandObj->saveEffect("Map successfully loaded");
                 return currentCommandObj;
             };
@@ -58,7 +61,7 @@ Command* CommandProcessor::validate(string _userInput){
 
         case GE_Map_Loaded:
             if (_userInput == "validatemap"){
-                current_game_state = GE_Map_Validated;
+                game->setCurrentState(GE_Map_Validated);
                 currentCommandObj->saveEffect("Map successfully validated");
                 return currentCommandObj;
             };
@@ -71,7 +74,7 @@ Command* CommandProcessor::validate(string _userInput){
 
         case GE_Map_Validated:
             if (std::regex_match(_userInput, regexRulePlayerAdd)){
-                current_game_state = GE_Players_Added;
+                game->setCurrentState(GE_Players_Added);
                 currentCommandObj->saveEffect("Player successfully added");
                 return currentCommandObj;
             };
@@ -79,12 +82,12 @@ Command* CommandProcessor::validate(string _userInput){
 
         case GE_Players_Added:
             if (std::regex_match(_userInput, regexRulePlayerAdd)){
-                current_game_state = GE_Players_Added;
+                game->setCurrentState(GE_Players_Added);
                 currentCommandObj->saveEffect("Player successfully added");
                 return currentCommandObj;
             };
             if(_userInput == "gamestart"){
-                current_game_state = GE_Reinforcement;
+                game->setCurrentState(GE_Reinforcement);
                 currentCommandObj->saveEffect("Game successfully started");
                 return currentCommandObj;
             };
@@ -92,7 +95,7 @@ Command* CommandProcessor::validate(string _userInput){
 
         case GE_Win:
             if (_userInput == "replay"){
-                current_game_state = GE_Start;
+                game->setCurrentState(GE_Start);
                 currentCommandObj->saveEffect("Game successfully restarted");
                 return currentCommandObj;
             };
@@ -120,34 +123,43 @@ vector<Command*> CommandProcessor::getCommandCollection(){
 }
 
 string CommandProcessor::StateToString() {
-  switch (current_game_state) {
+  switch (game->getCurrentState()) {
     case GE_Start:
-      return "Start";
+        return "Start";
     case GE_Map_Loaded:
-      return "Map Loaded";
+        return "Map Loaded";
     case GE_Map_Validated:
-      return "Map Validated";
+        return "Map Validated";
     case GE_Players_Added:
-      return "Players Added";
+        return "Players Added";
     case GE_Reinforcement:
-      return "Assign Reinforcement";
+        return "Assign Reinforcement";
     case GE_Win:
-      return "Win";
+        return "Win";
   }
 }
 
 ostream & operator << (ostream &out, const CommandProcessor &c)
 {
-    out << "Overloaded << operator for Command Processor?" << endl;
-    return out;
+  out << "Overloaded << operator for Command Processor?" << endl;
+  return out;
 }
 
 CommandProcessor& CommandProcessor::operator=(const CommandProcessor &other) {
   if(this == &other){
-    return *this;
+      return *this;
   }
 
   this->commandCollection = other.commandCollection;
 
   return *this;
+}
+
+std::string CommandProcessor::stringToLog() {
+  std::stringstream ss;
+  ss << "COMMAND PROCESSOR: ";
+  ss << "Saved command \"";
+  ss << commandCollection.back()->getEffect();
+  ss << "\"";
+  return ss.str();
 }

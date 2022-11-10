@@ -5,6 +5,8 @@
 
 void testCommandProcessor() {
 
+  auto gameEngine = new GameEngine;
+
     // Command line or file
     std::string decision;
 
@@ -14,10 +16,10 @@ void testCommandProcessor() {
 
     // Initializing file reading classes
     FileLineReader flr;
-    FileCommandProcessorAdapter adapter;
+    FileCommandProcessorAdapter adapter(gameEngine);
 
     // Initializing command line reading class
-    CommandProcessor cpr;
+    CommandProcessor cpr = CommandProcessor(gameEngine);
 
 
     // Get user input (command line or file)
