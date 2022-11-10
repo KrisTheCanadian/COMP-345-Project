@@ -114,6 +114,8 @@ private:
 public:
   // getters
   std::vector<Player*>* getPlayers();
+  // setters
+  void setCurrentPlayer(Player* player);
   Player* getCurrentPlayerTurn();
   Deck* getDeck();
   Map* getMap();

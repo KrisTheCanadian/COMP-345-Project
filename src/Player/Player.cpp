@@ -151,7 +151,7 @@ Hand *Player::getHand() {
   return hand;
 }
 
-OrdersList *Player::getOrdersListObject() {
+OrdersList* Player::getOrdersListObject() {
   return orders;
 }
 

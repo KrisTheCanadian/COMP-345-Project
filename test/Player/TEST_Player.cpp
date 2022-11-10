@@ -7,7 +7,7 @@ TEST(PlayerTestSuite, PlayerAddTerritories)
 {
   // arrange
   GameEngine gameEngine = GameEngine();
-  auto p = new Player(&gameEngine, new Hand());
+  auto p = new Player(&gameEngine, new Hand(), "Bob");
 
   gameEngine.loadMap("res/TestMap1_valid.map");
   auto map_territories = gameEngine.getMap()->getTerritories();
@@ -32,7 +32,7 @@ TEST(PlayerTestSuite, PlayerRemoveTerritories)
 {
   // arrange
   GameEngine gameEngine = GameEngine();
-  auto p = new Player(&gameEngine, new Hand());
+  auto p = new Player(&gameEngine, new Hand(), "Bob");
 
   gameEngine.loadMap("res/TestMap1_valid.map");
   auto map_territories = gameEngine.getMap()->getTerritories();
@@ -62,7 +62,7 @@ TEST(PlayerTestSuite, PlayerAttacknDefendTerritories)
 {
   // arrange
   GameEngine gameEngine = GameEngine();
-  auto p = new Player(&gameEngine, new Hand());
+  auto p = new Player(&gameEngine, new Hand(), "Bob");
 
   gameEngine.loadMap("res/TestMap1_valid.map");
   auto map_territories = gameEngine.getMap()->getTerritories();
@@ -83,28 +83,6 @@ TEST(PlayerTestSuite, PlayerAttacknDefendTerritories)
   // assert
   EXPECT_FALSE(defend.empty());
   EXPECT_FALSE(attack.empty());
-}
-
-TEST(PlayerTestSuite, PlayerIssueOrders)
-{
-  // arrange
-  GameEngine gameEngine = GameEngine();
-  auto p = new Player(&gameEngine, new Hand());
-
-  gameEngine.loadMap("res/TestMap1_valid.map");
-  auto map_territories = gameEngine.getMap()->getTerritories();
-  // act
-  p->issueOrder(CT_Bomb);
-  p->issueOrder(CT_Airlift);
-  p->issueOrder(CT_Blockade);
-  p->issueOrder(CT_Diplomacy);
-  // assert
-  auto orderList = p->getOrdersListObject()->getList();
-  EXPECT_EQ(orderList->size(), 4);
-  EXPECT_EQ(orderList->at(0)->getLabel(), "Bomb");
-  EXPECT_EQ(orderList->at(1)->getLabel(), "Airlift");
-  EXPECT_EQ(orderList->at(2)->getLabel(), "Blockade");
-  EXPECT_EQ(orderList->at(3)->getLabel(), "Negotiate");
 }
 
 int main(int argc, char **argv)
