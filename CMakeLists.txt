@@ -29,11 +29,11 @@ endif()
 # ---------------------------------------------------------
 
 set(GAME_LIB_SRCS
-   # Map
-   src/Map/Map.cpp
-   src/Map/Map.h
-   src/Map/MapDriver.cpp
-   src/Map/MapDriver.h
+    # Map
+    src/Map/Map.cpp
+    src/Map/Map.h
+    src/Map/MapDriver.cpp
+    src/Map/MapDriver.h
 
         # Player
         src/Player/Player.cpp
