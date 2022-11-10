@@ -26,7 +26,6 @@ class CommandProcessor: public Subject, ILoggable {
   public:
 
     //Constructors
-    CommandProcessor() = default;
     CommandProcessor(GameEngine*);
     CommandProcessor(const CommandProcessor &c);
 
