@@ -142,7 +142,7 @@ void Player::addFriendly(int targetPlayerID)
     friendlyPlayers.push_back(targetPlayerID);
 }
 
-GameEngine* Player::getGE()
+GameEngine* Player::getGameEngine()
 {
     return game;
 }

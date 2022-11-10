@@ -68,7 +68,7 @@ public:
 public:
   friend std::ostream& operator <<(std::ostream &out, const Player &player);
   bool canAttack(int);
-  GameEngine* getGE();
+  GameEngine* getGameEngine();
   void addFriendly(int);
   void addPlayer(Player* p);
   std::vector<Player*> getListOfPlayers();
