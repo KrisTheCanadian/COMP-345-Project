@@ -232,20 +232,6 @@ std::string OrdersList::stringToLog() {
 //                                                Advance
 //
 // -----------------------------------------------------------------------------------------------------------------
-
-
-
-Advance::Advance() : Order()
-{
-    source = nullptr;
-    target = nullptr;
-    amount = nullptr;
-}
-
-std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
-
-std::string Advance::getLabel() const { return label; }
-
 Advance::Advance(Territory& source, Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
 {
     this->source = &source;
@@ -253,6 +239,9 @@ Advance::Advance(Territory& source, Territory& target, Player& currentPlayer, in
     int* copiedAmount = new int(amount);
     this->amount = copiedAmount;
 }
+std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
+
+std::string Advance::getLabel() const { return label; }
 
 /**
  * Destructor
@@ -341,13 +330,6 @@ std::string Advance::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-
-Airlift::Airlift() : Order()
-{
-    source = nullptr;
-    target = nullptr;
-    amount = nullptr;
-}
 Airlift::Airlift(Territory& source, Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
 {
     this->source = &source;
@@ -435,10 +417,6 @@ std::string Airlift::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-
-Blockade::Blockade() : Order()
-    {target = nullptr;}
-
 Blockade::Blockade(Territory& target, Player& currentPlayer) : Order(currentPlayer)
 {
     this->target = &target;
@@ -499,10 +477,10 @@ std::string Blockade::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Bomb::Bomb() : Order()
-{target = nullptr;}
 Bomb::Bomb(Territory& target, Player& currentPlayer) : Order(currentPlayer)
-{this->target = &target;}
+{
+    this->target = &target;
+}
 
 const std::string Bomb::label = "Bomb";
 
@@ -565,15 +543,6 @@ std::string Bomb::stringToLog() {
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-
-Deploy::Deploy() : Order()
-{
-    target = nullptr;
-    amount = nullptr;
-}
-
-const std::string Deploy::label = "Deploy";
-
 Deploy::Deploy(Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
 {
     this->target = &target;
@@ -587,6 +556,8 @@ Deploy::~Deploy()
     currentPlayer = nullptr;
     delete amount;
 }
+
+const std::string Deploy::label = "Deploy";
 
 std::string Deploy::getLabel() const { return label; }
 
@@ -644,24 +615,17 @@ std::string Deploy::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-
-Negotiate::Negotiate() : Order()
-{
-    targetPlayer = nullptr;
-}
 Negotiate::Negotiate(Player& targetPlayer, Player& currentPlayer) : Order(currentPlayer)
 {
     this->targetPlayer = &targetPlayer;
 }
 
-
+Negotiate::~Negotiate()
+{
+    targetPlayer = nullptr;
+}
 
 const std::string Negotiate::label = "Negotiate";
-
-Negotiate::~Negotiate()
-    {
-        targetPlayer = nullptr;
-    }
 
 std::string Negotiate::getLabel() const { return label; }
 

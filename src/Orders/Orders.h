@@ -36,10 +36,8 @@ public:
   virtual ~Order() = 0;
   // cloner (copy)
   virtual Order *clone() const = 0;
-
-protected:
-    Player *currentPlayer;
-    bool enabled;
+  Player *currentPlayer;
+  bool enabled;
 
 private:
   // --------------------------------
@@ -118,9 +116,14 @@ private:
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-    class Advance : public Order {
+ class Advance : public Order {
+    private:
+        Territory *source;
+        Territory *target;
+        int *amount;
+
     public:
-        Advance();
+        Advance() = default;
         Advance(Territory &src, Territory &dest, Player &player, int amount);
         ~Advance() override;
         std::string getLabel() const override;
@@ -132,10 +135,7 @@ private:
         const static std::string label;
         Order *clone() const override;
         std::ostream &orderCout(std::ostream &) const override;
-        Territory *source;
-        Territory *target;
-        int *amount;
-    };
+};
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -149,8 +149,13 @@ private:
 
 class Airlift : public Order, Subject, ILoggable
 {
+private:
+    Territory *source;
+    Territory *target;
+    int *amount;
+
 public:
-  Airlift();
+  Airlift() = default;
   Airlift(Territory &source, Territory &target, Player &player, int amount);
   ~Airlift() override;
   std::string getLabel() const override;
@@ -162,10 +167,6 @@ private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
-
-  Territory *source;
-  Territory *target;
-  int *amount;
 };
 
 
@@ -182,8 +183,11 @@ private:
 
 class Blockade : public Order, Subject, ILoggable
 {
+private:
+    Territory *target;
+
 public:
-  Blockade();
+  Blockade() = default;
   Blockade(Territory &target, Player &player);
   ~Blockade() override;
   std::string getLabel() const override;
@@ -195,7 +199,6 @@ private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
-  Territory *target;
 };
 
 
@@ -210,8 +213,11 @@ private:
 
 class Bomb : public Order, Subject, ILoggable
 {
+private:
+    Territory *target;
+
 public:
-  Bomb();
+  Bomb() = default;
   Bomb(Territory &target, Player &player);
   ~Bomb() override;
   std::string getLabel() const override;
@@ -223,7 +229,7 @@ private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
-  Territory *target;
+
 };
 
 
@@ -239,8 +245,12 @@ private:
 
 class Deploy : public Order, Subject, ILoggable
 {
+private:
+    Territory *target;
+    int *amount;
+
 public:
-    Deploy();
+    Deploy() = default;
     Deploy(Territory &target, Player &player, int amount);
     ~Deploy() override;
     std::string getLabel() const override;
@@ -252,8 +262,7 @@ private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
-  Territory *target; // Target territory to deploy at
-  int *amount; // Amount of armies to deploy
+
 };
 
 
@@ -269,8 +278,11 @@ private:
 
 class Negotiate : public Order, Subject, ILoggable
 {
+private:
+    Player *targetPlayer;
+
 public:
-    Negotiate();
+    Negotiate() = default;
     Negotiate(Player &currentPlayer, Player &targetPlayer);
     ~Negotiate() override;
     std::string getLabel() const override;
@@ -282,7 +294,6 @@ private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
-  Player *targetPlayer;
 };
 
 // -----------------------------------------------------------------------------------------------------------------
