@@ -10,8 +10,9 @@ using namespace std;
 
 int main()
 {
-  testCommandProcessor();
-  testLoadMaps();
+  testGameLoop();
+//  testCommandProcessor();
+//  testLoadMaps();
 //  testGameStates();
   testOrdersLists();
   testCards();

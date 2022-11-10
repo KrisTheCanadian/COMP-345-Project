@@ -179,35 +179,35 @@ void Player::setReinforcementPool(int i)
     reinforcementPool = i;
 }
 
-/* For every Continent vector in Map obj, it will store its size and while iterating through player's territory list,
- * checks whether a territory's continent owned by a player matches the Continent name Continents[i] of map obj,
- * if so we increment the playerTerritoryInContinentCount, and then we check if it matches with Map Continent[i]'s size
- * if so then we can conclude that a player owns all territories in a particular continent and gains bonus power!
- */
-bool Player::ownsAllTerritoryInContinent()
+int Player::getContinentBonus()
 {
-    for(auto & continent : game->getMap()->continents)
-    {
-        int numOfTerritoriesInContinentMap = (int) continent->territories.size();
-        int playerTerritoryIsInContinentCount;
+  int continentBonusTotal = 0;
+  for(auto & continent : game->getMap()->continents)
+  {
+      int numOfTerritoriesInContinentMap = (int) continent->territories.size();
+      int playerTerritoryIsInContinentCount = 0;
 
-        for(auto & territory : territories)
-        {
-            if(territory->getContinentName() == continent->getName())
-            {
-                playerTerritoryIsInContinentCount++;
-            }
-        }
+      for(auto & territory : territories)
+      {
+          if(territory->getContinent()->getName() == continent->getName())
+          {
+              playerTerritoryIsInContinentCount++;
+          }
+      }
 
-        if(playerTerritoryIsInContinentCount == numOfTerritoriesInContinentMap)
-        {
-            return true;
-        }
-    }
-    return false;
+      if(playerTerritoryIsInContinentCount == numOfTerritoriesInContinentMap)
+      {
+        continentBonusTotal += continent->getBonus();
+      }
+  }
+    return continentBonusTotal;
 }
 
 std::string Player::getName() const {
   return name;
+}
+
+void Player::addReinforcement(int reinforcement) {
+  reinforcementPool += reinforcement;
 }
 

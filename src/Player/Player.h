@@ -29,7 +29,7 @@ public:
   // --------------------------------
   // Constructors
   // --------------------------------
-  Player(GameEngine* game, Hand* cards, std::string  name);
+  Player(GameEngine* game, Hand* cards, std::string name);
   ~Player();
   Player(const Player &p);
 
@@ -47,7 +47,8 @@ public:
   void issueOrder();
   void addTerritory(Territory& territory);
   void removeTerritory(Territory& territory);
-  bool ownsAllTerritoryInContinent();
+  void addReinforcement(int reinforcement);
+  int getContinentBonus();
 
   // --------------------------------
   // Getters

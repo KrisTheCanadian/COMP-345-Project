@@ -33,7 +33,7 @@ private:
   GameEngineState state = GE_Start;
 
   // Players
-  unsigned int playerTurn = 0;
+  Player* currentPlayerTurn;
   std::vector<Player*> players;
 
   // Deck
@@ -64,11 +64,6 @@ public:
   // Destructor
   // ----------------------------------------
   ~GameEngine() override;
-
-  // ----------------------------------------
-  // add players to game
-  // ----------------------------------------
-  void addPlayer(Player* player);
 
   // ----------------------------------------
   // load game map
@@ -105,9 +100,16 @@ public:
   // ----------------------------------------
   void mainGameLoop();
 
+  // ----------------------------------------
+  // add players to game (THIS IS DONE AUTOMATICALLY IN PLAYER CONSTRUCTOR)
+  // ----------------------------------------
+  void addPlayer(Player* player);
+
 private:
+
   // check win state
   Player* checkWinState();
+  void nextTurn(int& turn);
 
 public:
   // getters

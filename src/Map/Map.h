@@ -30,7 +30,6 @@ private:
   Continent* continent;
   std::string name;
   std::vector<Territory*> adjacentTerritories;
-  std::string *pContinentName; // pointer to a continent name
 
   int armies = 0;
   int ownerId = -1;
