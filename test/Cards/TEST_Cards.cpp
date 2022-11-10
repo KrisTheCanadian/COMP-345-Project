@@ -6,7 +6,7 @@ TEST(CardTestSuite, AddingCards)
 {
   // arrange
   auto gameEngine = new GameEngine();
-  auto player = new Player(gameEngine, new Hand());
+  auto player = new Player(gameEngine, new Hand(), "Rick");
   Deck* deck = gameEngine->getDeck();
   // act
   deck->addCardToDeck(new Card(CT_Bomb, gameEngine));
@@ -29,7 +29,7 @@ TEST(CardTestSuite, DrawFromDeck)
 {
   // arrange
   auto gameEngine = new GameEngine();
-  auto player = new Player(gameEngine, new Hand());
+  auto player = new Player(gameEngine, new Hand(), "Bob");
   Deck* deck = gameEngine->getDeck();
 
   deck->addCardToDeck(new Card(CT_Bomb, gameEngine));
@@ -57,13 +57,18 @@ TEST(CardTestSuite, PlayCard)
 {
   // arrange
   auto gameEngine = new GameEngine();
-  auto player = new Player(gameEngine, new Hand());
+  auto player = new Player(gameEngine, new Hand(), "Bob");
   Deck* deck = gameEngine->getDeck();
 
   deck->addCardToDeck(new Card(CT_Bomb, gameEngine));
   deck->draw(*player->getHand());
+  gameEngine->setCurrentPlayer(player);
+
+  auto playerCards = player->getHand()->getCards();
+
   // act
-  player->getHand()->getCards()->at(0)->play();
+  playerCards->at(0)->play();
+
   // assert
   auto cards = *deck->getDeckCards();
   auto player_cards = player->getHand()->getCards();

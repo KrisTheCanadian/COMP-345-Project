@@ -166,7 +166,11 @@ public:
     Deck* getDeck();
     Map* getMap();
     GameEngineState getCurrentState();
-    
+  // setters
+  void setCurrentPlayer(Player* player);
+  Player* getCurrentPlayerTurn();
+  Deck* getDeck();
+  Map* getMap();
   LogObserver* getLogObserver();
   CommandProcessor* getCommandProcessor();
 };

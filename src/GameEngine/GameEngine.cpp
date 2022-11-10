@@ -440,4 +440,8 @@ void GameEngine::nextTurn(int &turn) {
   turn %= (int)players.size();
 }
 
+void GameEngine::setCurrentPlayer(Player* player) {
+  currentPlayerTurn = player;
+}
+
 
