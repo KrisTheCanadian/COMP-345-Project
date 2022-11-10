@@ -242,15 +242,6 @@ std::ostream &Advance::orderCout(std::ostream &output) const { return output << 
 
 std::string Advance::getLabel() const { return label; }
 
-/**
- * Destructor
- */
-Advance::~Advance()
-{
-    source = nullptr;
-    target = nullptr;
-}
-
 const std::string Advance::label = "Advance";
 
 bool Advance::validate() const
@@ -333,15 +324,6 @@ Airlift::Airlift(Territory& source, Territory& target, Player& currentPlayer, in
 
 const std::string Airlift::label = "Airlift";
 
-/**
- * Destructor
- */
-Airlift::~Airlift()
-    {
-        source = nullptr;
-        target = nullptr;
-    }
-
 std::string Airlift::getLabel() const { return label; }
 
 std::ostream &Airlift::orderCout(std::ostream &output) const { return output << "-> Airlift order."; }
@@ -416,11 +398,6 @@ Blockade::Blockade(Territory& target, Player& currentPlayer) : Order(currentPlay
 
 const std::string Blockade::label = "Blockade";
 
-/**
- * Destructor
- */
-Blockade::~Blockade() {target = nullptr;}
-
 std::string Blockade::getLabel() const { return label; }
 
 std::ostream &Blockade::orderCout(std::ostream &output) const { return output << "-> Blockade order."; }
@@ -443,6 +420,7 @@ void Blockade::execute() const
       std::cout << "Blockade execution." << std::endl;
       target->setArmies(target->getArmies() * 3);
       target->setOwnerId(-1); // Transfer to neutral
+      cout << "Blockade has finished executing!\n" << endl;
   }
 }
 
@@ -475,12 +453,6 @@ Bomb::Bomb(Territory& target, Player& currentPlayer) : Order(currentPlayer)
 }
 
 const std::string Bomb::label = "Bomb";
-
-/**
- * Destructor
- */
-Bomb::~Bomb()
-{target = nullptr;}
 
 std::string Bomb::getLabel() const { return label; }
 
@@ -539,12 +511,6 @@ Deploy::Deploy(Territory& target, Player& currentPlayer, int amount) : Order(cur
 {
     this->target = &target;
     this->amount = amount;
-}
-
-Deploy::~Deploy()
-{
-    target = nullptr;
-    currentPlayer = nullptr;
 }
 
 const std::string Deploy::label = "Deploy";
@@ -608,11 +574,6 @@ std::string Deploy::stringToLog() {
 Negotiate::Negotiate(Player& targetPlayer, Player& currentPlayer) : Order(currentPlayer)
 {
     this->targetPlayer = &targetPlayer;
-}
-
-Negotiate::~Negotiate()
-{
-    targetPlayer = nullptr;
 }
 
 const std::string Negotiate::label = "Negotiate";

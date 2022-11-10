@@ -116,7 +116,7 @@ private:
 //
 // -----------------------------------------------------------------------------------------------------------------
 
- class Advance : public Order {
+ class Advance : public Order, Subject, ILoggable{
     private:
         Territory *source;
         Territory *target;
@@ -125,11 +125,11 @@ private:
     public:
         Advance() = default;
         Advance(Territory &src, Territory &dest, Player &player, int amount);
-        ~Advance() override;
+        ~Advance() = default;
         std::string getLabel() const override;
         bool validate() const override;
         void execute() const override;
-        std::string stringToLog();
+        std::string stringToLog() override;
 
     private:
         const static std::string label;
@@ -157,7 +157,7 @@ private:
 public:
   Airlift() = default;
   Airlift(Territory &source, Territory &target, Player &player, int amount);
-  ~Airlift() override;
+  ~Airlift() = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
@@ -189,7 +189,7 @@ private:
 public:
   Blockade() = default;
   Blockade(Territory &target, Player &player);
-  ~Blockade() override;
+  ~Blockade() = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
@@ -219,7 +219,7 @@ private:
 public:
   Bomb() = default;
   Bomb(Territory &target, Player &player);
-  ~Bomb() override;
+  ~Bomb() = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
@@ -252,7 +252,7 @@ private:
 public:
     Deploy() = default;
     Deploy(Territory &target, Player &player, int amount);
-    ~Deploy() override;
+    ~Deploy() = default;
     std::string getLabel() const override;
     bool validate() const override;
     void execute() const override;
@@ -284,7 +284,7 @@ private:
 public:
     Negotiate() = default;
     Negotiate(Player &currentPlayer, Player &targetPlayer);
-    ~Negotiate() override;
+    ~Negotiate() = default;
     std::string getLabel() const override;
     bool validate() const override;
     void execute() const override;
