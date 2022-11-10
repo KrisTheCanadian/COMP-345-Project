@@ -49,12 +49,6 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-
-/**
- * Default constructor
- */
-//OrdersList::OrdersList(){}
-
 /**
  * Destructor
  */
@@ -641,7 +635,6 @@ Order* OrdersFactory::CreateOrder(CardType cardType) {
         case CT_Bomb:
             return new Bomb();
         case CT_Reinforcement:
-            // TODO: Assignment 2 -> remove deploy and add new logic
             return new Deploy();
         case CT_Blockade:
             return new Blockade();

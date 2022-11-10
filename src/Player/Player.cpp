@@ -17,7 +17,6 @@ Player::Player(int playerID, int reinforcementPool, vector<Territory*> territory
     this->hand = cards;
     this->orders = orderlist;
 }
-Player::Player() {}
 
 // default copy constructor
 Player::Player(const Player &p) = default;
@@ -43,15 +42,10 @@ std::vector<Territory *> Player::toAttack() {
 }
 
 // Type of order
-//TODO: Please change this method to createOrder from the OrdersFactory class
 void Player::issueOrder(CardType cardType){
     auto order = OrdersFactory::CreateOrder(cardType);
     orders->add(order);
 }
-//void Player::issueOrder(const std::string& orderType, Territory* source, Territory* target, Player* currentPlayer, Player* targetPlayer, int* amount){
-//  auto order = OrdersFactory::createOrder(orderType, source, target, currentPlayer, targetPlayer, amount );
-//  orders->add(order);
-//}
 
 void Player::addTerritory(Territory& territory) {
   territory.setPlayer(this);
