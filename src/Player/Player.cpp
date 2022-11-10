@@ -43,8 +43,8 @@ std::vector<Territory *> Player::toAttack() {
 
 // Type of order
 void Player::issueOrder(CardType cardType){
-    auto order = OrdersFactory::CreateOrder(cardType);
-    orders->add(order);
+  auto order = OrdersFactory::CreateOrder(cardType);
+  orders->add(order);
 }
 
 void Player::addTerritory(Territory& territory) {

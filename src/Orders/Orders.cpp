@@ -695,11 +695,11 @@ std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
 }
 
 std::string Negotiate::stringToLog() {
-    std::stringstream ss;
-    ss << "ORDER: ";
-    ss << "Order Executed ";
-    ss << *this;
-    return ss.str();
+  std::stringstream ss;
+  ss << "ORDER: ";
+  ss << "Order Executed ";
+  ss << *this;
+  return ss.str();
 }
 
 // -----------------------------------------------------------------------------------------------------------------
