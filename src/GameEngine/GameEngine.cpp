@@ -2,8 +2,6 @@
 
 
 
-regex regexRuleFile("-file .+.txt$");
-
 void GameEngine::setCurrentState(GameEngineState engineState) {
   this->state = engineState;
 }

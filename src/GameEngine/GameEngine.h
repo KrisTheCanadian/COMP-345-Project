@@ -7,7 +7,6 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
-#include <regex>
 
 
 class Player;
@@ -42,9 +41,9 @@ private:
   // Map
   Map* map = nullptr;
 
-  FileCommandProcessorAdapter* adapter;
-  FileLineReader* flr;
-  CommandProcessor* commandProcessor;
+  FileCommandProcessorAdapter* adapter = nullptr;
+  FileLineReader* flr = nullptr;
+  CommandProcessor* commandProcessor = nullptr;
 
 public:
    bool isConsole;
