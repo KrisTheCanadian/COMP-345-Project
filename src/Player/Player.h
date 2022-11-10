@@ -6,6 +6,7 @@
 #include "Map/Map.h"
 
 #include <vector>
+#include <utility>
 
 class Territory;
 enum CardType : int;

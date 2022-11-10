@@ -322,7 +322,7 @@ std::string GameEngine::stringToLog() {
 */
 void GameEngine::reinforcementPhase()
 {
-  for (auto & player : players)
+  for (auto& player : players)
   {
     currentPlayerTurn = player;
     player->setPhase("Reinforcement");
@@ -344,8 +344,7 @@ void GameEngine::reinforcementPhase()
     player->addReinforcement(reinforcementsToAdd);
 
     cout << "Player: " << player->getName() << "'s updated Reinforcement Pool: "<< player->getReinforcementPool() << endl;
-
-}
+  }
 }
 
 /*

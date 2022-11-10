@@ -1,7 +1,5 @@
 #include "Player.h"
 
-#include <utility>
-
 int Player::nextId = 0;
 
 Player::Player(GameEngine* game, Hand* cards, std::string  name)
@@ -15,23 +13,57 @@ Player::Player(GameEngine* game, Hand* cards, std::string  name)
 Player::Player(const Player &p) = default;
 
 std::vector<Territory *> Player::toDefend() {
-  unsigned length = territories.size();
-  if(length > 0){
-    auto first = territories.begin();
-    auto last = territories.begin() + length/2;
-    return {first, last};
+  vector<tuple<Territory*, int>> listOfTerritories;
+  // check all neighbours for enemies
+  // prioritize defending the territories that are connected to enemies
+  for(auto& territory: territories){
+    int enemiesTerritories = 0;
+    // check for all territories the surrounding territories for enemies
+    auto adjacentTerritories = territory->getAdjacentTerritories();
+    for(auto& adjTerritory: *adjacentTerritories){
+      // check the playerID
+      if(adjTerritory->getOwnerId() != id && adjTerritory->getOwnerId() != -1){
+        enemiesTerritories++;
+      }
+    }
+    listOfTerritories.emplace_back(territory, enemiesTerritories);
   }
-  return {};
+
+  // let's sort this stuff
+  std::sort(listOfTerritories.begin(), listOfTerritories.end(), [](auto const &t1, auto const &t2) {
+    return get<1>(t1) > get<1>(t2); // compare the enemies
+  });
+  vector<Territory*> response;
+
+  for(auto& t: listOfTerritories){
+    response.push_back(std::get<0>(t));
+  }
+
+  return response;
 }
 
 std::vector<Territory *> Player::toAttack() {
-  unsigned length = territories.size();
-  if(length > 0){
-    auto first = territories.begin() + length/2;
-    auto last = territories.end();
-    return {first, last};
+  vector<Territory*> listOfTerritories;
+  // check all neighbours for enemies
+  // prioritize the territories with fewer enemies
+  for(auto& territory: territories){
+    // check for all territories the surrounding territories for enemies
+    auto adjacentTerritories = territory->getAdjacentTerritories();
+    for(auto& adjTerritory: *adjacentTerritories){
+      // check the playerID
+      if(adjTerritory->getOwnerId() != id && adjTerritory->getOwnerId() != -1){
+        listOfTerritories.push_back(adjTerritory);
+      }
+    }
   }
-  return {};
+
+  // let's sort this stuff
+  sort(listOfTerritories.begin(), listOfTerritories.end(), [ ]( const Territory* lhs, const Territory* rhs)
+  {
+    return lhs->getArmies() > lhs->getArmies();
+  });
+
+  return listOfTerritories;
 }
 
 // Type of order
