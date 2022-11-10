@@ -534,10 +534,6 @@ std::ostream &Deploy::orderCout(std::ostream &output) const { return output << "
 bool Deploy::validate() const
 {
   std::cout << "-> Deploy order validation check" << std::endl;
-    std::cout << target<< "target" << std::endl;
-
-    std::cout << target->getOwnerId() << std::endl;
-    std::cout << currentPlayer->getId() << std::endl;
 
     if (target->getOwnerId() != currentPlayer->getId())
     {
