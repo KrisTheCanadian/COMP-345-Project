@@ -1,7 +1,6 @@
 #include "Cards.h"
 using namespace std;
 
-Card::Card() {}
 //Card constructor with a type parameter
 Card::Card(const CardType& type, GameEngine* game)
 : cardType(type), game(game)
