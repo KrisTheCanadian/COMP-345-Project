@@ -11,9 +11,9 @@ using namespace std;
 int main()
 {
   testGameLoop();
-//  testCommandProcessor();
-//  testLoadMaps();
-//  testGameStates();
+  testCommandProcessor();
+  testLoadMaps();
+  testGameStates();
   testOrdersLists();
   testCards();
   testPlayers();
