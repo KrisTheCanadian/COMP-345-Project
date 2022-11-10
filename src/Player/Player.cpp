@@ -18,9 +18,6 @@ Player::Player(int playerID, int reinforcementPool, vector<Territory*> territory
     this->orders = orderlist;
 }
 
-// default copy constructor
-Player::Player(const Player &p) = default;
-
 std::vector<Territory *> Player::toDefend() {
   unsigned length = territories.size();
   if(length > 0){

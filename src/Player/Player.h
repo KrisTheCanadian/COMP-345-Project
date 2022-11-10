@@ -31,9 +31,10 @@ public:
   // --------------------------------
   Player() = default;;
   Player(GameEngine* game, Hand* cards);
+  // default copy constructor
+  Player(const Player &p) = default;
   Player(int id, int reinforcementPool, std::vector<Territory*> territories, Hand* cards, OrdersList* orders); //constructor for the OrdersDriver
   ~Player();
-  Player(const Player &p);
 
   // --------------------------------
   // Operator Overloads
