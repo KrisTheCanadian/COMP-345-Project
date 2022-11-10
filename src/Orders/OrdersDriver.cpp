@@ -104,195 +104,222 @@ void testOrderExecution()
     string targetTerritory;
     int nbArmies;
     int negotiatePlayerID;
+    int userChoice;
+
+    cout << "Which order execution would you like to test?" << endl;
+    cout << "-> Enter 1 for Deploy Testing" << endl;
+    cout << "-> Enter 2 for Advance Testing" << endl;
+    cout << "-> Enter 3 for Bomb Testing" << endl;
+    cout << "-> Enter 4 for Blockade Testing" << endl;
+    cout << "-> Enter 5 for Airlift Testing" << endl;
+    cout << "-> Enter 6 for Negotiate Testing" << endl;
+
+    cout << "Please enter your choice: " << endl;
+    cin >> userChoice;
+
 
     // --------------------------------
     // DEPLOY EXECUTION WITH PLAYER 1
     // --------------------------------
-//    cout << "-> Deploy Execution with Player 1" << endl;
-//    cout << "Your territories are: " << endl;
-//    for (int i = 0; i < player1->getTerritories()->size(); i++) {
-//        cout << "\t" << player1->getTerritories()->at(i)->getName() << endl;
-//    }
-//
-//        cout << "Which territory do you wish to deploy to?" << endl;
-//        cin >> targetTerritory;
-//        cout << "How many units from reinforcement pool do you wish to deploy?" << endl;
-//        cin >> nbArmies;
-//
-//        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
-//            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++)
-//            {
-//                if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == targetTerritory) {
-//                    deploy = new Deploy(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *player1, nbArmies);
-//                    //deploy->execute();
-//                }
-//            }
-//        }
-//    deploy->execute();
+    if(userChoice == 1) {
+        cout << "-> Deploy Execution with Player 1" << endl;
+        cout << "Your territories are: " << endl;
+        for (int i = 0; i < player1->getTerritories()->size(); i++) {
+            cout << "\t" << player1->getTerritories()->at(i)->getName() << endl;
+        }
+
+        cout << "Which territory do you wish to deploy to?" << endl;
+        cin >> targetTerritory;
+        cout << "How many units from reinforcement pool do you wish to deploy?" << endl;
+        cin >> nbArmies;
+
+        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
+            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++)
+            {
+                if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == targetTerritory) {
+                    deploy = new Deploy(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *player1, nbArmies);
+                }
+            }
+        }
+        deploy->execute();
+    }
+
 
     // --------------------------------
     // ADVANCE EXECUTION WITH PLAYER 2
     // --------------------------------
+    if(userChoice == 2) {
+        cout << "-> ADVANCE Execution with Player 2" << endl;
+        cout << "Your territories are " << endl;
+        for (int i = 0; i < player2->getTerritories()->size(); i++) {
+            cout << "\t" << player2->getTerritories()->at(i)->getName() << endl;
+        }
 
-//    cout << "-> ADVANCE Execution with Player 2" << endl;
-//    cout << "Your territories are " << endl;
-//    for (int i = 0; i < player2->getTerritories()->size(); i++) {
-//        cout << "\t" << player2->getTerritories()->at(i)->getName() << endl;
-//    }
-//
-//    cout << "Your enemy with" << endl;
-//    for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
-//        if (allPlayers->getListOfPlayers().at(i) != player2) {
-//            cout << "\t PLayer ID: " << allPlayers->getListOfPlayers().at(i)->getId() << "'s territories are: " << endl;
-//            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
-//                cout << "\t\t" << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() << endl;
-//            }
-//        }
-//    }
-//
-//
-//        cout << "From which territory do you wish to advance your army?" << endl;
-//        cin >> sourceTerritory;
-//        cout << "To which territory do you wish to advance your army?" << endl;
-//        cin >> targetTerritory;
-//
-//
-//        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
-//            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
-//                // Search for territory having the name of the source territory
-//                if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == sourceTerritory) {
-//
-//                    for (int k = 0; k < allPlayers->getListOfPlayers().size(); k++) {
-//                        for (int l = 0; l < allPlayers->getListOfPlayers().at(k)->getTerritories()->size(); l++) {
-//                            // Search for territory having the name of the target territory
-//                            if (allPlayers->getListOfPlayers().at(k)->getTerritories()->at(l)->getName() == targetTerritory) {
-//                                cout << "How many units do you wish to move? You have " << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getArmies()
-//                                     << " units in " << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() << endl;
-//                                cin >> nbArmies;
-//
-//                                advance = new Advance(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *(allPlayers->getListOfPlayers().at(k)->getTerritories()->at(l)), *player2, nbArmies);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//    advance->execute();
+        cout << "Your enemy with" << endl;
+        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
+            if (allPlayers->getListOfPlayers().at(i) != player2) {
+                cout << "\t PLayer ID: " << allPlayers->getListOfPlayers().at(i)->getId() << "'s territories are: " << endl;
+                for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
+                    cout << "\t\t" << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() << endl;
+                }
+            }
+        }
+
+
+        cout << "From which territory do you wish to advance your army?" << endl;
+        cin >> sourceTerritory;
+        cout << "To which territory do you wish to advance your army?" << endl;
+        cin >> targetTerritory;
+
+
+        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
+            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
+                // Search for territory having the name of the source territory
+                if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == sourceTerritory) {
+
+                    for (int k = 0; k < allPlayers->getListOfPlayers().size(); k++) {
+                        for (int l = 0; l < allPlayers->getListOfPlayers().at(k)->getTerritories()->size(); l++) {
+                            // Search for territory having the name of the target territory
+                            if (allPlayers->getListOfPlayers().at(k)->getTerritories()->at(l)->getName() == targetTerritory) {
+                                cout << "How many units do you wish to move? You have " << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getArmies()
+                                     << " units in " << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() << endl;
+                                cin >> nbArmies;
+
+                                advance = new Advance(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *(allPlayers->getListOfPlayers().at(k)->getTerritories()->at(l)), *player2, nbArmies);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        advance->execute();
+    }
+
 
     // --------------------------------
     // BOMB EXECUTION WITH PLAYER 1
     // --------------------------------
+    if(userChoice == 3) {
+        cout << "-> Bomb execution with player 1" << endl;
+        cout << "Your enemy with " << endl;
+        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
+            if (allPlayers->getListOfPlayers().at(i) != player1) {
+                cout << "\t Player ID: " << allPlayers->getListOfPlayers().at(i)->getId() << "'s territories are " << endl;
+                for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
+                    cout << "\t\t" << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() << endl;
+                }
+            }
+        }
 
-//    cout << "-> Bomb execution with player 1" << endl;
-//    cout << "Your enemy territories are " << endl;
-//    for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
-//        if (allPlayers->getListOfPlayers().at(i) != player1) {
-//            cout << "\t Player ID: " << allPlayers->getListOfPlayers().at(i)->getId() << "'s territories are " << endl;
-//            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
-//                cout << "\t\t" << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() << endl;
-//            }
-//        }
-//    }
-//
-//        cout << "Which territory do you wish to bomb? " << endl;
-//        cin >> targetTerritory;
-//
-//        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
-//            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
-//                if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == targetTerritory) {
-//                    bomb = new Bomb(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *player1);
-//                }
-//            }
-//        }
-//
-//    bomb->execute();
+        cout << "Which territory do you wish to bomb? " << endl;
+        cin >> targetTerritory;
+
+        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
+            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
+                if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == targetTerritory) {
+                    bomb = new Bomb(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *player1);
+                }
+            }
+        }
+
+        bomb->execute();
+    }
+
 
     // --------------------------------
     // BLOCKADE EXECUTION WITH PLAYER 1
     // --------------------------------
+    if(userChoice == 4) {
+        cout << "-> Blockade execution with player 2" << endl;
+        cout << "Your territories are: " << endl;
+        for (int i = 0; i < player2->getTerritories()->size(); i++) {
+            cout << "\t" << player2->getTerritories()->at(i)->getName() << endl;
+        }
 
-//    cout << "-> Blockade execution with player 2" << endl;
-//    cout << "Your territories are: " << endl;
-//    for (int i = 0; i < player2->getTerritories()->size(); i++) {
-//        cout << "\t" << player2->getTerritories()->at(i)->getName() << endl;
-//    }
-//
-//        cout << "Which territory do you wish to block?" << endl;
-//        cin >> targetTerritory;
-//
-//        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
-//            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
-//                if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == targetTerritory) {
-//                    blockade = new Blockade(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *player2);
-//                }
-//            }
-//
-//        }
-//    blockade->execute();
+        cout << "Which territory do you wish to block?" << endl;
+        cin >> targetTerritory;
+
+        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
+            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++) {
+                if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == targetTerritory) {
+                    blockade = new Blockade(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *player2);
+                }
+            }
+
+        }
+        blockade->execute();
+    }
+
 
     // --------------------------------
     // AIRLIFT EXECUTION WITH PLAYER 1
     // --------------------------------
-//    cout << "-> Airlift execution with player 1" << endl;
-//    cout << "Your territories are: " << endl;
-//    for (int i = 0; i < player1->getTerritories()->size(); i++)
-//    {
-//        cout << "\t" << player1->getTerritories()->at(i)->getName() << endl;
-//    }
-//        cout << "From which territory do you wish to airlift?" << endl;
-//        cin >> sourceTerritory;
-//        cout << "To which territory do you wish to airlift?" << endl;
-//        cin >> targetTerritory;
-//        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++)
-//        {
-//            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++)
-//            {
-//                // Search for territory having the name of the source territory
-//                if (allPlayers->getListOfPlayers().at(i)->getTerritories() -> at(j)->getName() == sourceTerritory)
-//                {
-//                    for (int k = 0; k < allPlayers->getListOfPlayers().size(); k++)
-//                    {
-//                        for (int l = 0; l < allPlayers->getListOfPlayers().at(k)->getTerritories()->size(); l++)
-//                        {
-//                            // Search for territory having the name of the target territory
-//                            if (allPlayers->getListOfPlayers().at(k)->getTerritories()->at(l)->getName() == targetTerritory)
-//                            {
-//                                cout << "How many units do you wish to move? You have " << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getArmies()
-//                                     << " units in " << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() << endl;
-//                                cin >> nbArmies;
-//
-//                                airlift = new Airlift(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *(allPlayers->getListOfPlayers().at(k)->getTerritories()->at(l)), *player1, nbArmies );
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    airlift->execute();
+    if(userChoice == 5) {
+        cout << "-> Airlift execution with player 1" << endl;
+        cout << "Your territories are: " << endl;
+        for (int i = 0; i < player1->getTerritories()->size(); i++)
+        {
+            cout << "\t" << player1->getTerritories()->at(i)->getName() << endl;
+        }
+        cout << "From which territory do you wish to airlift?" << endl;
+        cin >> sourceTerritory;
+        cout << "To which territory do you wish to airlift?" << endl;
+        cin >> targetTerritory;
+        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++)
+        {
+            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++)
+            {
+                // Search for territory having the name of the source territory
+                if (allPlayers->getListOfPlayers().at(i)->getTerritories() -> at(j)->getName() == sourceTerritory)
+                {
+                    for (int k = 0; k < allPlayers->getListOfPlayers().size(); k++)
+                    {
+                        for (int l = 0; l < allPlayers->getListOfPlayers().at(k)->getTerritories()->size(); l++)
+                        {
+                            // Search for territory having the name of the target territory
+                            if (allPlayers->getListOfPlayers().at(k)->getTerritories()->at(l)->getName() == targetTerritory)
+                            {
+                                cout << "How many units do you wish to move? You have " << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getArmies()
+                                     << " units in " << allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() << endl;
+                                cin >> nbArmies;
+
+                                airlift = new Airlift(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *(allPlayers->getListOfPlayers().at(k)->getTerritories()->at(l)), *player1, nbArmies );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        airlift->execute();
+    }
+
 
     // --------------------------------
     // NEGOTIATE EXECUTION WITH PLAYER 1
     // --------------------------------
-//
-//    cout << "-> Negotiate execution with player 2" << endl;
-//    cout << "List of players:" << endl;
-//    for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++)
-//    {
-//        cout << "\t PLayer ID: " << allPlayers->getListOfPlayers().at(i)->getId() << endl;
-//    }
-//        cout << "Which player do you wish to negotiate with? (Cin the player ID) " << endl;
-//        cin >> negotiatePlayerID;
-//
-//        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++)
-//        {
-//            if (allPlayers->getListOfPlayers().at(i)->getId() == negotiatePlayerID)
-//            {
-//                negotiate = new Negotiate(*(allPlayers->getListOfPlayers().at(i)), *player2);
-//            }
-//        }
-//
-//    negotiate->execute();
+    if(userChoice == 6) {
+
+        cout << "-> Negotiate execution with player 2" << endl;
+        cout << "List of players:" << endl;
+        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++)
+        {
+            cout << "\t PLayer ID: " << allPlayers->getListOfPlayers().at(i)->getId() << endl;
+        }
+        cout << "Which player do you wish to negotiate with? (Cin the player ID) " << endl;
+        cin >> negotiatePlayerID;
+
+        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++)
+        {
+            if (allPlayers->getListOfPlayers().at(i)->getId() == negotiatePlayerID)
+            {
+                negotiate = new Negotiate(*(allPlayers->getListOfPlayers().at(i)), *player2);
+            }
+        }
+
+        negotiate->execute();
+    }
+
 
 
 //    deploy->~Deploy();
