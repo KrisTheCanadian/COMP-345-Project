@@ -9,9 +9,9 @@ std::string FileCommandProcessorAdapter::readCommand(){
     return flr->readLineFromFile();
 }
 
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(){}
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(GameEngine* game): CommandProcessor(game){}
 
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpA){
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpA, GameEngine* game): CommandProcessor(game){
     flr = fcpA.flr;
 }
 
