@@ -5,12 +5,6 @@
 #include "Map/Map.h"
 #include "Player/Player.h"
 #include "Cards/Cards.h"
-using std::ostream;
-using std::setw;
-using std::setfill;
-using std::left;
-using std::cout;
-using std::endl;
 
 // -----------------------------------------------------------------------------------------------------------------
 //
@@ -536,6 +530,7 @@ bool Deploy::validate() const
     else if (amount < 1)
     {
         cout << "Please enter a value that is at least 1 for this order\n" << endl;
+        return false;
     }
     cout << "Your order has been validated!\n" << endl;
   return true;
