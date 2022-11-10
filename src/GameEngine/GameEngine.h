@@ -95,10 +95,10 @@ public:
   // ----------------------------------------
   std::string stringToLog() override;
 
-    // ----------------------------------------
-    // reinforcement phase
-    // ----------------------------------------
-    void reinforcementPhase();
+  // ----------------------------------------
+  // reinforcement phase
+  // ----------------------------------------
+  void reinforcementPhase();
 
   // ----------------------------------------
   // Issuing Orders Phase
