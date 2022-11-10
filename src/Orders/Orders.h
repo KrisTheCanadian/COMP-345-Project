@@ -126,7 +126,7 @@ private:
         std::string getLabel() const override;
         bool validate() const override;
         void execute() const override;
-        std::string stringToLog() override;
+        std::string stringToLog() ;
 
     private:
         const static std::string label;
