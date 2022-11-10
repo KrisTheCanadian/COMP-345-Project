@@ -236,8 +236,7 @@ Advance::Advance(Territory& source, Territory& target, Player& currentPlayer, in
 {
     this->source = &source;
     this->target = &target;
-    int* copiedAmount = new int(amount);
-    this->amount = copiedAmount;
+    this->amount = amount;
 }
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
 
@@ -250,7 +249,6 @@ Advance::~Advance()
 {
     source = nullptr;
     target = nullptr;
-    delete amount;
 }
 
 const std::string Advance::label = "Advance";
@@ -270,12 +268,12 @@ bool Advance::validate() const
         cout << "The target territory is not adjacent to the source territory!\n" << endl;
         return false;
     }
-    else if (*amount > source->getArmies())
+    else if (amount > source->getArmies())
     {
         cout << "You do not have this many armies in this territory!\n" << endl;
         return false;
     }
-    else if (*amount < 1)
+    else if (amount < 1)
     {
         cout << "Please enter a value that is at least 1 for this order\n" << endl;
     }
@@ -290,8 +288,8 @@ void Advance::execute() const
         std::cout << "Advance execution." << std::endl;
         if (source->getOwnerId() == target->getOwnerId()) // Transferring army to another territory
         {
-            source->setArmies(source->getArmies() - *amount);
-            target->setArmies(target->getArmies() + *amount);
+            source->setArmies(source->getArmies() - amount);
+            target->setArmies(target->getArmies() + amount);
         }
         else // If you try to transfer on enemy territory, considered as attack.
         {
@@ -318,10 +316,6 @@ std::string Advance::stringToLog() {
 
 
 
-
-
-
-
 // -----------------------------------------------------------------------------------------------------------------
 //
 //
@@ -334,8 +328,7 @@ Airlift::Airlift(Territory& source, Territory& target, Player& currentPlayer, in
 {
     this->source = &source;
     this->target = &target;
-    int* copiedAmount = new int(amount);
-    this->amount = copiedAmount;
+    this->amount = amount;
 }
 
 const std::string Airlift::label = "Airlift";
@@ -347,7 +340,6 @@ Airlift::~Airlift()
     {
         source = nullptr;
         target = nullptr;
-        delete amount;
     }
 
 std::string Airlift::getLabel() const { return label; }
@@ -362,11 +354,11 @@ bool Airlift::validate() const
         cout << "The source territory is not your own!\n" << endl;
         return false;
     }
-    else if (*amount > source->getArmies())
+    else if (amount > source->getArmies())
     {
         cout << "You do not have this many armies in this territory!\n" << endl;
     }
-    else if (*amount < 1)
+    else if (amount < 1)
     {
         cout << "Please enter a value that is at least 1 for this order\n" << endl;
     }
@@ -385,8 +377,8 @@ void Airlift::execute() const
       std::cout << "Airlift execution." << std::endl;
       if (source->getOwnerId() == target->getOwnerId()) // Transferring army to another territory
       {
-          source->setArmies(source->getArmies() - *amount);
-          target->setArmies(target->getArmies() + *amount);
+          source->setArmies(source->getArmies() - amount);
+          target->setArmies(target->getArmies() + amount);
       }
       else // If you try to airlift on enemy territory, considered as attack.
       {
@@ -546,15 +538,13 @@ std::string Bomb::stringToLog() {
 Deploy::Deploy(Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
 {
     this->target = &target;
-    int* copiedAmount = new int(amount); // Because our data member is an int pointer.
-    this->amount = copiedAmount;
+    this->amount = amount;
 }
 
 Deploy::~Deploy()
 {
     target = nullptr;
     currentPlayer = nullptr;
-    delete amount;
 }
 
 const std::string Deploy::label = "Deploy";
@@ -572,12 +562,12 @@ bool Deploy::validate() const
         cout << "You do not own this territory!\n" << endl;
         return false;
     }
-    else if (*amount > currentPlayer->getReinforcementPool())
+    else if (amount > currentPlayer->getReinforcementPool())
     {
         cout << "You do not have this many armies in the reinforcement pool!\n" << endl;
         return false;
     }
-    else if (*amount < 1)
+    else if (amount < 1)
     {
         cout << "Please enter a value that is at least 1 for this order\n" << endl;
     }
@@ -589,7 +579,7 @@ void Deploy::execute() const
 {
   if (validate()) {
       std::cout << "Deploy execution." << std::endl;
-      target->setArmies(*amount + target->getArmies());
+      target->setArmies(amount + target->getArmies());
       cout << "Deploy has finished executing!\n" << endl;
   }
 }
@@ -690,15 +680,15 @@ Order* OrdersFactory::CreateOrder(CardType cardType) {
     }
 }
 
-void attackSimulation(Territory* source, Territory* target, Player* currentPlayer, int* amount)
+void attackSimulation(Territory* source, Territory* target, Player* currentPlayer, int amount)
 {
-    source->setArmies(source->getArmies() - *amount); // Attackers leave home territory
+    source->setArmies(source->getArmies() - amount); // Attackers leave home territory
 
     srand(time(NULL));
     int successAttack = 0;
     int successDefend = 0;
 
-    for (int i = 1; i <= *amount; i++) // Attacking Phase
+    for (int i = 1; i <= amount; i++) // Attacking Phase
     {
         int roll = rand() % 100 + 1;
         if (roll <= 60)
@@ -717,7 +707,7 @@ void attackSimulation(Territory* source, Territory* target, Player* currentPlaye
         }
     }
 
-    int remainingAttackArmies = *amount - successDefend;
+    int remainingAttackArmies = amount - successDefend;
     int remainingDefendArmies = target->getArmies() - successAttack;
 
     if (remainingAttackArmies < 0) // Possible if for example 1 attacker vs 70 defenders

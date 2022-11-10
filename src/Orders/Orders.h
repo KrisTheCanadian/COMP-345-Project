@@ -120,7 +120,7 @@ private:
     private:
         Territory *source;
         Territory *target;
-        int *amount;
+        int amount;
 
     public:
         Advance() = default;
@@ -152,7 +152,7 @@ class Airlift : public Order, Subject, ILoggable
 private:
     Territory *source;
     Territory *target;
-    int *amount;
+    int amount;
 
 public:
   Airlift() = default;
@@ -247,7 +247,7 @@ class Deploy : public Order, Subject, ILoggable
 {
 private:
     Territory *target;
-    int *amount;
+    int amount;
 
 public:
     Deploy() = default;
@@ -309,4 +309,4 @@ public:static Order* CreateOrder(CardType cardType);
 
 };
 
-void attackSimulation(Territory*, Territory*, Player*, int*);
+void attackSimulation(Territory*, Territory*, Player*, int);

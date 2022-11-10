@@ -262,6 +262,11 @@ void testOrderExecution()
         {
             cout << "\t" << player1->getTerritories()->at(i)->getName() << endl;
         }
+        cout << "Your opponents territories are: " << endl;
+        for (int i = 0; i < player2->getTerritories()->size(); i++)
+        {
+            cout << "\t" << player2->getTerritories()->at(i)->getName() << endl;
+        }
         cout << "From which territory do you wish to airlift?" << endl;
         cin >> sourceTerritory;
         cout << "To which territory do you wish to airlift?" << endl;
