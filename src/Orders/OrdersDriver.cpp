@@ -6,7 +6,6 @@ void testOrdersLists()
 {
   auto gameEngine = new GameEngine;
   auto player = new Player(gameEngine, new Hand(), "Rick Astley");
-  gameEngine->addPlayer(player);
 
   auto orderList = player->getOrdersListObject();
   std::cout << "-> Order Addition" << std::endl;

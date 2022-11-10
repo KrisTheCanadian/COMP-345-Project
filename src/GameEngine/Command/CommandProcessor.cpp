@@ -136,6 +136,7 @@ string CommandProcessor::StateToString() {
     case GE_Win:
         return "Win";
   }
+  throw std::runtime_error("CommandProcessor::StateToString Assert:Invalid State");
 }
 
 ostream & operator << (ostream &out, const CommandProcessor &c)

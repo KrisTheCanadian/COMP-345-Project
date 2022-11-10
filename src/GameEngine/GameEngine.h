@@ -36,6 +36,7 @@ private:
   // Players
   unsigned int playerTurn = 0;
   std::string fileName;
+  Player* currentPlayerTurn;
   std::vector<Player*> players;
 
   std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
@@ -73,11 +74,6 @@ public:
   // Destructor
   // ----------------------------------------
   ~GameEngine() override;
-
-  // ----------------------------------------
-  // add players to game
-  // ----------------------------------------
-  void addPlayer(Player* player);
 
   // ----------------------------------------
   // load game map
@@ -119,6 +115,11 @@ public:
   // ----------------------------------------
   void mainGameLoop();
 
+  // ----------------------------------------
+  // add players to game (THIS IS DONE AUTOMATICALLY IN PLAYER CONSTRUCTOR)
+  // ----------------------------------------
+  void addPlayer(Player* player);
+
 private:
     // ----------------------------------------
     // initiates startup phase for commands read from the console
@@ -126,6 +127,7 @@ private:
     void startupPhase();
   // check win state
   Player* checkWinState();
+  void nextTurn(int& turn);
 
     // ----------------------------------------
     // prints all the commands available for the user to use

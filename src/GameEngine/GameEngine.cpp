@@ -224,7 +224,7 @@ std::vector<Player *> *GameEngine::getPlayers() {
 }
 
 Player* GameEngine::getCurrentPlayerTurn() {
-  return players.at(playerTurn);
+  return currentPlayerTurn;
 }
 
 Deck* GameEngine::getDeck() {
@@ -322,33 +322,30 @@ std::string GameEngine::stringToLog() {
 */
 void GameEngine::reinforcementPhase()
 {
-    for (auto & player : players)
-    {
-        player->setPhase("Reinforcement");
-        cout << "Player No: " << player->getId() << "'s old Reinforcement Pool Looks Like----> "<< player->getReinforcementPool();
-        // if (number of territories owned) / 3 is less than 3, assigns 3 to the player reinforcement pool
-        if(((player->getTerritories()->size()) / 3) < 3) // removed round
-        {
-            cout << "| Player: " << player->getId() << "'s updated Reinforcement Pool Looks Like----> ";
-            player->setReinforcementPool(player->getReinforcementPool() + 3);
-            cout << player->getReinforcementPool() << endl;
-        }
+  for (auto & player : players)
+  {
+    currentPlayerTurn = player;
+    player->setPhase("Reinforcement");
+    cout << "Player: " << player->getName() << "'s current Reinforcement Pool: "<< player->getReinforcementPool() << endl;
+    // check for continents bonus before territories themselves
+    // check if players owned number of territories matches a continent that hold n amount of territories in order to gain control bonus
+    int reinforcementsToAdd = 0;
 
-        // check if players owned number of territories matches a continent that hold n amount of territories in order to gain control bonus
-        else if (player->ownsAllTerritoryInContinent())
-        {
-            cout << "| Player: " << player->getId() << "'s updated Reinforcement Pool Looks Like----> ";
-            player->setReinforcementPool(player->getReinforcementPool() + 10);
-            cout << player->getReinforcementPool() << endl;
-        }
+    // get continent bonus
+    reinforcementsToAdd += player->getContinentBonus();
+    if(reinforcementsToAdd > 0){cout << "Player: " << player->getName() << "'s continent bonus is: "<< player->getReinforcementPool() << endl;}
 
-        else
-        {
-            cout << "| Player: " << player->getId() << "'s updated Reinforcement Pool Looks Like----> ";
-            player->setReinforcementPool(player->getReinforcementPool() + (int)((player->getTerritories()->size()) / 3)); // removed round
-            cout << player->getReinforcementPool() << endl;
-        }
-    }
+    // get territories reinforcement
+    reinforcementsToAdd += (int)(player->getTerritories()->size() / 3) * 3;
+
+    // check if they have min
+    if(reinforcementsToAdd < 3){ reinforcementsToAdd = 3;}
+
+    player->addReinforcement(reinforcementsToAdd);
+
+    cout << "Player: " << player->getName() << "'s updated Reinforcement Pool: "<< player->getReinforcementPool() << endl;
+
+}
 }
 
 /*
@@ -360,17 +357,22 @@ void GameEngine::issueOrdersPhase() {
   vector<bool> completed(players.size());
   for(auto& player : players){ player->setPhase("Issue Orders"); }
 
-  while(std::all_of(completed.begin(), completed.end(), [](bool v) { return v; })){
-    auto currentPlayer = players[phaseTurn];
+  while(!std::all_of(completed.begin(), completed.end(), [](bool v) { return v; })){
+    if(completed[phaseTurn]){ nextTurn(phaseTurn); continue; }
+    currentPlayerTurn = players[phaseTurn];
+
+    cout << "Player: " << currentPlayerTurn->getName() << "'s turn to issue an order!" << endl;
 
     // when no more orders need to be issued
-    if(currentPlayer->getReinforcementPool() == 0 && currentPlayer->getHand()->getHandCards()->empty()){
+    if(currentPlayerTurn->getReinforcementPool() == 0 && currentPlayerTurn->getHand()->getHandCards()->empty()){
+      cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
       completed[phaseTurn] = true;
+      continue;
     }
 
-    currentPlayer->issueOrder();
+    currentPlayerTurn->issueOrder();
 
-    phaseTurn = phaseTurn + 1 % (int) players.size();
+    nextTurn(phaseTurn);
   }
 }
 
@@ -382,30 +384,39 @@ void GameEngine::executeOrdersPhase() {
   int phaseTurn = 0;
   vector<bool> completed(players.size());
   for(auto& player : players){ player->setPhase("Execute Orders Phase"); }
-  while(std::all_of(completed.begin(), completed.end(), [](bool v) { return v; })){
-    auto currentPlayer = players[phaseTurn];
-    auto currentPlayerOrders = currentPlayer->getOrdersListObject()->getList();
+
+  while(!std::all_of(completed.begin(), completed.end(), [](bool v) { return v; })){
+    if(completed[phaseTurn]){nextTurn(phaseTurn); continue; }
+    currentPlayerTurn = players[phaseTurn];
+    auto currentPlayerOrders = currentPlayerTurn->getOrdersListObject()->getList();
+
     // when no more orders need to be issued
     if(currentPlayerOrders->empty()){
+      cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to execute." << endl;
       completed[phaseTurn] = true;
+      continue;
     }
 
     auto topOrder = currentPlayerOrders->at(0);
+    cout << "Player: " << currentPlayerTurn->getName() << "'s order: " + topOrder->getLabel() + " is being executed." << endl;
     topOrder->execute();
     currentPlayerOrders->erase(currentPlayerOrders->cbegin());
     delete topOrder;
 
-    phaseTurn = phaseTurn + 1 % (int) players.size();
+    nextTurn(phaseTurn);
   }
 }
 
 void GameEngine::mainGameLoop() {
+  if(players.empty()){throw std::runtime_error("GameEngine::mainGameLoop::Assert Player size is 0.");}
   Player* winner = nullptr;
   // check win state
   while((winner = checkWinState()) == nullptr){
     reinforcementPhase();
     issueOrdersPhase();
     executeOrdersPhase();
+    // TODO: Remove when logic from part 4 is added (or else it infinite loops)
+    cin.get();
   }
   cout << "Congratulations" << winner->getName() << endl;
 }
@@ -422,6 +433,11 @@ Player* GameEngine::checkWinState() {
     }
   }
   return nullptr;
+}
+
+void GameEngine::nextTurn(int &turn) {
+  turn++;
+  turn %= (int)players.size();
 }
 
 
