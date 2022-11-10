@@ -1,5 +1,6 @@
 #include <iomanip> // To format output.
 #include <cstdlib>
+#include <cmath>
 #include "Orders.h"
 #include "Map/Map.h"
 #include "Player/Player.h"
@@ -485,7 +486,7 @@ void Bomb::execute() const
           return;
       }
       std::cout << "Bomb execution." << std::endl;
-      target->setArmies(target->getArmies() / 2);
+      target->setArmies(ceil(target->getArmies() / 2));
       cout << "Bomb has finished executing!\n" << endl;
   }
 }

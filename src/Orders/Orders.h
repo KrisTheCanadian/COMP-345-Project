@@ -115,7 +115,7 @@ private:
     public:
         Advance();
 
-        Advance(Territory &, Territory &, Player &, int); // Src, dest, current player, amount
+        Advance(Territory &src, Territory &dest, Player &player, int amount);
         ~Advance() override;
 
         std::string getLabel() const override;
@@ -151,7 +151,7 @@ class Airlift : public Order
 {
 public:
   Airlift();
-  Airlift(Territory &, Territory &, Player &, int); // Source, target, current player, amount
+  Airlift(Territory &source, Territory &target, Player &player, int amount);
   ~Airlift() override;
   std::string getLabel() const override;
   bool validate() const override;
@@ -183,7 +183,7 @@ class Blockade : public Order
 {
 public:
   Blockade();
-  Blockade(Territory &, Player &); // Target, current player
+  Blockade(Territory &target, Player &player);
   ~Blockade() override;
   std::string getLabel() const override;
   bool validate() const override;
@@ -211,7 +211,7 @@ class Bomb : public Order
 {
 public:
   Bomb();
-  Bomb(Territory &, Player &); // Target territory to bomb, current player
+  Bomb(Territory &target, Player &player);
   ~Bomb() override;
   std::string getLabel() const override;
   bool validate() const override;
@@ -239,7 +239,7 @@ class Deploy : public Order
 {
 public:
     Deploy();
-    Deploy(Territory &, Player &, int); // Target territory, current player, amount
+    Deploy(Territory &target, Player &player, int amount);
     ~Deploy() override;
     std::string getLabel() const override;
     bool validate() const override;
@@ -268,7 +268,7 @@ class Negotiate : public Order
 {
 public:
     Negotiate();
-    Negotiate(Player &, Player &);
+    Negotiate(Player &currentPlayer, Player &targetPlayer);
     ~Negotiate() override;
     std::string getLabel() const override;
     bool validate() const override;
