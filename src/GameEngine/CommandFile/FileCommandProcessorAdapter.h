@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "../Command/CommandProcessor.h"
 #include "FileLineReader.h"
 
@@ -14,7 +15,9 @@ class FileCommandProcessorAdapter : public CommandProcessor{
 
         // Copy constructor
         FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpA);
-        
+
+
+
         //Operator Overloading
         friend std::ostream & operator << (std::ostream &out, const FileCommandProcessorAdapter &ffcpAr);
         FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& other);

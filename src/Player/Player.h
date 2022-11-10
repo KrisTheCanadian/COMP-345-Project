@@ -21,7 +21,7 @@ private:
   Hand* hand;
   OrdersList* orders;
   GameEngine* game;
-  string playerName;
+  std::string playerName;
 
 public:
   // --------------------------------
@@ -53,7 +53,7 @@ public:
   OrdersList* getOrdersListObject();
   std::vector<Territory*>* getTerritories();
   int getId() const;
-  string* getPlayerName();
+  std::string* getPlayerName();
 
 public:
   friend std::ostream& operator <<(std::ostream &out, const Player &player);

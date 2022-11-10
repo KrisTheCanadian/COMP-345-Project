@@ -1,5 +1,5 @@
 #include "FileCommandProcessorAdapter.h"
-#include <iostream>
+
 
 void FileCommandProcessorAdapter::commandLineToFile(FileLineReader* _flr){
     flr = _flr;

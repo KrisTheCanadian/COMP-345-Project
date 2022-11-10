@@ -1,10 +1,14 @@
 #pragma once
+#include "Player/Player.h"
+#include "Map/Map.h"
+#include "Command/CommandProcessor.h"
+#include "CommandFile/FileCommandProcessorAdapter.h"
 
 #include <string>
 #include <stdexcept>
 #include <vector>
-#include "Player/Player.h"
-#include "Map/Map.h"
+#include <regex>
+
 
 class Player;
 class Map;
@@ -30,13 +34,18 @@ private:
   GameEngineState state = GE_Start;
   // Players
   unsigned int playerTurn = 0;
+  std::string fileName;
   std::vector<Player*> players;
   std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
   // Deck
   Deck* deck = nullptr;
   // Map
   Map* map = nullptr;
+
+  CommandProcessor* commandProcessor;
+
 public:
+   bool isConsole;
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
@@ -77,16 +86,8 @@ private:
     // ----------------------------------------
     // initiates startup phase for commands read from the console
     // ----------------------------------------
-    void cStartupPhase();
+    void startupPhase();
 
-    // ----------------------------------------
-    // initiates startup phase for commands read from a text file
-    // ----------------------------------------
-    void fStartupPhase();
-
-    // ----------------------------------------
-    // initiates startup phase
-    // ----------------------------------------
     void printCommands();
 
     // ----------------------------------------
@@ -113,7 +114,7 @@ public:
     // ----------------------------------------
     // redirects to the appropriate startup method
     // ----------------------------------------
-    void startupPhase(bool cmd);
+    void preStartupPhase();
 
     // getters
     std::vector<Player*>* getPlayers();

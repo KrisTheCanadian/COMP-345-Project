@@ -7,5 +7,5 @@ void printInvalidCommand(const std::string& command){
 void testGameStates(){
   GameEngine gameEngine;
 
-    gameEngine.startupPhase(true);
+    gameEngine.preStartupPhase();
 }

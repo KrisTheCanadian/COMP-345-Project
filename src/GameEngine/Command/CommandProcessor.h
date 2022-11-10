@@ -1,7 +1,11 @@
 #pragma once
+
 #include <iostream>
 #include <vector>
-#include "./GameEngine/GameEngine.h"
+#include "Command.h"
+#include <regex>
+
+
 
 class Command;
 
@@ -26,7 +30,7 @@ class CommandProcessor{
         CommandProcessor(const CommandProcessor &c);
 
 
-        void getCommand();
+        Command* getCommand();
         int getCurrentState();
 
         

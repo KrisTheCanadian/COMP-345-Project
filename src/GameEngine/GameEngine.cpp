@@ -1,7 +1,8 @@
 #include "GameEngine.h"
-#include "Command/CommandProcessor.h"
-#include "Command/Command.h"
 
+
+
+regex regexRuleFile("-file .+.txt$");
 
 void GameEngine::setCurrentState(GameEngineState engineState) {
   this->state = engineState;
@@ -17,22 +18,39 @@ GameEngine::GameEngine(GameEngineState state) {
   this->map = new Map(this);
 }
 
-void GameEngine::startupPhase(bool cmd) {
-    if(cmd){cStartupPhase();}
-    else if(!cmd){fStartupPhase();}
+void GameEngine::preStartupPhase() {
+    cout << "Welcome to the startup phase of the game!"<< endl
+    << "Use \'-console\' if you want to input commands for the startup phase through the console." << endl
+    << "Use \'-file <filename>\' if you want to complete the startup phase using commands from a file." << endl;
+    std::string result;
+    FileCommandProcessorAdapter* adapter;
+    FileLineReader* flr;
+    while(true){
+        cin >> result;
+        if(result.find("-console") != string::npos) {
+            printCommands();
+            startupPhase();
+        }
+        else if(std::regex_match(result, regexRuleFile)){
+            size_t pos = result.find(' ');
+            std::string fileName = "res/" + MapLoader::trim(result.substr(pos));
+            commandProcessor = adapter;
+            flr->setFile(fileName);
+            adapter->commandLineToFile(flr);
+            startupPhase();
+        }
+        else{
+            cout<< "Please enter a valid command: " <<endl;
+            continue;
+        }
+    }
 }
 
-void GameEngine::fStartupPhase() {
-
-}
-
-void GameEngine::cStartupPhase() {
-    CommandProcessor* commandProcessor = new CommandProcessor ();
-    Command* command = NULL;
+void GameEngine::startupPhase() {
+    Command* command;
     std::string strCommand = "";
     std::string effect = "";
-    cout << "Welcome to the startup phase of the game! Here are the list of commands available to you: " << endl;
-    printCommands();
+
     do{
         command = commandProcessor->getCommand();
         strCommand = command->getCommand();
@@ -81,10 +99,6 @@ void GameEngine::cStartupPhase() {
             setCurrentState(GE_Players_Added);
         }
         else if(strCommand == "gamestart"){
-            if(state < GE_Players_Added){
-                cout<< "At least two players are necessary to play."<<endl;
-                continue;
-            }
             distributeTerritories();
             cout<< "Territories distributed."<<endl;
 
@@ -161,6 +175,7 @@ void GameEngine::playerOrder(){
 bool GameEngine::isValid(const std::string strCommand){return strCommand.find("Invalid") == string::npos;}
 
 void GameEngine::printCommands() {
+    cout<< "Here are the commands available to you: "<<endl;
     for (string cmd: commands) {
         cout << cmd << " ";
     }
