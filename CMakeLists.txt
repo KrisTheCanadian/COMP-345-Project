@@ -123,7 +123,10 @@ add_executable(testRunnerMap test/Map/TEST_MapLoader.cpp)
 target_link_libraries(testRunnerMap gtest_main gmock_main Game)
 add_test(NAME MapTests COMMAND testRunnerMap)
 
-
+# Logger Test
+add_executable(testRunnerLogger test/Logger/TEST_Logger.cpp)
+target_link_libraries(testRunnerLogger gtest_main gmock_main Game)
+add_test(NAME LoggerTests COMMAND testRunnerLogger)
 
 
 
