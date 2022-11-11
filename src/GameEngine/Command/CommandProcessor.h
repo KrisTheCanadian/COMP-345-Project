@@ -5,9 +5,9 @@
 #include <vector>
 #include <regex>
 #include "Logger/LogObserver.h"
-#include "GameEngine/GameEngine.h"
 
 class Command;
+class GameEngine;
 
 class CommandProcessor: public Subject, ILoggable {
 
@@ -31,8 +31,8 @@ class CommandProcessor: public Subject, ILoggable {
     CommandProcessor(GameEngine*);
     CommandProcessor(const CommandProcessor &c);
 
-        Command* getCommand();
-        int getCurrentState();
+    Command* getCommand();
+    int getCurrentState();
 
     //Functions for CommandProcessorDriver.cpp
     void printInvalidCommand(std::string& command);

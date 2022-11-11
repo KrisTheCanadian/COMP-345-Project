@@ -20,5 +20,3 @@ class FileCommandProcessorAdapter : public CommandProcessor {
         friend std::ostream & operator << (std::ostream &out, const FileCommandProcessorAdapter &ffcpAr);
         FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& other);
 };
-
-
