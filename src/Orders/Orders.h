@@ -30,15 +30,10 @@ public:
   virtual bool validate() const = 0;
   // executes order
   virtual void execute() const = 0;
-  Order();
-  explicit Order(Player &);
   // destructor
   virtual ~Order() = 0;
   // cloner (copy)
   virtual Order *clone() const = 0;
-  Player *currentPlayer;
-  bool enabled;
-
 private:
   // --------------------------------
   // Operator Overloads

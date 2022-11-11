@@ -16,13 +16,6 @@
 
 Order::Order()
 {
-    currentPlayer = nullptr;
-    enabled = true;
-}
-Order::Order(Player& currentPlayer)
-{
-    this->currentPlayer = &currentPlayer;
-    enabled = true;
 }
 /**
  * Destructor
