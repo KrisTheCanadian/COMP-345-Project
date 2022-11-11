@@ -12,18 +12,6 @@
 //                                                Orders
 //
 // -----------------------------------------------------------------------------------------------------------------
-
-
-Order::Order()
-{
-}
-/**
- * Destructor
- */
-Order::~Order()
-{
-    currentPlayer = nullptr;
-}
 std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderCout(stream); }
 
 
@@ -219,7 +207,7 @@ std::string OrdersList::stringToLog() {
 //                                                Advance
 //
 // -----------------------------------------------------------------------------------------------------------------
-Advance::Advance(Territory& source, Territory& target, Player& currentPlayer, int amount) : source(&source), target(&target), currentPlayer(&currentPlayer), amount(amount){}
+Advance::Advance(Territory* source, Territory* target, Player* currentPlayer, int amount) : source(source), target(target), currentPlayer(currentPlayer), amount(amount){}
 
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
 
@@ -267,7 +255,7 @@ void Advance::execute() const
         }
         else // If you try to transfer on enemy territory, considered as attack.
         {
-            if (!currentPlayer->canAttack(target->getOwnerId()))
+            if (!currentPlayer->canAttack(target->getPlayer()))
             {
                 cout << "You cannot attack this player!\n" << endl;
                 return;
@@ -298,7 +286,7 @@ std::string Advance::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Airlift::Airlift(Territory& source, Territory& target, Player& currentPlayer, int amount) : source(&source), target(&target), currentPlayer(&currentPlayer), amount(amount){}
+Airlift::Airlift(Territory* source, Territory* target, Player* currentPlayer, int amount) : source(source), target(target), currentPlayer(currentPlayer), amount(amount){}
 
 const std::string Airlift::label = "Airlift";
 
@@ -329,7 +317,7 @@ bool Airlift::validate() const
 void Airlift::execute() const
 {
   if (validate()) {
-      if (!currentPlayer->canAttack(target->getOwnerId()))
+      if (!currentPlayer->canAttack(target->getPlayer()))
       {
           cout << "You cannot attack this player!\n" << endl;
           return;
@@ -369,7 +357,7 @@ std::string Airlift::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Blockade::Blockade(Territory& target, Player& currentPlayer) : target(&target), currentPlayer(&currentPlayer){}
+Blockade::Blockade(Territory* target, Player* currentPlayer) : target(target), currentPlayer(currentPlayer){}
 
 const std::string Blockade::label = "Blockade";
 
@@ -422,10 +410,7 @@ std::string Blockade::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Bomb::Bomb(Territory& target, Player& currentPlayer) : Order(currentPlayer)
-{
-    this->target = &target;
-}
+Bomb::Bomb(Territory* target, Player* currentPlayer) : target(target), currentPlayer(currentPlayer){}
 
 const std::string Bomb::label = "Bomb";
 
@@ -455,7 +440,7 @@ void Bomb::execute() const
           return;
       }
       std::cout << "Bomb execution." << std::endl;
-      target->setArmies(ceil(target->getArmies() / 2));
+      target->setArmies((target->getArmies() / 2) + 1);
       cout << "Bomb has finished executing!\n" << endl;
   }
 }
@@ -482,7 +467,7 @@ std::string Bomb::stringToLog() {
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-Deploy::Deploy(Territory& target, Player& currentPlayer, int amount) : target(&target), currentPlayer(&currentPlayer), amount(amount){}
+Deploy::Deploy(Territory* target, Player* currentPlayer, int amount) : target(target), currentPlayer(currentPlayer), amount(amount){}
 
 const std::string Deploy::label = "Deploy";
 
@@ -543,7 +528,7 @@ std::string Deploy::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Negotiate::Negotiate(Player& targetPlayer, Player& currentPlayer) : targetPlayer(&targetPlayer), currentPlayer(&currentPlayer){}
+Negotiate::Negotiate(Player* targetPlayer, Player* currentPlayer) : targetPlayer(targetPlayer), currentPlayer(currentPlayer){}
 
 const std::string Negotiate::label = "Negotiate";
 
@@ -565,8 +550,8 @@ void Negotiate::execute() const
 {
   if (validate()) {
       std::cout << "Negotiate execution." << std::endl;
-      currentPlayer->addFriendly(targetPlayer->getId());
-      targetPlayer->addFriendly(currentPlayer->getId());
+      currentPlayer->addFriendly(targetPlayer);
+      targetPlayer->addFriendly(currentPlayer);
   }
     cout << "Negotiate has finished executing." << endl;
 }

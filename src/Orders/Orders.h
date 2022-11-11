@@ -119,7 +119,7 @@ private:
   int amount = 0;
 
 public:
-  Advance(Territory &src, Territory &dest, Player &player, int amount);
+  Advance(Territory* src, Territory* dest, Player* player, int amount);
   ~Advance() override = default;
   std::string getLabel() const override;
   bool validate() const override;
@@ -151,7 +151,7 @@ private:
   int amount = 0;
 
 public:
-  Airlift(Territory &source, Territory &target, Player &player, int amount);
+  Airlift(Territory* source, Territory* target, Player* player, int amount);
   ~Airlift() override = default;
   std::string getLabel() const override;
   bool validate() const override;
@@ -183,7 +183,7 @@ private:
   Player* currentPlayer;
 
 public:
-  Blockade(Territory &target, Player &player);
+  Blockade(Territory* target, Player* player);
   ~Blockade() override = default;
   std::string getLabel() const override;
   bool validate() const override;
@@ -213,7 +213,7 @@ private:
   Player* currentPlayer;
 
 public:
-  Bomb(Territory &target, Player &player);
+  Bomb(Territory* target, Player* player);
   ~Bomb() override = default;
   std::string getLabel() const override;
   bool validate() const override;
@@ -246,7 +246,7 @@ private:
   int amount;
 
 public:
-  Deploy(Territory &target, Player &player, int amount);
+  Deploy(Territory* target, Player* player, int amount);
   ~Deploy() override = default;
   std::string getLabel() const override;
   bool validate() const override;
@@ -255,7 +255,7 @@ public:
 
 private:
   const static std::string label;
-  Order *clone() const override;
+  Order* clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 
 };
@@ -276,9 +276,10 @@ class Negotiate : public Order, Subject, ILoggable
 private:
   Player* currentPlayer;
   Player* targetPlayer;
+  std::vector<Player*> friendlyPlayers;
 
 public:
-  Negotiate(Player &currentPlayer, Player &targetPlayer);
+  Negotiate(Player* currentPlayer, Player* targetPlayer);
   ~Negotiate() override = default;
   std::string getLabel() const override;
   bool validate() const override;

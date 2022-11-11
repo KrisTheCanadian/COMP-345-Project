@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 class Territory;
 enum CardType : int;
@@ -21,11 +22,11 @@ private:
   std::string phase;
   int reinforcementPool;
   std::vector<Territory*> territories;
-  std::vector<Player*> players;
   Hand* hand;
   OrdersList* orders;
   GameEngine* game;
   std::string name;
+  std::vector<Player*> friendlyPlayers;
 
 public:
   // --------------------------------
@@ -56,6 +57,8 @@ public:
   // Setters
   // --------------------------------
   void setReinforcementPool(int n);
+  void addFriendly(Player *pPlayer);
+  void clearFriendly();
 
   // --------------------------------
   // Getters
@@ -72,13 +75,8 @@ public:
   // Setters
   // --------------------------------
   void setPhase(std::string ph);
-  void setReinforcementPool(int i);
 
 public:
   friend std::ostream& operator <<(std::ostream &out, const Player &player);
-  bool canAttack(int);
-  GameEngine* getGameEngine();
-  void addFriendly(int);
-  void addPlayer(Player* p);
-  std::vector<Player*> getListOfPlayers();
+  bool canAttack(Player *pPlayer);
 };

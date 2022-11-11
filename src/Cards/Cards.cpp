@@ -29,6 +29,7 @@ void Card::play() {
   // check to see whose turn it is
   Player* currentPlayer = game->getCurrentPlayerTurn();
   auto orders = currentPlayer->getOrdersListObject();
+  // TODO: FIX
   orders->add(OrdersFactory::CreateOrder(cardType));
 
   Card* card = currentPlayer->getHand()->removeCard(cardType);
@@ -57,11 +58,6 @@ std::string Card::CardTypeToString(CardType& c) {
 
 // Destructor
 Card::~Card() = default;
-
-
-
-
-
 
 //Copy construct
 Hand::Hand(const Hand &initial)

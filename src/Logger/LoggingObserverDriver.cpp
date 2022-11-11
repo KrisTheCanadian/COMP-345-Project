@@ -6,20 +6,22 @@
 void testLoggingObserver(){
 
   auto gameEngine = new GameEngine;
-  auto player = new Player(gameEngine, new Hand(), "Bob");
-  gameEngine->addPlayer(player);
-  auto observer = gameEngine->getLogObserver();
+  auto player1 = new Player(gameEngine, new Hand(), "Player1");
+  auto player2 = new Player(gameEngine, new Hand(), "Player2");
 
+  player2->addTerritory(*gameEngine->getMap()->getTerritories()->at(0));
+
+  auto observer = gameEngine->getLogObserver();
   // Create order and attach observer
-  auto order = (Bomb*) OrdersFactory::CreateOrder(CardType::CT_Bomb);
+  auto order = new Bomb(player2->getTerritories()->at(0), player1);
   ((Subject*)order)->attach((ILogObserver*)observer);
 
   // Get orderList and attach observer
-  auto orderList = player->getOrdersListObject();
+  auto orderList = player1->getOrdersListObject();
   ((Subject*)orderList)->attach((ILogObserver*)observer);
 
   // Create commandProcessor and attach observer
-  CommandProcessor *processor = new CommandProcessor(gameEngine);
+  auto processor = new CommandProcessor(gameEngine);
   ((Subject*)processor)->attach((ILogObserver*)observer);
 
   // TEST GAME STATE CHANGE

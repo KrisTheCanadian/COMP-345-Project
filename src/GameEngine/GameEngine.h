@@ -47,7 +47,6 @@ private:
   // Map
   Map* map = nullptr;
 
-
   // Logger
   LogObserver* logObserver = nullptr;
 

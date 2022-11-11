@@ -168,14 +168,6 @@ std::ostream &operator<<(std::ostream &out, const Player &player) {
   return out;
 }
 
-/*
- * Setting player's reinforcement pool
- */
-void Player::setReinforcementPool(int n)
-{
-    reinforcementPool = n;
-}
-
 
 // ----------------------------------------------------------------
 // Getters
@@ -248,4 +240,12 @@ std::string Player::getName() const {
 void Player::addReinforcement(int reinforcement) {
   reinforcementPool += reinforcement;
 }
-
+void Player::addFriendly(Player* pPlayer) {
+  friendlyPlayers.push_back(pPlayer);
+}
+void Player::clearFriendly() {
+  friendlyPlayers.erase(friendlyPlayers.begin(), friendlyPlayers.end());
+}
+bool Player::canAttack(Player *pPlayer) {
+  return std::find(friendlyPlayers.begin(), friendlyPlayers.end(), pPlayer) == friendlyPlayers.end();
+}
