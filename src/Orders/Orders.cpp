@@ -148,7 +148,7 @@ OrdersList &OrdersList::operator=(const OrdersList &copyList)
   return *this;
 }
 
-int OrdersList::getOrdersListSize()
+size_t OrdersList::getOrdersListSize()
 {
     return orders.size();
 }
@@ -298,12 +298,7 @@ std::string Advance::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Airlift::Airlift(Territory& source, Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
-{
-    this->source = &source;
-    this->target = &target;
-    this->amount = amount;
-}
+Airlift::Airlift(Territory& source, Territory& target, Player& currentPlayer, int amount) : source(&source), target(&target), currentPlayer(&currentPlayer), amount(amount){}
 
 const std::string Airlift::label = "Airlift";
 
@@ -374,10 +369,7 @@ std::string Airlift::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Blockade::Blockade(Territory& target, Player& currentPlayer) : Order(currentPlayer)
-{
-    this->target = &target;
-}
+Blockade::Blockade(Territory& target, Player& currentPlayer) : target(&target), currentPlayer(&currentPlayer){}
 
 const std::string Blockade::label = "Blockade";
 
@@ -490,11 +482,7 @@ std::string Bomb::stringToLog() {
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-Deploy::Deploy(Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
-{
-    this->target = &target;
-    this->amount = amount;
-}
+Deploy::Deploy(Territory& target, Player& currentPlayer, int amount) : target(&target), currentPlayer(&currentPlayer), amount(amount){}
 
 const std::string Deploy::label = "Deploy";
 
@@ -555,10 +543,7 @@ std::string Deploy::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Negotiate::Negotiate(Player& targetPlayer, Player& currentPlayer) : Order(currentPlayer)
-{
-    this->targetPlayer = &targetPlayer;
-}
+Negotiate::Negotiate(Player& targetPlayer, Player& currentPlayer) : targetPlayer(&targetPlayer), currentPlayer(&currentPlayer){}
 
 const std::string Negotiate::label = "Negotiate";
 
@@ -599,30 +584,6 @@ std::string Negotiate::stringToLog() {
   ss << "Order Executed ";
   ss << *this;
   return ss.str();
-}
-
-// -----------------------------------------------------------------------------------------------------------------
-//
-//
-//                                                OrdersFactory
-//
-// -----------------------------------------------------------------------------------------------------------------
-
-Order* OrdersFactory::CreateOrder(CardType cardType) {
-    switch(cardType){
-        case CT_Bomb:
-            return new Bomb();
-        case CT_Reinforcement:
-            return new Deploy();
-        case CT_Blockade:
-            return new Blockade();
-        case CT_Airlift:
-            return new Airlift();
-        case CT_Diplomacy:
-            return new Negotiate();
-        default:
-            throw std::runtime_error("ASSERT: Unhandled CardType Value");
-    }
 }
 
 void attackSimulation(Territory* source, Territory* target, Player* currentPlayer, int amount)

@@ -83,7 +83,7 @@ public:
   // Run user orders and remove them from order list
   void execute();
 
-  int getOrdersListSize();
+  size_t getOrdersListSize();
   Order* getOrder(int index);
 
   // --------------------------------
@@ -113,9 +113,9 @@ private:
 
 class Advance : public Order, Subject, ILoggable{
 private:
-  Player* currentPlayer = nullptr;
-  Territory* source = nullptr;
-  Territory* target = nullptr;
+  Player* currentPlayer;
+  Territory* source;
+  Territory* target;
   int amount = 0;
 
 public:
@@ -145,9 +145,10 @@ private:
 class Airlift : public Order, Subject, ILoggable
 {
 private:
-    Territory *source;
-    Territory *target;
-    int amount;
+  Player* currentPlayer;
+  Territory* source;
+  Territory* target;
+  int amount = 0;
 
 public:
   Airlift(Territory &source, Territory &target, Player &player, int amount);
@@ -178,7 +179,8 @@ private:
 class Blockade : public Order, Subject, ILoggable
 {
 private:
-    Territory *target;
+  Territory* target;
+  Player* currentPlayer;
 
 public:
   Blockade(Territory &target, Player &player);
@@ -207,7 +209,8 @@ private:
 class Bomb : public Order, Subject, ILoggable
 {
 private:
-    Territory *target;
+  Territory* target;
+  Player* currentPlayer;
 
 public:
   Bomb(Territory &target, Player &player);
@@ -238,16 +241,17 @@ private:
 class Deploy : public Order, Subject, ILoggable
 {
 private:
-    Territory *target;
-    int amount;
+  Player* currentPlayer;
+  Territory* target;
+  int amount;
 
 public:
-    Deploy(Territory &target, Player &player, int amount);
-    ~Deploy() override = default;
-    std::string getLabel() const override;
-    bool validate() const override;
-    void execute() const override;
-    std::string stringToLog() override;
+  Deploy(Territory &target, Player &player, int amount);
+  ~Deploy() override = default;
+  std::string getLabel() const override;
+  bool validate() const override;
+  void execute() const override;
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
@@ -270,33 +274,21 @@ private:
 class Negotiate : public Order, Subject, ILoggable
 {
 private:
-    Player *targetPlayer;
+  Player* currentPlayer;
+  Player* targetPlayer;
 
 public:
-    Negotiate(Player &currentPlayer, Player &targetPlayer);
-    ~Negotiate() override = default;
-    std::string getLabel() const override;
-    bool validate() const override;
-    void execute() const override;
-    std::string stringToLog() override;
+  Negotiate(Player &currentPlayer, Player &targetPlayer);
+  ~Negotiate() override = default;
+  std::string getLabel() const override;
+  bool validate() const override;
+  void execute() const override;
+  std::string stringToLog() override;
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
-};
-
-// -----------------------------------------------------------------------------------------------------------------
-//
-//
-//                                                OrdersFactory
-//
-// -----------------------------------------------------------------------------------------------------------------
-
-class OrdersFactory {
-
-public:static Order* CreateOrder(CardType cardType);
-
 };
 
 void attackSimulation(Territory*, Territory*, Player*, int);
