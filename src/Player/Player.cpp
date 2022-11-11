@@ -168,6 +168,15 @@ std::ostream &operator<<(std::ostream &out, const Player &player) {
   return out;
 }
 
+/*
+ * Setting player's reinforcement pool
+ */
+void Player::setReinforcementPool(int n)
+{
+    reinforcementPool = n;
+}
+
+
 // ----------------------------------------------------------------
 // Getters
 // ----------------------------------------------------------------

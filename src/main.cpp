@@ -14,7 +14,7 @@ int main()
   testCommandProcessor();
   testLoadMaps();
   testGameStates();
-  testOrdersLists();
+  testOrderExecution();
   testCards();
   testPlayers();
   testLoggingObserver();

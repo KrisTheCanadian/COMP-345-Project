@@ -21,6 +21,7 @@ private:
   std::string phase;
   int reinforcementPool;
   std::vector<Territory*> territories;
+  std::vector<Player*> players;
   Hand* hand;
   OrdersList* orders;
   GameEngine* game;
@@ -52,6 +53,11 @@ public:
   int getContinentBonus();
 
   // --------------------------------
+  // Setters
+  // --------------------------------
+  void setReinforcementPool(int n);
+
+  // --------------------------------
   // Getters
   // --------------------------------
   Hand* getHand();
@@ -70,5 +76,9 @@ public:
 
 public:
   friend std::ostream& operator <<(std::ostream &out, const Player &player);
-
+  bool canAttack(int);
+  GameEngine* getGameEngine();
+  void addFriendly(int);
+  void addPlayer(Player* p);
+  std::vector<Player*> getListOfPlayers();
 };

@@ -1,6 +1,4 @@
 #include "Cards.h"
-
-
 using namespace std;
 
 //Card constructor with a type parameter
@@ -17,7 +15,7 @@ Card::Card(const Card &initial)
   if(game == nullptr){throw std::runtime_error("Card::Error | Cannot set Card Game Engine to null");}
 }
 
-void Card::setCardType(CardType& type)
+void Card::setCardType(const CardType& type)
 {
     cardType = type;
 }
@@ -185,3 +183,39 @@ Card *Deck::removeCardRandom() {
 std::vector<Card *> *Deck::getDeckCards() {
   return &this->deckCards;
 };
+
+//for the testing purpose
+void Deck::create_deck() {
+    // Assign 40 cards in deck vector, each type has 8 cards, 5 types
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 5; j++) {
+            Card *cardPtr = new Card();
+
+            // Type 1 = Bomb
+            if (j == 0) {
+                cardPtr->setCardType(CT_Bomb);
+                deckCards.push_back(cardPtr);
+            }
+                // Type 2 = Reinforcement
+            else if (j == 1) {
+                cardPtr->setCardType(CT_Reinforcement);
+                deckCards.push_back(cardPtr);
+            }
+                // Type 3 = Blockade
+            else if (j == 2) {
+                cardPtr->setCardType(CT_Blockade);
+                deckCards.push_back(cardPtr);
+            }
+                // Type 4 = Airlift
+            else if (j == 3) {
+                cardPtr->setCardType(CT_Airlift);
+                deckCards.push_back(cardPtr);
+            }
+                // Type 5 = Diplomacy
+            else if (j == 4) {
+                cardPtr->setCardType(CT_Diplomacy);
+                deckCards.push_back(cardPtr);
+            }
+        }
+    }
+}

@@ -44,6 +44,7 @@ public:
   // --------------------------------
   // Constructors
   // --------------------------------
+  Card() = default;
   explicit Card(const CardType& type, GameEngine* game);
   Card(const Card &initial);
 
@@ -55,7 +56,7 @@ public:
   // --------------------------------
   // Setters + Getters
   // --------------------------------
-  void setCardType(CardType& type);
+  void setCardType(const CardType& type);
   CardType getCardType();
 
   // --------------------------------
@@ -111,12 +112,12 @@ class Deck
 private:
   //deck pointer vector
   std::vector<Card *> deckCards;
-
   // Object Owner
   GameEngine* game;
 
 public:
   //default constructor
+  Deck() = default;
   explicit Deck(GameEngine*);
   //destruct
   ~Deck();
@@ -130,6 +131,7 @@ public:
   std::vector<Card *> * getDeckCards();
   // add card to deck
   void addCardToDeck(Card* card);
+  void create_deck();
 private:
   // removes card from deck at random
   Card* removeCardRandom();
