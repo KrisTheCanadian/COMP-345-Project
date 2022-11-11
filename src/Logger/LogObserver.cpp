@@ -57,3 +57,19 @@ void LogObserver::update(ILoggable* loggable) {
     file.close();
 }
 
+std::ostream& operator << (std::ostream &out, const LogObserver &log)
+{
+  out << "I am a LogObserver" << std::endl;
+  return out;
+}
+
+LogObserver& LogObserver::operator=(const LogObserver &other){
+  if(this == &other){
+    return *this;
+  }
+
+  this->game = other.game;
+
+  return *this;
+}
+

@@ -82,9 +82,20 @@ class LogObserver : ILogObserver {
 private:
     // Object Owner
     GameEngine* game;
+
 public:
+
+    // Constructors
     explicit LogObserver(GameEngine*);
-    LogObserver(LogObserver*);
     ~LogObserver() override = default;
+    LogObserver(LogObserver*);
+
     void update(ILoggable*) override;
+
+    // Stream Operator
+    friend std::ostream &operator << (std::ostream &out, const LogObserver &log);
+
+    // Assignment Operator
+    LogObserver& operator=(const LogObserver &other);
+
 };

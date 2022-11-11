@@ -7,13 +7,8 @@
 #include "Logger/LogObserver.h"
 
 class Command;
-class GameEngine;
 
 class CommandProcessor: public Subject, ILoggable {
-
-  protected:
-    virtual std::string readCommand();
-    void saveCommand(Command* c);
 
   private:
     //Store all user commands
@@ -22,8 +17,11 @@ class CommandProcessor: public Subject, ILoggable {
     // Object Owner
     GameEngine* game;
 
-    //validate a user command
-    Command *validate(const std::string &_userInput);
+  private:
+
+    virtual std::string readCommand();
+    void saveCommand(Command* c);
+    Command* validate(std::string userInputCommand);
 
   public:
 

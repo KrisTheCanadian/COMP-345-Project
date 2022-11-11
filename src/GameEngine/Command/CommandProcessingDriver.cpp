@@ -2,7 +2,7 @@
 
 void testCommandProcessor() {
 
-  auto gameEngine = new GameEngine;
+    auto gameEngine = new GameEngine;
 
     // Command line or file
     std::string decision;

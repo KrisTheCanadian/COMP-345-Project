@@ -1,6 +1,4 @@
 #include "LoggingObserverDriver.h"
-#include "Orders/Orders.h"
-#include "GameEngine/Command/CommandProcessor.h"
 
 
 void testLoggingObserver(){
