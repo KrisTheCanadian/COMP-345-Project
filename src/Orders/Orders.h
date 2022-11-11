@@ -92,7 +92,7 @@ public:
   std::vector<Order *>* getList();
 
   // Logging
-  std::string castOrderType(Order * o);
+  static std::string castOrderType(Order * o);
   std::string stringToLog() override;
 
 private:
@@ -111,24 +111,25 @@ private:
 //
 // -----------------------------------------------------------------------------------------------------------------
 
- class Advance : public Order, Subject, ILoggable{
-    private:
-        Territory *source;
-        Territory *target;
-        int amount;
+class Advance : public Order, Subject, ILoggable{
+private:
+  Player* currentPlayer = nullptr;
+  Territory* source = nullptr;
+  Territory* target = nullptr;
+  int amount = 0;
 
-    public:
-        Advance(Territory &src, Territory &dest, Player &player, int amount);
-        ~Advance() override = default;
-        std::string getLabel() const override;
-        bool validate() const override;
-        void execute() const override;
-        std::string stringToLog() override;
+public:
+  Advance(Territory &src, Territory &dest, Player &player, int amount);
+  ~Advance() override = default;
+  std::string getLabel() const override;
+  bool validate() const override;
+  void execute() const override;
+  std::string stringToLog() override;
 
-    private:
-        const static std::string label;
-        Order *clone() const override;
-        std::ostream &orderCout(std::ostream &) const override;
+private:
+  const static std::string label;
+  Order *clone() const override;
+  std::ostream &orderCout(std::ostream &) const override;
 };
 
 

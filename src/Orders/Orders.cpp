@@ -180,23 +180,23 @@ std::vector<Order *> *OrdersList::getList() {
 
 
 std::string OrdersList::castOrderType(Order * o){
-  if(Advance *order = dynamic_cast<Advance*>(o)){
-      return order->getLabel();
+  if(auto advance = dynamic_cast<Advance*>(o)){
+      return advance->getLabel();
   }
-  else if(Airlift *order = dynamic_cast<Airlift*>(o)){
-      return order->getLabel();
+  else if(auto airlift = dynamic_cast<Airlift*>(o)){
+      return airlift->getLabel();
   }
-  else if(Blockade *order = dynamic_cast<Blockade*>(o)){
-      return order->getLabel();
+  else if(auto blockade = dynamic_cast<Blockade*>(o)){
+      return blockade->getLabel();
   }
-  else if(Bomb *order = dynamic_cast<Bomb*>(o)){
-      return order->getLabel();
+  else if(auto bomb = dynamic_cast<Bomb*>(o)){
+      return bomb->getLabel();
   }
-  else if(Deploy *order = dynamic_cast<Deploy*>(o)){
-      return order->getLabel();
+  else if(auto deploy = dynamic_cast<Deploy*>(o)){
+      return deploy->getLabel();
   }
-  else if(Negotiate *order = dynamic_cast<Negotiate*>(o)){
-      return order->getLabel();
+  else if(auto negotiate = dynamic_cast<Negotiate*>(o)){
+      return negotiate->getLabel();
   }
   throw std::runtime_error("OrderList::Error Order is null");
 }
@@ -219,12 +219,8 @@ std::string OrdersList::stringToLog() {
 //                                                Advance
 //
 // -----------------------------------------------------------------------------------------------------------------
-Advance::Advance(Territory& source, Territory& target, Player& currentPlayer, int amount) : Order(currentPlayer)
-{
-    this->source = &source;
-    this->target = &target;
-    this->amount = amount;
-}
+Advance::Advance(Territory& source, Territory& target, Player& currentPlayer, int amount) : source(&source), target(&target), currentPlayer(&currentPlayer), amount(amount){}
+
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
 
 std::string Advance::getLabel() const { return label; }
