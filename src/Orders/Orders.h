@@ -123,9 +123,8 @@ private:
         int amount;
 
     public:
-        Advance() = default;
         Advance(Territory &src, Territory &dest, Player &player, int amount);
-        ~Advance() = default;
+        ~Advance() override = default;
         std::string getLabel() const override;
         bool validate() const override;
         void execute() const override;
@@ -155,9 +154,8 @@ private:
     int amount;
 
 public:
-  Airlift() = default;
   Airlift(Territory &source, Territory &target, Player &player, int amount);
-  ~Airlift() = default;
+  ~Airlift() override = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
@@ -187,9 +185,8 @@ private:
     Territory *target;
 
 public:
-  Blockade() = default;
   Blockade(Territory &target, Player &player);
-  ~Blockade() = default;
+  ~Blockade() override = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
@@ -217,9 +214,8 @@ private:
     Territory *target;
 
 public:
-  Bomb() = default;
   Bomb(Territory &target, Player &player);
-  ~Bomb() = default;
+  ~Bomb() override = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() const override;
@@ -250,9 +246,8 @@ private:
     int amount;
 
 public:
-    Deploy() = default;
     Deploy(Territory &target, Player &player, int amount);
-    ~Deploy() = default;
+    ~Deploy() override = default;
     std::string getLabel() const override;
     bool validate() const override;
     void execute() const override;
@@ -282,9 +277,8 @@ private:
     Player *targetPlayer;
 
 public:
-    Negotiate() = default;
     Negotiate(Player &currentPlayer, Player &targetPlayer);
-    ~Negotiate() = default;
+    ~Negotiate() override = default;
     std::string getLabel() const override;
     bool validate() const override;
     void execute() const override;
