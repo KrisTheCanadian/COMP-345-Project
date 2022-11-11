@@ -54,16 +54,16 @@ void testOrderExecution()
         deck->draw(*hand2);
     }
 
-    Deploy *deploy = new Deploy();
-    Advance *advance = new Advance();
-    Bomb *bomb = new Bomb();
-    Blockade *blockade = new Blockade();
-    Airlift *airlift = new Airlift();
-    Negotiate *negotiate = new Negotiate();
+    auto deploy = new Deploy();
+    auto advance = new Advance();
+    auto bomb = new Bomb();
+    auto blockade = new Blockade();
+    auto airlift = new Airlift();
+    auto negotiate = new Negotiate();
 
     cout << "-> Creating list of orders" << endl;
-    OrdersList* ordersList1 = new OrdersList();
-    OrdersList* ordersList2 = new OrdersList();
+    auto ordersList1 = new OrdersList();
+    auto ordersList2 = new OrdersList();
 
     ordersList1->add(deploy);
     ordersList1->add(advance);
@@ -80,19 +80,19 @@ void testOrderExecution()
     ordersList2->add(negotiate);
 
     cout << "-> Creating the players" << endl;
-    Player* player1 = new Player(id1, reinforcementPool1, tList1, hand1, ordersList1);
-    Player* player2 = new Player(id2, reinforcementPool2, tList2, hand2, ordersList2);
+    auto player1 = new Player(id1, reinforcementPool1, tList1, hand1, ordersList1);
+    auto player2 = new Player(id2, reinforcementPool2, tList2, hand2, ordersList2);
 
     cout << "-> Setting the players as territory owners" << endl;
-    for (int i = 0; i < tList1.size(); i++) {
-        tList1.at(i)->setOwnerId(player1->getId());
+    for (auto & i : tList1) {
+        i->setOwnerId(player1->getId());
     }
-    for (int i = 0; i < tList2.size(); i++) {
-        tList2.at(i)->setOwnerId(player2->getId());
+    for (auto & i : tList2) {
+        i->setOwnerId(player2->getId());
     }
 
     cout << "-> Adding the players to a list" << endl;
-    Player* allPlayers = new Player();
+    auto allPlayers = new Player();
     allPlayers->addPlayer(player1);
     allPlayers->addPlayer(player2);
 
@@ -123,8 +123,8 @@ void testOrderExecution()
     if(userChoice == 1) {
         cout << "-> Deploy Execution with Player 1" << endl;
         cout << "Your territories are: " << endl;
-        for (int i = 0; i < player1->getTerritories()->size(); i++) {
-            cout << "\t" << player1->getTerritories()->at(i)->getName() << endl;
+        for (auto & i : *player1->getTerritories()) {
+            cout << "\t" << i->getName() << endl;
         }
 
         cout << "Which territory do you wish to deploy to?" << endl;
@@ -150,8 +150,8 @@ void testOrderExecution()
     if(userChoice == 2) {
         cout << "-> ADVANCE Execution with Player 2" << endl;
         cout << "Your territories are " << endl;
-        for (int i = 0; i < player2->getTerritories()->size(); i++) {
-            cout << "\t" << player2->getTerritories()->at(i)->getName() << endl;
+        for (auto & i : *player2->getTerritories()) {
+            cout << "\t" << i->getName() << endl;
         }
 
         cout << "Your enemy with" << endl;
@@ -232,8 +232,8 @@ void testOrderExecution()
     if(userChoice == 4) {
         cout << "-> Blockade execution with player 2" << endl;
         cout << "Your territories are: " << endl;
-        for (int i = 0; i < player2->getTerritories()->size(); i++) {
-            cout << "\t" << player2->getTerritories()->at(i)->getName() << endl;
+        for (auto & i : *player2->getTerritories()) {
+            cout << "\t" << i->getName() << endl;
         }
 
         cout << "Which territory do you wish to block?" << endl;
@@ -257,14 +257,14 @@ void testOrderExecution()
     if(userChoice == 5) {
         cout << "-> Airlift execution with player 1" << endl;
         cout << "Your territories are: " << endl;
-        for (int i = 0; i < player1->getTerritories()->size(); i++)
+        for (auto & i : *player1->getTerritories())
         {
-            cout << "\t" << player1->getTerritories()->at(i)->getName() << endl;
+            cout << "\t" << i->getName() << endl;
         }
         cout << "Your opponents territories are: " << endl;
-        for (int i = 0; i < player2->getTerritories()->size(); i++)
+        for (auto & i : *player2->getTerritories())
         {
-            cout << "\t" << player2->getTerritories()->at(i)->getName() << endl;
+            cout << "\t" << i->getName() << endl;
         }
         cout << "From which territory do you wish to airlift?" << endl;
         cin >> sourceTerritory;
