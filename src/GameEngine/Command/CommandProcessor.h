@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <regex>
 #include "Logger/LogObserver.h"
 #include "GameEngine/GameEngine.h"
 

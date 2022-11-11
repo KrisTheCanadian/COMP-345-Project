@@ -48,6 +48,7 @@ void testCommandProcessor() {
         adapter.commandLineToFile(&flr);
         
         while(!flr.getReadComplete()){
+
             adapter.getCommand();
         }
         
