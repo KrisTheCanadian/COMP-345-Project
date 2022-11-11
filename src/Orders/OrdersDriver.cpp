@@ -15,15 +15,15 @@ void testOrderExecution()
     int reinforcementPool2 = 20;
 
     cout << "-> Creating territories" << endl;
-    Territory* t1 = new Territory("t1");
+    auto t1 = new Territory("t1");
     t1->addArmyUnits(10);
-    Territory* t2 = new Territory("t2");
+    auto t2 = new Territory("t2");
     t2->addArmyUnits(10);
-    Territory* t3 = new Territory("t3");
+    auto t3 = new Territory("t3");
     t3->addArmyUnits(10);
-    Territory* t4 = new Territory("t4");
+    auto t4 = new Territory("t4");
     t4->addArmyUnits(10);
-    Territory* t5 = new Territory("t5");
+    auto t5 = new Territory("t5");
     t5->addArmyUnits(10);
 
     t1->addAdjacentTerritory(t2);
@@ -64,7 +64,6 @@ void testOrderExecution()
     cout << "-> Creating list of orders" << endl;
     OrdersList* ordersList1 = new OrdersList();
     OrdersList* ordersList2 = new OrdersList();
-    //OrdersFactory factory;
 
     ordersList1->add(deploy);
     ordersList1->add(advance);
