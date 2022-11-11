@@ -52,6 +52,7 @@ public:
   void removeTerritory(Territory& territory);
   void addReinforcement(int reinforcement);
   int getContinentBonus();
+  Territory* findFirstNeighbourTerritory(Territory* target);
 
   // --------------------------------
   // Setters

@@ -434,7 +434,7 @@ void Bomb::execute() const
 {
 
   if (validate()) {
-      if (!currentPlayer->canAttack(target->getOwnerId()))
+      if (!currentPlayer->canAttack(target->getPlayer()))
       {
           cout << "You cannot attack this player!\n" << endl;
           return;

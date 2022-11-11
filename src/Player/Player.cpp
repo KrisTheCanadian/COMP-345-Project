@@ -66,27 +66,12 @@ std::vector<Territory *> Player::toAttack() {
 // Type of order
 void Player::issueOrder() {
 
-  // for now, only 1 attack and only 1 defend
-  static bool attacked = false;
-  static bool defended = false;
-
-  // they can do advance order to own territory (defend)
-  if(!defended){
-    orders->add(new Advance());
-    defended = true;
-  }
-
-  // they can also advance to enemy territory (attack)
-  if(!attacked){
-    orders->add(new Advance());
-    attacked = true;
-  }
-
-  // randomly create
-
   // if army units in reinforcement pool, then can only create deploy orders
   if(reinforcementPool > 0){
-    orders->add(new Deploy());
+
+    // get player toDefend vector
+    auto defend = toDefend();
+
     // deploy a random amount
     std::random_device dev1;
     std::mt19937 rng1(dev1());
@@ -97,12 +82,11 @@ void Player::issueOrder() {
 
     std::random_device dev2;
     std::mt19937 rng2(dev2());
-    std::uniform_int_distribution<std::mt19937::result_type> distRandomIndexTerritory(0, territories.size() - 1);
+    std::uniform_int_distribution<std::mt19937::result_type> distRandomIndexTerritory(0, defend.size() - 1);
     int randomIndex = (int) distRandomIndexTerritory(rng2);
 
-    Territory* randomTerritory = territories.at(randomIndex);
-    randomTerritory->setArmies(deploymentAmount);
-    reinforcementPool -= deploymentAmount;
+    Territory* randomTerritory = defend.at(randomIndex);
+    orders->add(new Deploy(randomTerritory, this, deploymentAmount));
     return;
   }
 
@@ -119,6 +103,32 @@ void Player::issueOrder() {
     // play this card
     randomCard->play();
     return;
+  }
+
+  // for now, 5 attacks
+  static auto attack = 0;
+
+  // they can also advance to enemy territory (attack)
+  if(attack < 5){
+    // get to attack vector
+    auto attackTerritories = toAttack();
+    // no attacks to be done in this turn
+    if(attackTerritories.empty()){ attack = 5; return; }
+
+    if(!attackTerritories.empty()){
+      // getting a territory from the priority list
+      auto attackTerritory = toAttack()[attack % attackTerritories.size()];
+      // trying to find a neighbourTerritory
+      auto neighbour = findFirstNeighbourTerritory(attackTerritory);
+
+      // we check if we have a valid neighbour
+      // we also should check if there are enough armies to attack this territory
+      if(neighbour && neighbour->getArmies() > 1){
+        // if so then we actually attack (for now with half our troops) -> to keep it simple
+        orders->add(new Advance(attackTerritory, neighbour, this, neighbour->getArmies() / 2));
+      }
+    }
+    attack++;
   }
 
 }
@@ -248,4 +258,12 @@ void Player::clearFriendly() {
 }
 bool Player::canAttack(Player *pPlayer) {
   return std::find(friendlyPlayers.begin(), friendlyPlayers.end(), pPlayer) == friendlyPlayers.end();
+}
+Territory* Player::findFirstNeighbourTerritory(Territory* target) {
+  for(auto& t: *target->getAdjacentTerritories()){
+    if(t->getPlayer() == this){
+      return t;
+    }
+  }
+  return nullptr;
 }
