@@ -1,9 +1,9 @@
-#include "FileLineReader.h"
+
 #include <fstream>
 #include <iostream>
 #include <limits>
 #include <utility>
-
+#include "FileLineReader.h"
 
 FileLineReader::FileLineReader(const FileLineReader &flr){
     fileName = flr.fileName;

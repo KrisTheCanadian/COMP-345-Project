@@ -1,17 +1,18 @@
 #pragma once
-
 #include <string>
 #include <stdexcept>
 #include <vector>
 #include "Player/Player.h"
 #include "Map/Map.h"
 #include "Logger/LogObserver.h"
-#include "GameEngine/Command/CommandProcessor.h"
+#include "CommandFile/FileCommandProcessorAdapter.h"
+#include "CommandFile/FileLineReader.h"
+#include "Command/Command.h"
 
 class Player;
 class Map;
 class Deck;
-class CommandProcessor;
+
 
 // ----------------------------------------
 // Public GameEngine State Enum
@@ -34,7 +35,10 @@ private:
 
   // Players
   unsigned int playerTurn = 0;
+  std::string fileName;
   std::vector<Player*> players;
+
+  std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
 
   // Deck
   Deck* deck = nullptr;
@@ -42,13 +46,18 @@ private:
   // Map
   Map* map = nullptr;
 
+
   // Logger
   LogObserver* logObserver = nullptr;
 
   // Command Processor
   CommandProcessor* commandProcessor = nullptr;
+    FileCommandProcessorAdapter* adapter = nullptr;
+    FileLineReader* flr = nullptr;
+
 
 public:
+   bool isConsole;
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
@@ -76,9 +85,14 @@ public:
   void loadMap(const std::string& path);
 
   // ----------------------------------------
-  // convert current state to string
+  // Validate game map
   // ----------------------------------------
-  std::string getCurrentStateToString();
+  bool validateMap();
+
+  // ----------------------------------------
+  // gameStart
+  // ----------------------------------------
+  void gameStart();
 
   // ----------------------------------------
   // convert current state to string
@@ -86,16 +100,49 @@ public:
   std::string stringToLog() override;
 
 private:
-  // player increment turn
-  void nextPlayerTurn();
+    // ----------------------------------------
+    // initiates startup phase for commands read from the console
+    // ----------------------------------------
+    void startupPhase();
+
+    // ----------------------------------------
+    // prints all the commands available for the user to use
+    // ----------------------------------------
+    void printCommands();
+
+    // ----------------------------------------
+    // checks whether a command is valid or not
+    // ----------------------------------------
+    bool isValid(const std::string strCommand);
+
+    // ----------------------------------------
+    // distributes all territories evenly between the players
+    // ----------------------------------------
+    void distributeTerritories();
+
+    // ----------------------------------------
+    // determines a random order of play for players
+    // ----------------------------------------
+    void playerOrder();
+
+    // ----------------------------------------
+    // convert current state to string
+    // ----------------------------------------
+    std::string getCurrentStateToString();
 
 public:
-  // getters
-  std::vector<Player*>* getPlayers();
-  Player* getCurrentPlayerTurn();
-  Deck* getDeck();
-  Map* getMap();
+    // ----------------------------------------
+    // redirects to the appropriate startup method
+    // ----------------------------------------
+    void preStartupPhase();
+
+    // getters
+    std::vector<Player*>* getPlayers();
+    Player* getCurrentPlayerTurn();
+    Deck* getDeck();
+    Map* getMap();
+    GameEngineState getCurrentState();
+    
   LogObserver* getLogObserver();
   CommandProcessor* getCommandProcessor();
-  GameEngineState getCurrentState();
 };

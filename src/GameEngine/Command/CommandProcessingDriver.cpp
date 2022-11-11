@@ -1,7 +1,4 @@
 #include "CommandProcessingDriver.h"
-#include "CommandProcessor.h"
-#include "../CommandFile/FileCommandProcessorAdapter.h"
-#include <iostream>
 
 void testCommandProcessor() {
 
@@ -51,6 +48,7 @@ void testCommandProcessor() {
         adapter.commandLineToFile(&flr);
         
         while(!flr.getReadComplete()){
+
             adapter.getCommand();
         }
         

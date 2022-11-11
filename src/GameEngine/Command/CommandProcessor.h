@@ -1,11 +1,13 @@
 #pragma once
+
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <regex>
 #include "Logger/LogObserver.h"
-#include "GameEngine/GameEngine.h"
 
 class Command;
+class GameEngine;
 
 class CommandProcessor: public Subject, ILoggable {
 
@@ -29,7 +31,7 @@ class CommandProcessor: public Subject, ILoggable {
     CommandProcessor(GameEngine*);
     CommandProcessor(const CommandProcessor &c);
 
-    void getCommand();
+    Command* getCommand();
     int getCurrentState();
 
     //Functions for CommandProcessorDriver.cpp

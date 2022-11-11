@@ -2,8 +2,7 @@
 
 int Player::nextId = 0;
 
-Player::Player(GameEngine* game, Hand* cards)
-  : game(game), hand(cards), id(nextId++)
+Player::Player(GameEngine* game, Hand* cards): game(game), hand(cards), id(nextId++)
 {
   orders = new OrdersList();
   game->addPlayer(this);
@@ -101,4 +100,8 @@ OrdersList *Player::getOrdersListObject() {
 
 int Player::getId() const {
   return id;
+}
+
+string* Player::getPlayerName() {
+  return &playerName;
 }

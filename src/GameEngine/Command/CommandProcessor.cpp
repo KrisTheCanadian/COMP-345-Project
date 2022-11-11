@@ -1,8 +1,5 @@
 #include "CommandProcessor.h"
-#include "Command.h"
-#include <iostream>
-#include <vector>
-#include <regex>
+#include "../GameEngine.h"
 
 using namespace std;
 
@@ -21,11 +18,13 @@ CommandProcessor::CommandProcessor(const CommandProcessor &c){
     this->game = c.game;
 }
 
-void CommandProcessor::getCommand(){
-    string userInput = readCommand();
+Command* CommandProcessor::getCommand(){
+    string userInput =  readCommand() ;
     Command* currentCommand = validate(userInput);
     saveCommand(currentCommand);
+    return currentCommand;
 }
+
 
 string CommandProcessor::readCommand(){
     string userInput;
