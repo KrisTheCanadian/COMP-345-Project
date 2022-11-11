@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 #include "GameEngine/CommandFile/FileCommandProcessorAdapter.h"
 #include "GameEngine/CommandFile/FileLineReader.h"
+#include "GameEngine/GameEngine.h"
 
 TEST(FileCommandTestSuite, CommandFile2_invalid){
 
