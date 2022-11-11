@@ -53,12 +53,12 @@ private:
 
   // Command Processor
   CommandProcessor* commandProcessor = nullptr;
-    FileCommandProcessorAdapter* adapter = nullptr;
-    FileLineReader* flr = nullptr;
+  FileCommandProcessorAdapter* adapter = nullptr;
+  FileLineReader* flr = nullptr;
 
 
 public:
-   bool isConsole;
+  bool isConsole;
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
@@ -121,56 +121,53 @@ public:
   void addPlayer(Player* player);
 
 private:
-    // ----------------------------------------
-    // initiates startup phase for commands read from the console
-    // ----------------------------------------
-    void startupPhase();
+  // ----------------------------------------
+  // initiates startup phase for commands read from the console
+  // ----------------------------------------
+  void startupPhase();
   // check win state
   Player* checkWinState();
   void nextTurn(int& turn);
 
-    // ----------------------------------------
-    // prints all the commands available for the user to use
-    // ----------------------------------------
-    void printCommands();
+  // ----------------------------------------
+  // prints all the commands available for the user to use
+  // ----------------------------------------
+  void printCommands();
 
-    // ----------------------------------------
-    // checks whether a command is valid or not
-    // ----------------------------------------
-    bool isValid(const std::string strCommand);
+  // ----------------------------------------
+  // checks whether a command is valid or not
+  // ----------------------------------------
+  bool isValid(const std::string strCommand);
 
-    // ----------------------------------------
-    // distributes all territories evenly between the players
-    // ----------------------------------------
-    void distributeTerritories();
+  // ----------------------------------------
+  // distributes all territories evenly between the players
+  // ----------------------------------------
+  void distributeTerritories();
 
-    // ----------------------------------------
-    // determines a random order of play for players
-    // ----------------------------------------
-    void playerOrder();
+  // ----------------------------------------
+  // determines a random order of play for players
+  // ----------------------------------------
+  void playerOrder();
 
-    // ----------------------------------------
-    // convert current state to string
-    // ----------------------------------------
-    std::string getCurrentStateToString();
+  // ----------------------------------------
+  // convert current state to string
+  // ----------------------------------------
+  std::string getCurrentStateToString();
 
 public:
-    // ----------------------------------------
-    // redirects to the appropriate startup method
-    // ----------------------------------------
-    void preStartupPhase();
+  // ----------------------------------------
+  // redirects to the appropriate startup method
+  // ----------------------------------------
+  void preStartupPhase();
 
-    // getters
-    std::vector<Player*>* getPlayers();
-    Player* getCurrentPlayerTurn();
-    Deck* getDeck();
-    Map* getMap();
-    GameEngineState getCurrentState();
-  // setters
-  void setCurrentPlayer(Player* player);
+  // getters
+  std::vector<Player*>* getPlayers();
   Player* getCurrentPlayerTurn();
   Deck* getDeck();
   Map* getMap();
+  GameEngineState getCurrentState();
+  // setters
+  void setCurrentPlayer(Player* player);
   LogObserver* getLogObserver();
   CommandProcessor* getCommandProcessor();
 };

@@ -32,7 +32,7 @@ public:
   // --------------------------------
   Player(GameEngine* game, Hand* cards, std::string name);
   ~Player();
-  Player(const Player &p);
+  Player(const Player &p) = default;
 
   // --------------------------------
   // Operator Overloads
@@ -59,8 +59,6 @@ public:
   std::vector<Territory*>* getTerritories();
   int getId() const;
   std::string getPhase();
-  std::string* getPlayerName();
-  string getPhase();
   int getReinforcementPool() const;
   std::string getName() const;
 

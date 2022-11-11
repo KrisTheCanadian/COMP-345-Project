@@ -105,8 +105,8 @@ void GameEngine::startupPhase() {
             }
             size_t pos = strCommand.find(' ');
             std::string playerName = strCommand.substr(pos);
-            Player* p = new Player(this, new Hand());
-            cout<< "Player " << playerName << " was successfully added!"<<endl;
+            auto p = new Player(this, new Hand(), playerName);
+            cout<< "Player " << p->getName() << " was successfully added!"<<endl;
 
             if(players.size() < 2){
                 cout << "Please add at least one more player! Minimum number of players required is two(2)." << endl;

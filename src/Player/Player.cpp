@@ -9,9 +9,6 @@ Player::Player(GameEngine* game, Hand* cards, std::string  name)
   game->addPlayer(this);
 }
 
-// default copy constructor
-Player::Player(const Player &p) = default;
-
 std::vector<Territory *> Player::toDefend() {
   vector<tuple<Territory*, int>> listOfTerritories;
   // check all neighbours for enemies
@@ -189,10 +186,6 @@ OrdersList* Player::getOrdersListObject() {
 
 int Player::getId() const {
   return id;
-}
-
-string* Player::getPlayerName() {
-  return &playerName;
 }
 
 string Player::getPhase()
