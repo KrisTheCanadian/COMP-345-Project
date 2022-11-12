@@ -37,14 +37,16 @@ void GameEngine::preStartupPhase() {
         else if(result.find("-file") != string::npos ){
             cout << "Please enter the name of the file you would like to use: " << endl;
             cin >> result;
-            std::string fileName = "res/" + MapLoader::trim(result);
+            std::string filepath = "res/" + MapLoader::trim(result);
             try{
-                flr->setFile(fileName);
+              if(!flr){ throw std::runtime_error("GameEngine::preStartupPhase::ASSERT flr is null");}
+              if(!adapter){ throw std::runtime_error("GameEngine::preStartupPhase::ASSERT adapter is null"); }
+                flr->setFile(filepath);
                 adapter->commandLineToFile(flr);
                 commandProcessor = adapter;
                 startupPhase();
             }
-            catch(std::runtime_error err){
+            catch(std::runtime_error& err){
                 cout<< err.what() <<endl;
                 continue;
             }
@@ -58,8 +60,10 @@ void GameEngine::preStartupPhase() {
 
 void GameEngine::startupPhase() {
     Command* command;
-    std::string strCommand = "";
-    std::string effect = "";
+    std::string strCommand;
+    std::string effect;
+
+    if(!commandProcessor){ throw std::runtime_error("GameEngine::startupPhase::ASSERT commandProcessor is null"); }
 
     do{
         command = commandProcessor->getCommand();
@@ -86,44 +90,45 @@ void GameEngine::validateMinPlayers() {
 }
 
 void GameEngine::distributeTerritories(){
-    std::vector<Territory*>* territories = map->getTerritories();
-    int numPlayers = players.size();
-    int territoriesDistr[numPlayers];
-    int terrPerPlayer = floor(territories->size() / numPlayers);
-    int remainingTerr = territories->size() - (numPlayers * terrPerPlayer);
-    int currPlayer = 0;
-    int tempTerr = 0;
-    Player* player = players.at(currPlayer);
+  if(!map){ throw std::runtime_error("GameEngine::distributeTerritories::ASSERT Map is null"); }
+  std::vector<Territory*>* territories = map->getTerritories();
+  int numPlayers = (int)players.size();
+  int territoriesDistr[numPlayers];
+  int terrPerPlayer = floor(territories->size() / numPlayers);
+  int remainingTerr = (int)territories->size() - (numPlayers * terrPerPlayer);
+  int currPlayer = 0;
+  int tempTerr = 0;
+  Player* player = players.at(currPlayer);
 
-    for(int i = 0; i < numPlayers; i++){
-        territoriesDistr[i] = terrPerPlayer;
-        if(remainingTerr > 0){
-                territoriesDistr[i] +=1;
-                remainingTerr--;
-        }
-    }
+  for(int i = 0; i < numPlayers; i++){
+      territoriesDistr[i] = terrPerPlayer;
+      if(remainingTerr > 0){
+              territoriesDistr[i] +=1;
+              remainingTerr--;
+      }
+  }
 
-    for(Territory *terr : *territories){
-        Territory* t = terr;
-        if(tempTerr == (territoriesDistr[currPlayer])){
-            currPlayer++;
-            player = players.at(currPlayer);
-            tempTerr = 0;
-        }
-        player->addTerritory(*t);
-        tempTerr++;
-    }
+  for(Territory *terr : *territories){
+      Territory* t = terr;
+      if(tempTerr == (territoriesDistr[currPlayer])){
+          currPlayer++;
+          player = players.at(currPlayer);
+          tempTerr = 0;
+      }
+      player->addTerritory(*t);
+      tempTerr++;
+  }
 }
 
 void GameEngine::playerOrder(){
     int index;
     std::vector<int> temp(players.size());
     Player* tempPlayer;
-    std::srand(std::time(0));
+    std::srand(std::time(nullptr));
 
     for(int i = 0; i < players.size(); i++){
         do{
-            index = 1 + rand()%(players.size());
+            index = (int)(1 + rand()%(players.size()));
         }while(std::count(temp.begin(), temp.end(),index));
         temp.push_back(index);
         tempPlayer = new Player(*players.at(index - 1));
@@ -342,7 +347,7 @@ void GameEngine::executeOrdersPhase() {
 
 void GameEngine::mainGameLoop() {
   if(players.empty()){throw std::runtime_error("GameEngine::mainGameLoop::Assert Player size is 0.");}
-  Player* winner = nullptr;
+  Player* winner;
   // check win state
   int round = 0;
   while((winner = checkWinState()) == nullptr){
