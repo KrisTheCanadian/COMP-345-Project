@@ -25,8 +25,6 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
   player2->addTerritory(*continents->at(1)->getTerritories()->at(0));
 
   gameEngine.reinforcementPhase();
-  gameEngine.issueOrdersPhase();
-  gameEngine.executeOrdersPhase();
 
   auto observer = gameEngine.getLogObserver();
   std::string output;
@@ -44,8 +42,6 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
   ((Subject*)orderList)->attach((ILogObserver*)observer);
   orderList->add(order);
 
-  orderList->execute();
-
 
   std::string line;
   if ( file.is_open() ) {
@@ -58,7 +54,7 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
       std::cout << "Couldn't open file\n";
   }
 
-EXPECT_TRUE(output == "ORDER: Order Executed -> Bomb order.ORDER LIST: Order List Added BombORDER: Order Executed -> Bomb order.");
+EXPECT_TRUE(output == "ORDER: Order Executed -> Bomb order.ORDER LIST: Order List Added Bomb");
 }
 
 // Logging GameState
