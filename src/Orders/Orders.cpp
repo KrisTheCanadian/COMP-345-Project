@@ -31,7 +31,7 @@ OrdersList::~OrdersList(){ for(auto order: orders){ delete order; } }
 
 // Copy constructor to make deep copy of the order list
 OrdersList::OrdersList(const OrdersList &oldList)
-{
+ : Subject(oldList) {
   unsigned listLength = oldList.orders.size();
   orders = std::vector<Order *>(listLength);
   // cloning the same object into another memory slot
@@ -243,7 +243,7 @@ bool Advance::validate() const
   return true;
 }
 
-void Advance::execute() const
+void Advance::execute()
 {
     if (validate())
     {
@@ -268,6 +268,7 @@ void Advance::execute() const
             attackSimulation(source, target, currentPlayer, amount);
         }
         cout << "Advance has finished executing!\n" << endl;
+        Subject::notify(this);
     }
 }
 
@@ -394,7 +395,7 @@ bool Airlift::validate() const
   return true;
 }
 
-void Airlift::execute() const
+void Airlift::execute()
 {
   if (validate()) {
       std::cout << "Airlift execution." << std::endl;
@@ -408,7 +409,7 @@ void Airlift::execute() const
         p->removeTerritory(*source);
         source->setPlayer(nullptr);
       }
-      cout << "Advance has finished executing!\n" << endl;
+      Subject::notify(this);
   }
 }
 
@@ -453,13 +454,14 @@ bool Blockade::validate() const
   return true;
 }
 
-void Blockade::execute() const
+void Blockade::execute()
 {
   if (validate()) {
       std::cout << "Blockade execution." << std::endl;
       target->setArmies(target->getArmies() * 3);
       target->setPlayer(nullptr); // Transfer to neutral
       cout << "Blockade has finished executing!\n" << endl;
+      Subject::notify(this);
   }
 }
 
@@ -506,7 +508,7 @@ bool Bomb::validate() const
   return true;
 }
 
-void Bomb::execute() const
+void Bomb::execute()
 {
 
   if (validate()) {
@@ -523,6 +525,7 @@ void Bomb::execute() const
         player->removeTerritory(*target);
       }
       cout << "Bomb has finished executing!\n" << endl;
+      Subject::notify(this);
   }
 }
 
@@ -579,13 +582,14 @@ bool Deploy::validate() const
   return true;
 }
 
-void Deploy::execute() const
+void Deploy::execute()
 {
   if (validate()) {
       std::cout << "Deploy execution." << std::endl;
       target->setArmies(amount + target->getArmies());
       currentPlayer->removeArmies(amount);
       cout << "Deploy has finished executing!\n" << endl;
+      Subject::notify(this);
   }
 }
 
@@ -628,7 +632,7 @@ bool Negotiate::validate() const
   return true;
 }
 
-void Negotiate::execute() const
+void Negotiate::execute()
 {
   if (validate()) {
       std::cout << "Negotiate execution." << std::endl;

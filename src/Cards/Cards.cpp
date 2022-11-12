@@ -31,7 +31,10 @@ void Card::play() {
   auto orders = currentPlayer->getOrdersListObject();
   auto order = currentPlayer->decideOrder(cardType);
 
-  if(order){orders->add(order);} else {cout << "Order was not decided " << currentPlayer->getName() << ". Skipping card..." << endl;}
+  if(order){orders->add(order);}
+  else if (cardType != CardType::CT_Reinforcement) {
+    cout << "Order was not decided " << currentPlayer->getName() << ". Skipping card..." << endl;
+  }
 
 
   Card* card = currentPlayer->getHand()->removeCard(cardType);

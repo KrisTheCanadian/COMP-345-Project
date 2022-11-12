@@ -30,7 +30,7 @@ public:
   // validates order
   virtual bool validate() const = 0;
   // executes order
-  virtual void execute() const = 0;
+  virtual void execute() = 0;
   // cloner (copy)
   virtual Order *clone() const = 0;
 private:
@@ -122,7 +122,7 @@ public:
   ~Advance() override = default;
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   std::string stringToLog() override;
   static void attackSimulation(Territory*, Territory*, Player*, int);
 
@@ -155,7 +155,7 @@ public:
   ~Airlift() override = default;
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   std::string stringToLog() override;
 
 private:
@@ -187,7 +187,7 @@ public:
   ~Blockade() override = default;
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   std::string stringToLog() override;
 
 private:
@@ -217,7 +217,7 @@ public:
   ~Bomb() override = default;
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   std::string stringToLog() override;
 
 private:
@@ -250,7 +250,7 @@ public:
   ~Deploy() override = default;
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   std::string stringToLog() override;
 
 private:
@@ -283,7 +283,7 @@ public:
   ~Negotiate() override = default;
   std::string getLabel() const override;
   bool validate() const override;
-  void execute() const override;
+  void execute() override;
   std::string stringToLog() override;
 
 private:

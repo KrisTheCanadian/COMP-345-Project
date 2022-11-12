@@ -362,7 +362,7 @@ void GameEngine::issueOrdersPhase() {
     cout << "Player: " << currentPlayerTurn->getName() << "'s turn to issue an order!" << endl;
 
     // when no more orders need to be issued
-    if(currentPlayerTurn->getDeployedArmiesThisTurn() == currentPlayerTurn->getReinforcementPool() && currentPlayerTurn->getHand()->getHandCards()->empty()){
+    if(currentPlayerTurn->getDeployedArmiesThisTurn() > currentPlayerTurn->getReinforcementPool() && currentPlayerTurn->getHand()->getHandCards()->empty()){
       cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
       completed[phaseTurn] = true;
       continue;

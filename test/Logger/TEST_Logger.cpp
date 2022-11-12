@@ -34,8 +34,6 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
   file.open("gamelog.txt", std::ios::in | std::ios::out | std::ios::trunc);
 
   // create a scenario for the bomb
-
-
   // Create order and attach observer
   auto order = player1->decideCardOrderBomb();
   ((Subject*)order)->attach((ILogObserver*)observer);
@@ -46,11 +44,13 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
   ((Subject*)orderList)->attach((ILogObserver*)observer);
   orderList->add(order);
 
+  orderList->execute();
+
 
   std::string line;
   if ( file.is_open() ) {
       while(file){
-          std::getline (file, line);
+          std::getline(file, line);
           output += line;
       }
   }
@@ -58,7 +58,7 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
       std::cout << "Couldn't open file\n";
   }
 
-EXPECT_TRUE(output == "ORDER: Order Executed -> Bomb order.ORDER LIST: Order List Added Bomb");
+EXPECT_TRUE(output == "ORDER: Order Executed -> Bomb order.ORDER LIST: Order List Added BombORDER: Order Executed -> Bomb order.");
 }
 
 // Logging GameState

@@ -292,6 +292,17 @@ Airlift* Player::decideCardOrderAirlift() {
     return nullptr;
   }
 
+  bool validPlay = false;
+
+  // check if airlift can be applied
+  for(auto t : territories){
+    if(t->getArmies() > 1){
+      validPlay = true;
+    }
+  }
+
+  if(!validPlay){ return nullptr;}
+
   auto priorityDefendTerritories = toDefend();
   // no territories to defend (cannot decide)
   if(priorityDefendTerritories.empty()){ return nullptr; }
@@ -324,16 +335,18 @@ Bomb* Player::decideCardOrderBomb() {
     // get enemies
     auto enemies = getEnemies();
     if(enemies.empty()){ return nullptr; }
-    // attack random enemy
-    std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> distEnemy(0, enemies.size() - 1);
-    int randomEnemy = (int) distEnemy(rng);
+    while(true){
+      // attack random enemy
+      std::random_device dev;
+      std::mt19937 rng(dev());
+      std::uniform_int_distribution<std::mt19937::result_type> distEnemy(0, enemies.size() - 1);
+      int randomEnemy = (int) distEnemy(rng);
 
-    auto enemy = enemies.at(randomEnemy);
-    if(!enemy->toDefend().empty()){
-      auto biggestArmy = enemy->toDefend().back();
-      return new Bomb(biggestArmy, this);
+      auto enemy = enemies.at(randomEnemy);
+      if(!enemy->toDefend().empty()){
+        auto biggestArmy = enemy->toDefend().back();
+        return new Bomb(biggestArmy, this);
+      }
     }
   }
   // bomb the priority territory
