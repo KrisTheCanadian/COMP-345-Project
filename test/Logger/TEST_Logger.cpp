@@ -30,7 +30,6 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
 
   gameEngine.reinforcementPhase();
 
-  auto observer = gameEngine.getLogObserver();
   std::string output;
   std::fstream file;
   file.open("gamelog.txt", std::ios::in | std::ios::out | std::ios::trunc);
