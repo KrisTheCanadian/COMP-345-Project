@@ -217,10 +217,6 @@ TEST(GameEngineTestSuite, GameEngineExecuteOrdersPhase)
 
 
   // assert
-  EXPECT_EQ(player1->getReinforcementPool(), 0);
-  EXPECT_EQ(player2->getReinforcementPool(), 0);
-  EXPECT_EQ(player3->getReinforcementPool(), 0);
-
   EXPECT_TRUE(player1->getOrdersListObject()->getList()->empty());
   EXPECT_TRUE(player2->getOrdersListObject()->getList()->empty());
   EXPECT_TRUE(player3->getOrdersListObject()->getList()->empty());
