@@ -10,6 +10,7 @@ CommandProcessor::CommandProcessor(GameEngine* game, int argc, char** argv) : ga
   commandCollection = {};
   // add all program arguments to a raw string
   for(int i = 0; i < argc; i++){ rawCommands.emplace_back(argv[i]); }
+  Subject::attach((ILogObserver*)game->getLogObserver());
 }
 
 CommandProcessor::CommandProcessor(const CommandProcessor &c) : Subject(c) {
@@ -19,6 +20,7 @@ CommandProcessor::CommandProcessor(const CommandProcessor &c) : Subject(c) {
     }
     this->rawCommands = c.rawCommands;
     this->game = c.game;
+    Subject::attach((ILogObserver*)game->getLogObserver());
 }
 
 Command* CommandProcessor::getCommand(){
@@ -30,9 +32,9 @@ Command* CommandProcessor::getCommand(){
 
 string CommandProcessor::readCommand(){
     string userInput;
-    cout << "Please enter a command: " << endl;
+    cout << "Please enter a command: ";
     getline(cin, userInput);
-    cin.ignore(1,'\n');
+    std::cout << std::endl;
     return userInput;
 }
 
@@ -47,7 +49,7 @@ int CommandProcessor::getCurrentState(){
 
 Command* CommandProcessor::validate(const string& _userInput){
 
-    auto currentCommandObj = new Command(_userInput);
+    auto currentCommandObj = new Command(_userInput, game);
     currentCommandObj->attach((ILogObserver*)game->getLogObserver());
     GameEngineState current_game_state = game->getCurrentState();
     std::string strCommand = currentCommandObj->getCommand();
@@ -146,6 +148,7 @@ Command* CommandProcessor::validate(const string& _userInput){
 
               try{
                 for(Player* player : *game->getPlayers()){
+                  game->setCurrentPlayer(player);
                   Hand &hand = *player->getHand();
                   game->getDeck()->draw(hand);
                   game->getDeck()->draw(hand);
@@ -232,7 +235,7 @@ CommandProcessor& CommandProcessor::operator=(const CommandProcessor &other) {
   }
 
   this->commandCollection = other.commandCollection;
-
+  Subject::attach((ILogObserver*)game->getLogObserver());
   return *this;
 }
 
@@ -246,4 +249,9 @@ std::string CommandProcessor::stringToLog() {
 }
 std::vector<std::string> *CommandProcessor::getRawCommands() {
   return &rawCommands;
+}
+CommandProcessor::~CommandProcessor() {
+  if(game){
+    Subject::detach((ILogObserver* )game->getLogObserver());
+  }
 }

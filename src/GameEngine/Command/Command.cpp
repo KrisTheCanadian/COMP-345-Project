@@ -1,21 +1,26 @@
 #include "Command.h"
 #include <iostream>
+#include <utility>
 
 using namespace std;
 
 
-Command::Command(string _command){
-    command = _command;
-    effect = "Command has not been executed yet";
+Command::Command(string _command, GameEngine* gameEngine){
+  this->game = gameEngine;
+  command = std::move(_command);
+  effect = "Command has not been executed yet";
+  Subject::attach((ILogObserver*)game->getLogObserver());
 }
 
-Command::Command(const Command &c){
-    command = c.command;
-    effect = c.effect;
+Command::Command(const Command &c) : Subject(c) {
+  game = c.game;
+  command = c.command;
+  effect = c.effect;
+  Subject::attach((ILogObserver*)game->getLogObserver());
 }
 
 void Command::saveEffect(string _effect){
-    effect = _effect;
+    effect = std::move(_effect);
     Subject::notify(this);
 }
 
@@ -28,7 +33,7 @@ string Command::getCommand(){
 }
 
 void Command::setCommand(string _command){
-    command = _command;
+    command = std::move(_command);
 }
 
 ostream & operator << (ostream &out, const Command &c)
@@ -44,6 +49,7 @@ Command& Command::operator=(const Command &other) {
 
   this->command = other.command;
   this->effect = other.effect;
+  Subject::attach((ILogObserver*)game->getLogObserver());
 
   return *this;
 }
@@ -55,4 +61,9 @@ std::string Command::stringToLog() {
   ss << getEffect();
   ss << "\"";
   return ss.str();
+}
+Command::~Command() {
+  if(game){
+    Subject::detach((ILogObserver* )game->getLogObserver());
+  }
 }

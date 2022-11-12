@@ -3,7 +3,7 @@
 Player::Player(GameEngine* game, Hand* cards, std::string  name)
   : game(game), hand(cards), name(std::move(name)), reinforcementPool(0)
 {
-  orders = new OrdersList();
+  orders = new OrdersList(game);
   game->addPlayer(this);
 }
 
@@ -90,7 +90,7 @@ void Player::issueOrder() {
     int randomIndex = (int) distRandomIndexTerritory(rng2);
 
     Territory* randomTerritory = defend.at(randomIndex);
-    orders->add(new Deploy(randomTerritory, this, deploymentAmount));
+    orders->add(new Deploy(game, randomTerritory, this, deploymentAmount));
     deployedArmiesThisTurn += deploymentAmount;
     return;
   } else if(i == 4){
@@ -134,7 +134,7 @@ void Player::issueOrder() {
       // get random neighbour
       auto target = adj->at(randomIndexAdj);
 
-      return orders->add(new Advance(t, target, this, t->getArmies() / 2));
+      return orders->add(new Advance(game, t, target, this, t->getArmies() / 2));
     }
 
     // getting a territory from the priority list
@@ -146,7 +146,7 @@ void Player::issueOrder() {
     // we also should check if there are enough armies to attack this territory
     if(neighbour && neighbour->getArmies() > 1){
       // if so then we actually attack (for now with half our troops) -> to keep it simple
-      orders->add(new Advance(neighbour, attackTerritory, this, neighbour->getArmies() / 2));
+      orders->add(new Advance(game, neighbour, attackTerritory, this, neighbour->getArmies() / 2));
     }
 
   }
@@ -343,7 +343,7 @@ Airlift* Player::decideCardOrderAirlift() {
     int randomIndex2 = (int) distRandomIndexTerritory1(rng2);
     target = priorityDefendTerritories.at(randomIndex2);
   }
-  return new Airlift(source, target, this, (source->getArmies() / 2) + 1);
+  return new Airlift(game, source, target, this, (source->getArmies() / 2) + 1);
 }
 
 Bomb* Player::decideCardOrderBomb() {
@@ -363,12 +363,12 @@ Bomb* Player::decideCardOrderBomb() {
       auto enemy = enemies.at(randomEnemy);
       if(!enemy->toDefend().empty()){
         auto biggestArmy = enemy->toDefend().back();
-        return new Bomb(biggestArmy, this);
+        return new Bomb(game, biggestArmy, this);
       }
     }
   }
   // bomb the priority territory
-  return new Bomb(attack[0], this);
+  return new Bomb(game, attack[0], this);
 }
 
 Blockade* Player::decideCardOrderBlockade() {
@@ -376,7 +376,7 @@ Blockade* Player::decideCardOrderBlockade() {
   if(defend.empty()){
     return nullptr;
   }
-  return new Blockade(defend.back(), this);
+  return new Blockade(game, defend.back(), this);
 }
 
 Negotiate* Player::decideCardOrderNegotiate() {
@@ -389,7 +389,7 @@ Negotiate* Player::decideCardOrderNegotiate() {
       target = enemy;
     }
   }
-  return new Negotiate(this, target);
+  return new Negotiate(game, this, target);
 }
 
 void Player::decideCardReinforcement() {

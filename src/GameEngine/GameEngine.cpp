@@ -19,6 +19,7 @@ GameEngine::GameEngine(GameEngineState state, int argc, char** argv) {
   this->commandProcessor = new CommandProcessor(this, argc, argv);
   this->adapter = new FileCommandProcessorAdapter(this, argc, argv);
   this->flr = new FileLineReader();
+  Subject::attach((ILogObserver*)logObserver);
 }
 
 void GameEngine::preStartupPhase() {
@@ -121,21 +122,8 @@ void GameEngine::distributeTerritories(){
 }
 
 void GameEngine::playerOrder(){
-    int index;
-    std::vector<int> temp(players.size());
-    Player* tempPlayer;
-    std::srand(std::time(nullptr));
-
-    for(int i = 0; i < players.size(); i++){
-        do{
-            index = (int)(1 + rand()%(players.size()));
-        }while(std::count(temp.begin(), temp.end(),index));
-        temp.push_back(index);
-        tempPlayer = new Player(*players.at(index - 1));
-        players.at((index - 1)) = players.at(i);
-        players.at(i) = tempPlayer;
-    }
-    delete tempPlayer;
+  auto rng = std::default_random_engine {};
+  std::shuffle(std::begin(players), std::end(players), rng);
 }
 
 bool GameEngine::isValid(const std::string& strCommand){return strCommand.find("Invalid") == string::npos;}
@@ -206,27 +194,26 @@ void GameEngine::addPlayer(Player* player) {
 }
 
 GameEngine::~GameEngine() {
+  for(auto player : players){
+    delete player;
+  }
+
   delete deck;
   delete map;
   delete adapter;
   delete flr;
   delete logObserver;
   delete commandProcessor;
-
-  for(auto player : players){
-    delete player;
-  }
 }
 
 GameEngine::GameEngine(int argc, char** argv) {
+  this->logObserver = new LogObserver(this);
   this->map = new Map(this);
   this->deck = new Deck(this);
   this->adapter = new FileCommandProcessorAdapter(this, argc, argv);
   this->flr = new FileLineReader();
-  this->logObserver = new LogObserver(this);
   this->commandProcessor = new CommandProcessor(this, argc, argv);
   Subject::attach((ILogObserver*)logObserver);
-
 }
 
 void GameEngine::loadMap(const std::string& path) {

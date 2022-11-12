@@ -88,7 +88,7 @@ public:
     // Constructors
     explicit LogObserver(GameEngine*);
     ~LogObserver() override = default;
-    LogObserver(LogObserver*);
+    explicit LogObserver(LogObserver*);
 
     void update(ILoggable*) override;
 

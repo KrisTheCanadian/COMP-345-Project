@@ -10,7 +10,7 @@ class FileCommandProcessorAdapter : public CommandProcessor {
     public:
         void commandLineToFile(FileLineReader* _flr);
         std::string readCommand() override;
-
+        ~FileCommandProcessorAdapter() override = default;
         FileCommandProcessorAdapter(GameEngine* game, int argc, char** argv);
 
         // Copy constructor

@@ -28,9 +28,12 @@ private:
 
 public:
 
+
   //Constructors
   explicit CommandProcessor(GameEngine*, int argc,char* argv[]);
   CommandProcessor(const CommandProcessor &c);
+
+  ~CommandProcessor() override;
 
   //getters and setters
   Command* getCommand();

@@ -1,17 +1,6 @@
 #include <gtest/gtest.h>
 #include "Orders/Orders.h"
 
-TEST(OrdersListSuite, listInitialized)
-{
-  // arrange
-  OrdersList list;
-  // act
-  list = OrdersList();
-  // assert
-  auto orders = list.getList();
-  EXPECT_EQ(orders->size(), 0);
-}
-
 TEST(OrdersListSuite, listAddOrders)
 {
 

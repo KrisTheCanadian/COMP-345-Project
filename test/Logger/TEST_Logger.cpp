@@ -36,14 +36,12 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
   file.open("gamelog.txt", std::ios::in | std::ios::out | std::ios::trunc);
 
   // create a scenario for the bomb
-  // Create order and attach observer
+  // Create order
   auto order = player1->decideCardOrderBomb();
-  ((Subject*)order)->attach((ILogObserver*)observer);
   order->execute();
 
-  // Get orderList and attach observer
+  // Get orderList
   auto orderList = player1->getOrdersListObject();
-  ((Subject*)orderList)->attach((ILogObserver*)observer);
   orderList->add(order);
 
 

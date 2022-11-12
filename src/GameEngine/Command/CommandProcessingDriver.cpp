@@ -34,6 +34,7 @@ void testCommandProcessor(int argc, char* argv[]) {
             cpr.printCommandCollection(cpr.getCommandCollection());
             std::cout << "Please enter a command: ";
             getline(std::cin, moreCommandsDecision);
+            cin.ignore(1,'\n');
             std::cout << std::endl;
             if (!(moreCommandsDecision == "y")){
                 moreCommands = false;
