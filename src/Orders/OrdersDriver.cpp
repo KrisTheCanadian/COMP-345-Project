@@ -44,7 +44,6 @@ void testOrderExecution()
   // adding sets of territories just for testing
   auto map = gameEngine.getMap();
   auto continents = map->getContinents();
-  auto mapTerritories = map->getTerritories();
 
   for(auto t : *continents->at(0)->getTerritories()){
     player1->addTerritory(*t);
