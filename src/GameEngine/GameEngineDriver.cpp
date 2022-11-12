@@ -20,21 +20,21 @@ void testGameLoop(){
   deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
   deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
 
-//  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
-//  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
-//  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
-//
-//  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
-//  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
-//  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
-//
-//  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
-//  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
-//  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
-//
-//  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
-//  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
-//  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
 
 
   // load a map before game starts
