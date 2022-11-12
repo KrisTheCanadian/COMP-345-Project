@@ -12,10 +12,8 @@ int main(int argc, char** argv)
 {
   testGameLoop(argc, argv);
   testCommandProcessor(argc, argv);
-  testLoadMaps();
   testOrderExecution();
   testCards(argc, argv);
-  testPlayers();
   testLoggingObserver(argc, argv);
   return 0;
 }
