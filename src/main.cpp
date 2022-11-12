@@ -11,7 +11,7 @@ using namespace std;
 int main(int argc, char** argv)
 {
   testGameLoop(argc, argv);
-  testCommandProcessor(argc, argv); // seg fault
+  testCommandProcessor(argc, argv);
   testLoadMaps();
   testGameStates(argc, argv);
   testOrderExecution();
