@@ -32,7 +32,6 @@ private:
   std::vector<Territory*> adjacentTerritories;
 
   int armies = 0;
-  int ownerId = -1;
   Player* player;
 
   int x = -1;
@@ -50,9 +49,6 @@ public:
   // ----------------------------------------
   // getters and setters
   // ----------------------------------------
-  void setOwnerId(int id);
-  int getOwnerId() const;
-
   int getArmies() const;
   void setArmies(int);
 
@@ -65,10 +61,7 @@ public:
   void setX(int x);
   void setY(int y);
 
-  std::string getContinentName();//to get the continent name that this territory belongs to
-  void setContinentName(std::string c);
-
-    // ----------------------------------------
+  // ----------------------------------------
   // adders and removers
   // ----------------------------------------
 

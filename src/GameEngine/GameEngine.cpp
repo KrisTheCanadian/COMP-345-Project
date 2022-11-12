@@ -161,7 +161,6 @@ void GameEngine::distributeTerritories(){
             player = players.at(currPlayer);
             tempTerr = 0;
         }
-        t->setPlayer(player);
         player->addTerritory(*t);
         tempTerr++;
     }
@@ -362,7 +361,7 @@ void GameEngine::issueOrdersPhase() {
     cout << "Player: " << currentPlayerTurn->getName() << "'s turn to issue an order!" << endl;
 
     // when no more orders need to be issued
-    if(currentPlayerTurn->getDeployedArmiesThisTurn() > currentPlayerTurn->getReinforcementPool() && currentPlayerTurn->getHand()->getHandCards()->empty()){
+    if(currentPlayerTurn->getDeployedArmiesThisTurn() >= currentPlayerTurn->getReinforcementPool() && currentPlayerTurn->getHand()->getHandCards()->empty()){
       cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
       completed[phaseTurn] = true;
       continue;
@@ -419,11 +418,21 @@ void GameEngine::mainGameLoop() {
   if(players.empty()){throw std::runtime_error("GameEngine::mainGameLoop::Assert Player size is 0.");}
   Player* winner = nullptr;
   // check win state
+  int round = 0;
   while((winner = checkWinState()) == nullptr){
+    cout << "-----------------------------------------------------------------------" << endl;
+    cout << "Round: " << round << "" << endl;
+    cout << "-----------------------------------------------------------------------" << endl;
     reinforcementPhase();
     issueOrdersPhase();
     executeOrdersPhase();
     removePlayersWithNoTerritories();
+    round++;
+    if(round % 500 == 0){
+      cout << "-----------------------------------------------------------------------" << endl;
+      cout << "Entering Round: " << round << endl;
+      cout << "-----------------------------------------------------------------------" << endl;
+    }
   }
   cout << "Congratulations" << winner->getName() << endl;
 }
@@ -450,10 +459,25 @@ void GameEngine::nextTurn(int &turn) {
 void GameEngine::setCurrentPlayer(Player* player) {
   currentPlayerTurn = player;
 }
+
 void GameEngine::removePlayersWithNoTerritories() {
-  for(auto it = players.begin(); it != players.end(); it++){
-    if((*it)->getTerritories()->empty()){
-      players.erase(it);
+  auto playersToBeDeleted = vector<Player*>();
+
+  for(auto& player : players){
+    if(player->getTerritories()->empty()){
+      playersToBeDeleted.push_back(player);
     }
+  }
+
+  // remove from game
+  players.erase(std::remove_if(players.begin(), players.end(), [&](Player* p) {
+                  return p->getTerritories()->empty();
+                }), players.end());
+
+
+  // free memory
+  for(auto& player : playersToBeDeleted){
+    cout << player->getName() << " has been conquered!" << endl;
+    delete player;
   }
 }

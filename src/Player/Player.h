@@ -93,6 +93,7 @@ public:
   int getReinforcementPool() const;
   std::string getName() const;
   int getDeployedArmiesThisTurn() const;
+  GameEngine* getGameInstance();
 
 
 public:

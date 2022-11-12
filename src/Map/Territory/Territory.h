@@ -4,6 +4,7 @@
 #include <vector>
 #include <fstream>
 #include <utility>
+#include <utility>
 
 class Continent;
 class Player;
@@ -30,6 +31,8 @@ public:
 
   std::string getName();
   std::vector<Territory *>* getAdjacentTerritories();
+
+
   // ----------------------------------------
   // getters and setters
   // ----------------------------------------

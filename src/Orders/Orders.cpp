@@ -1,6 +1,5 @@
 #include <iomanip> // To format output.
 #include <cstdlib>
-#include <cmath>
 #include "Orders.h"
 #include "Map/Map.h"
 #include "Player/Player.h"
@@ -317,43 +316,48 @@ void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* p
     }
   }
 
-  int remainingAttackArmies = a - successDefend;
-  int remainingDefendArmies = pTarget->getArmies() - successAttack;
-
-  if (remainingAttackArmies < 0) // Possible if for example 1 attacker vs 70 defenders
-  {
-    remainingAttackArmies = 0;
-  }
-
-  if (remainingDefendArmies < 0) // Possible if for example 1 defender vs 70 attackers
-  {
-    remainingDefendArmies = 0;
-  }
+  int remainingAttackArmies = max(a - successDefend, 0);
+  int remainingDefendArmies = max(pTarget->getArmies() - successAttack, 0);
 
   if (remainingAttackArmies > 0 && remainingDefendArmies == 0) // Win
   {
-    cout << "Territory conquered! You have won this battle!\n" << endl;
-    pTarget->setPlayer(pCurrentPlayer); // Current player now occupies territory
-    pCurrentPlayer->getTerritories()->push_back(pTarget);// territory added to player list
+    cout << "Territory conquered! " << pCurrentPlayer->getName() << " has won this battle for " << pTarget->getName() << "!" << endl;
+    if(pTarget->getPlayer() != nullptr){
+      pTarget->getPlayer()->removeTerritory(*pTarget);
+    }
+    pCurrentPlayer->addTerritory(*pTarget);// territory added to player list
     pTarget->setArmies(remainingAttackArmies); // Attackers advance to conquered territory
-  }
 
+    // give player a card from deck (if there is one)
+    if(!pCurrentPlayer->getGameInstance()->getDeck()->getDeckCards()->empty()){
+      cout << pCurrentPlayer->getName() <<"has won a card" << endl;
+      pCurrentPlayer->getGameInstance()->getDeck()->draw(*pCurrentPlayer->getHand());
+    }
+  }
   else // Lose. A draw is considered a loss. If any, attackers retreat. If any, defenders retreat.
   {
-    cout << "Territory has not been conquered. You have lost this battle!\n" << endl;
+    cout << "Territory " << pTarget->getName() << " has not been conquered. " << pCurrentPlayer->getName() << " has lost this battle!" << endl;
     pSource->setArmies(pSource->getArmies() + remainingAttackArmies); // Attackers retreat
     pTarget->setArmies(remainingDefendArmies);
   }
 
   if (pSource->getArmies() == 0)
   {
-    cout << "The attacker has lost his territory in the process!\n" << endl;
+    cout << pCurrentPlayer->getName()  << " has lost their territory: " + pSource->getName() + " in the process!" << endl;
+    if(pSource->getPlayer() != nullptr){
+      pSource->getPlayer()->removeTerritory(*pSource);
+    }
     pSource->setPlayer(nullptr);
   }
 
   if (pTarget->getArmies() == 0)
   {
-    cout << "The defender has lost his territory in the process!\n" << endl;
+    if(pSource->getPlayer() != nullptr){
+      cout << pSource->getPlayer()->getName() << " has lost their territory in the process!\n" << endl;
+    }
+    if(pSource->getPlayer()){
+      pSource->getPlayer()->removeTerritory(*pSource);
+    }
     pTarget->setPlayer(nullptr);
   }
 }
@@ -405,8 +409,9 @@ void Airlift::execute()
           target->setArmies(target->getArmies() + amount);
       }
       if(source->getArmies() == 0){
-        auto p = source->getPlayer();
-        p->removeTerritory(*source);
+        if(source->getPlayer()){
+          source->getPlayer()->removeTerritory(*source);
+        }
         source->setPlayer(nullptr);
       }
       Subject::notify(this);
@@ -459,6 +464,9 @@ void Blockade::execute()
   if (validate()) {
       std::cout << "Blockade execution." << std::endl;
       target->setArmies(target->getArmies() * 3);
+      if(target->getPlayer()){
+        target->getPlayer()->removeTerritory(*target);
+      }
       target->setPlayer(nullptr); // Transfer to neutral
       cout << "Blockade has finished executing!\n" << endl;
       Subject::notify(this);
@@ -521,8 +529,10 @@ void Bomb::execute()
       target->setArmies((target->getArmies() / 2) + 1);
       // if target army is cleared. Remove player from ownership
       if(target->getArmies() == 0){
-        auto player = target->getPlayer();
-        player->removeTerritory(*target);
+        if(target->getPlayer()){
+          target->getPlayer()->removeTerritory(*target);
+        }
+        target->setPlayer(nullptr);
       }
       cout << "Bomb has finished executing!\n" << endl;
       Subject::notify(this);

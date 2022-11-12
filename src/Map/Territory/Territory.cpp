@@ -1,6 +1,5 @@
 #include "Territory.h"
 
-#include <utility>
 
 Territory::Territory(std::string name)
   : name(std::move(name)), continent(nullptr), player(nullptr)

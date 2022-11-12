@@ -283,7 +283,6 @@ Territory& Territory::operator=(const Territory &other) {
   this->player = other.player;
 
   this->armies = other.armies;
-  this->ownerId = other.ownerId;
 
   this->x = other.x;
   this->y = other.y;
