@@ -132,7 +132,7 @@ TEST(GameEngineTestSuite, GameEngineIssueOrderPhase)
     player1->addTerritory(*t);
   }
 
-  player2->addTerritory(*continents->at(1)->getTerritories()->at(0));
+  player2->addTerritory(*continents->at(2)->getTerritories()->at(0));
 
   for(auto t : *continents->at(1)->getTerritories()){
     player3->addTerritory(*t);
@@ -145,9 +145,9 @@ TEST(GameEngineTestSuite, GameEngineIssueOrderPhase)
 
 
   // assert
-  EXPECT_EQ(player1->getReinforcementPool(), 0);
-  EXPECT_EQ(player2->getReinforcementPool(), 0);
-  EXPECT_EQ(player3->getReinforcementPool(), 0);
+  EXPECT_EQ(player1->getDeployedArmiesThisTurn(), 0);
+  EXPECT_EQ(player2->getDeployedArmiesThisTurn(), 0);
+  EXPECT_EQ(player3->getDeployedArmiesThisTurn(), 0);
 
   EXPECT_FALSE(player1->getOrdersListObject()->getList()->empty());
   EXPECT_FALSE(player2->getOrdersListObject()->getList()->empty());
@@ -203,7 +203,7 @@ TEST(GameEngineTestSuite, GameEngineExecuteOrdersPhase)
     player1->addTerritory(*t);
   }
 
-  player2->addTerritory(*continents->at(1)->getTerritories()->at(0));
+  player2->addTerritory(*continents->at(2)->getTerritories()->at(0));
 
   for(auto t : *continents->at(1)->getTerritories()){
     player3->addTerritory(*t);

@@ -4,37 +4,59 @@
 
 // Logging Order and OrderList
 TEST(LoggerTestSuite, ExecuteAndAddOrder){
+  GameEngine gameEngine = GameEngine();
+  gameEngine.loadMap("res/TestMap1_valid.map");
+
+  // add cards to the gameEngine deck
+  auto deck = gameEngine.getDeck();
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
+
+  // adding sets of territories just for testing
+  auto map = gameEngine.getMap();
+  auto continents = map->getContinents();
+
+  for(auto t : *continents->at(0)->getTerritories()){
+    player1->addTerritory(*t);
+  }
+
+  player2->addTerritory(*continents->at(1)->getTerritories()->at(0));
+
+  gameEngine.reinforcementPhase();
+  gameEngine.issueOrdersPhase();
+  gameEngine.executeOrdersPhase();
+
+  auto observer = gameEngine.getLogObserver();
+  std::string output;
+  std::fstream file;
+  file.open("gamelog.txt", std::ios::in | std::ios::out | std::ios::trunc);
+
+  // create a scenario for the bomb
 
 
-    auto gameEngine = new GameEngine;
-    auto player = new Player(gameEngine, new Hand(), "Bob");
-    gameEngine->addPlayer(player);
-    auto observer = gameEngine->getLogObserver();
-    std::string output;
-    std::fstream file;
-    file.open("gamelog.txt", std::ios::in | std::ios::out | std::ios::trunc);
+  // Create order and attach observer
+  auto order = player1->decideCardOrderBomb();
+  ((Subject*)order)->attach((ILogObserver*)observer);
+  order->execute();
 
-    // Create order and attach observer
-    auto order = (Bomb*) OrdersFactory::CreateOrder(CardType::CT_Bomb);
-    ((Subject*)order)->attach((ILogObserver*)observer);
-    order->execute();
-
-    // Get orderList and attach observer
-    auto orderList = player->getOrdersListObject();
-    ((Subject*)orderList)->attach((ILogObserver*)observer);
-    orderList->add(order);
+  // Get orderList and attach observer
+  auto orderList = player1->getOrdersListObject();
+  ((Subject*)orderList)->attach((ILogObserver*)observer);
+  orderList->add(order);
 
 
-    std::string line;
-    if ( file.is_open() ) {
-        while(file){
-            std::getline (file, line);
-            output += line;
-        }
-    }
-    else {
-        std::cout << "Couldn't open file\n";
-    }
+  std::string line;
+  if ( file.is_open() ) {
+      while(file){
+          std::getline (file, line);
+          output += line;
+      }
+  }
+  else {
+      std::cout << "Couldn't open file\n";
+  }
 
 EXPECT_TRUE(output == "ORDER: Order Executed -> Bomb order.ORDER LIST: Order List Added Bomb");
 }

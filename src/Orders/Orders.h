@@ -24,14 +24,13 @@ enum CardType : int;
 class Order
 {
 public:
+  virtual ~Order() = default;
   // gets label
   virtual std::string getLabel() const = 0;
   // validates order
   virtual bool validate() const = 0;
   // executes order
   virtual void execute() const = 0;
-  // destructor
-  virtual ~Order() = 0;
   // cloner (copy)
   virtual Order *clone() const = 0;
 private:
@@ -125,6 +124,7 @@ public:
   bool validate() const override;
   void execute() const override;
   std::string stringToLog() override;
+  static void attackSimulation(Territory*, Territory*, Player*, int);
 
 private:
   const static std::string label;
@@ -291,5 +291,3 @@ private:
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
-
-void attackSimulation(Territory*, Territory*, Player*, int);

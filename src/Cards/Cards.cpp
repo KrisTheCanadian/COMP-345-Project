@@ -29,8 +29,10 @@ void Card::play() {
   // check to see whose turn it is
   Player* currentPlayer = game->getCurrentPlayerTurn();
   auto orders = currentPlayer->getOrdersListObject();
-  // TODO: FIX
-  orders->add(OrdersFactory::CreateOrder(cardType));
+  auto order = currentPlayer->decideOrder(cardType);
+
+  if(order){orders->add(order);} else {cout << "Order was not decided " << currentPlayer->getName() << ". Skipping card..." << endl;}
+
 
   Card* card = currentPlayer->getHand()->removeCard(cardType);
 

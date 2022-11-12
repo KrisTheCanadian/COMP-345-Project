@@ -219,7 +219,7 @@ bool Advance::validate() const
 {
   std::cout << "-> Advance order validation check" << std::endl;
 
-    if (source->getOwnerId() != currentPlayer->getId())
+    if (source->getPlayer() != currentPlayer)
     {
         cout << "The source territory is not your own!\n" << endl;
         return false;
@@ -248,10 +248,15 @@ void Advance::execute() const
     if (validate())
     {
         std::cout << "Advance execution." << std::endl;
-        if (source->getOwnerId() == target->getOwnerId()) // Transferring army to another territory
+        if (source->getPlayer() == target->getPlayer()) // Transferring army to another territory
         {
             source->setArmies(source->getArmies() - amount);
             target->setArmies(target->getArmies() + amount);
+
+            if(source->getArmies() == 0 && source->getPlayer()){
+              source->getPlayer()->removeTerritory(*source);
+              source->setPlayer(nullptr);
+            }
         }
         else // If you try to transfer on enemy territory, considered as attack.
         {
@@ -276,6 +281,81 @@ std::string Advance::stringToLog() {
   return ss.str();
 }
 
+void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* pCurrentPlayer, int a) {
+  pSource->setArmies(pSource->getArmies() - a); // Attackers leave home territory
+
+  int successAttack = 0;
+  int successDefend = 0;
+
+  for (int i = 1; i <= a; i++) // Attacking Phase
+  {
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> range(0, 100);
+
+    int roll = (int)range(rng) % 100 + 1;
+    if (roll <= 60)
+    {
+      successAttack++;
+    }
+  }
+
+  for (int i = 1; i <= pTarget->getArmies(); i++) // Defending Phase
+  {
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> range(0, 100);
+
+    int roll = (int)range(rng) % 100 + 1;
+
+    if (roll <= 70)
+    {
+      successDefend++;
+    }
+  }
+
+  int remainingAttackArmies = a - successDefend;
+  int remainingDefendArmies = pTarget->getArmies() - successAttack;
+
+  if (remainingAttackArmies < 0) // Possible if for example 1 attacker vs 70 defenders
+  {
+    remainingAttackArmies = 0;
+  }
+
+  if (remainingDefendArmies < 0) // Possible if for example 1 defender vs 70 attackers
+  {
+    remainingDefendArmies = 0;
+  }
+
+  if (remainingAttackArmies > 0 && remainingDefendArmies == 0) // Win
+  {
+    cout << "Territory conquered! You have won this battle!\n" << endl;
+    pTarget->setPlayer(pCurrentPlayer); // Current player now occupies territory
+    pCurrentPlayer->getTerritories()->push_back(pTarget);// territory added to player list
+    pTarget->setArmies(remainingAttackArmies); // Attackers advance to conquered territory
+  }
+
+  else // Lose. A draw is considered a loss. If any, attackers retreat. If any, defenders retreat.
+  {
+    cout << "Territory has not been conquered. You have lost this battle!\n" << endl;
+    pSource->setArmies(pSource->getArmies() + remainingAttackArmies); // Attackers retreat
+    pTarget->setArmies(remainingDefendArmies);
+  }
+
+  if (pSource->getArmies() == 0)
+  {
+    cout << "The attacker has lost his territory in the process!\n" << endl;
+    pSource->setPlayer(nullptr);
+  }
+
+  if (pTarget->getArmies() == 0)
+  {
+    cout << "The defender has lost his territory in the process!\n" << endl;
+    pTarget->setPlayer(nullptr);
+  }
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -297,9 +377,9 @@ std::ostream &Airlift::orderCout(std::ostream &output) const { return output << 
 bool Airlift::validate() const
 {
   std::cout << "-> Airlift order validation check" << std::endl;
-    if (source->getOwnerId() != currentPlayer->getId())
+    if (source->getPlayer() != currentPlayer && target->getPlayer() != currentPlayer)
     {
-        cout << "The source territory is not your own!\n" << endl;
+        cout << "The territory is not your own!\n" << endl;
         return false;
     }
     else if (amount > source->getArmies())
@@ -317,20 +397,16 @@ bool Airlift::validate() const
 void Airlift::execute() const
 {
   if (validate()) {
-      if (!currentPlayer->canAttack(target->getPlayer()))
-      {
-          cout << "You cannot attack this player!\n" << endl;
-          return;
-      }
       std::cout << "Airlift execution." << std::endl;
-      if (source->getOwnerId() == target->getOwnerId()) // Transferring army to another territory
+      if (source->getPlayer() == target->getPlayer()) // Transferring army to another territory
       {
           source->setArmies(source->getArmies() - amount);
           target->setArmies(target->getArmies() + amount);
       }
-      else // If you try to airlift on enemy territory, considered as attack.
-      {
-          attackSimulation(source, target, currentPlayer, amount);
+      if(source->getArmies() == 0){
+        auto p = source->getPlayer();
+        p->removeTerritory(*source);
+        source->setPlayer(nullptr);
       }
       cout << "Advance has finished executing!\n" << endl;
   }
@@ -368,7 +444,7 @@ std::ostream &Blockade::orderCout(std::ostream &output) const { return output <<
 bool Blockade::validate() const
 {
   std::cout << "-> Blockade order validation check" << std::endl;
-    if(target->getOwnerId() != currentPlayer->getId())
+    if(target->getPlayer() != currentPlayer)
     {
         cout << "This is not your territory! This order can only be played on your own territory!\n" << endl;
         return false;
@@ -382,7 +458,7 @@ void Blockade::execute() const
   if (validate()) {
       std::cout << "Blockade execution." << std::endl;
       target->setArmies(target->getArmies() * 3);
-      target->setOwnerId(-1); // Transfer to neutral
+      target->setPlayer(nullptr); // Transfer to neutral
       cout << "Blockade has finished executing!\n" << endl;
   }
 }
@@ -421,7 +497,7 @@ std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "->
 bool Bomb::validate() const
 {
   std::cout << "-> Bomb order validation check" << std::endl;
-    if(target->getOwnerId() == currentPlayer->getId())
+    if(target->getPlayer() == currentPlayer)
     {
         cout << "This territory is your own!\n" << endl;
         return false;
@@ -441,6 +517,11 @@ void Bomb::execute() const
       }
       std::cout << "Bomb execution." << std::endl;
       target->setArmies((target->getArmies() / 2) + 1);
+      // if target army is cleared. Remove player from ownership
+      if(target->getArmies() == 0){
+        auto player = target->getPlayer();
+        player->removeTerritory(*target);
+      }
       cout << "Bomb has finished executing!\n" << endl;
   }
 }
@@ -479,7 +560,7 @@ bool Deploy::validate() const
 {
   std::cout << "-> Deploy order validation check" << std::endl;
 
-    if (target->getOwnerId() != currentPlayer->getId())
+    if (target->getPlayer() != currentPlayer)
     {
         cout << "You do not own this territory!\n" << endl;
         return false;
@@ -503,6 +584,7 @@ void Deploy::execute() const
   if (validate()) {
       std::cout << "Deploy execution." << std::endl;
       target->setArmies(amount + target->getArmies());
+      currentPlayer->removeArmies(amount);
       cout << "Deploy has finished executing!\n" << endl;
   }
 }
@@ -537,7 +619,7 @@ std::string Negotiate::getLabel() const { return label; }
 bool Negotiate::validate() const
 {
   std::cout << "-> Negotiate order validation check" << std::endl;
-    if(targetPlayer->getId() == currentPlayer->getId())
+    if(targetPlayer == currentPlayer)
     {
         cout << "You cannot negotiate with yourself.\n" << endl;
         return false;
@@ -569,72 +651,4 @@ std::string Negotiate::stringToLog() {
   ss << "Order Executed ";
   ss << *this;
   return ss.str();
-}
-
-void attackSimulation(Territory* source, Territory* target, Player* currentPlayer, int amount)
-{
-    source->setArmies(source->getArmies() - amount); // Attackers leave home territory
-
-    srand(time(NULL));
-    int successAttack = 0;
-    int successDefend = 0;
-
-    for (int i = 1; i <= amount; i++) // Attacking Phase
-    {
-        int roll = rand() % 100 + 1;
-        if (roll <= 60)
-        {
-            successAttack++;
-        }
-    }
-
-    for (int i = 1; i <= target->getArmies(); i++) // Defending Phase
-    {
-        int roll = rand() % 100 + 1;
-
-        if (roll <= 70)
-        {
-            successDefend++;
-        }
-    }
-
-    int remainingAttackArmies = amount - successDefend;
-    int remainingDefendArmies = target->getArmies() - successAttack;
-
-    if (remainingAttackArmies < 0) // Possible if for example 1 attacker vs 70 defenders
-    {
-        remainingAttackArmies = 0;
-    }
-
-    if (remainingDefendArmies < 0) // Possible if for example 1 defender vs 70 attackers
-    {
-        remainingDefendArmies = 0;
-    }
-
-    if (remainingAttackArmies > 0 && remainingDefendArmies == 0) // Win
-    {
-        cout << "Territory conquered! You have won this battle!\n" << endl;
-        target->setOwnerId(currentPlayer->getId()); // Current player now occupies territory
-        currentPlayer->getTerritories()->push_back(target);// territory added to player list
-        target->setArmies(remainingAttackArmies); // Attackers advance to conquered territory
-    }
-
-    else // Lose. A draw is considered a loss. If any, attackers retreat. If any, defenders retreat.
-    {
-        cout << "Territory has not been conquered. You have lost this battle!\n" << endl;
-        source->setArmies(source->getArmies() + remainingAttackArmies); // Attackers retreat
-        target->setArmies(remainingDefendArmies);
-    }
-
-    if (source->getArmies() == 0)
-    {
-        cout << "The attacker has lost his territory in the process!\n" << endl;
-        source->setOwnerId(-1);
-    }
-
-    if (target->getArmies() == 0)
-    {
-        cout << "The defender has lost his territory in the process!\n" << endl;
-        target->setOwnerId(-1);
-    }
 }

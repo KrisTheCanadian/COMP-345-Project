@@ -161,7 +161,6 @@ void GameEngine::distributeTerritories(){
             player = players.at(currPlayer);
             tempTerr = 0;
         }
-        t->setOwnerId(player->getId());
         t->setPlayer(player);
         player->addTerritory(*t);
         tempTerr++;
@@ -363,7 +362,7 @@ void GameEngine::issueOrdersPhase() {
     cout << "Player: " << currentPlayerTurn->getName() << "'s turn to issue an order!" << endl;
 
     // when no more orders need to be issued
-    if(currentPlayerTurn->getReinforcementPool() == 0 && currentPlayerTurn->getHand()->getHandCards()->empty()){
+    if(currentPlayerTurn->getDeployedArmiesThisTurn() == currentPlayerTurn->getReinforcementPool() && currentPlayerTurn->getHand()->getHandCards()->empty()){
       cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
       completed[phaseTurn] = true;
       continue;
@@ -372,6 +371,10 @@ void GameEngine::issueOrdersPhase() {
     currentPlayerTurn->issueOrder();
 
     nextTurn(phaseTurn);
+  }
+
+  for(auto& player : players){
+    player->clearDeploymentArmies();
   }
 }
 
@@ -400,9 +403,15 @@ void GameEngine::executeOrdersPhase() {
     cout << "Player: " << currentPlayerTurn->getName() << "'s order: " + topOrder->getLabel() + " is being executed." << endl;
     topOrder->execute();
     currentPlayerOrders->erase(currentPlayerOrders->cbegin());
+
     delete topOrder;
 
     nextTurn(phaseTurn);
+  }
+
+  // reset player friendly
+  for(auto player : players){
+    player->clearFriendly();
   }
 }
 
@@ -414,8 +423,7 @@ void GameEngine::mainGameLoop() {
     reinforcementPhase();
     issueOrdersPhase();
     executeOrdersPhase();
-    // TODO: Remove when logic from part 4 is added (or else it infinite loops)
-    cin.get();
+    removePlayersWithNoTerritories();
   }
   cout << "Congratulations" << winner->getName() << endl;
 }
@@ -442,5 +450,10 @@ void GameEngine::nextTurn(int &turn) {
 void GameEngine::setCurrentPlayer(Player* player) {
   currentPlayerTurn = player;
 }
-
-
+void GameEngine::removePlayersWithNoTerritories() {
+  for(auto it = players.begin(); it != players.end(); it++){
+    if((*it)->getTerritories()->empty()){
+      players.erase(it);
+    }
+  }
+}

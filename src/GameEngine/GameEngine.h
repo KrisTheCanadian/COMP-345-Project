@@ -136,7 +136,7 @@ private:
   // ----------------------------------------
   // checks whether a command is valid or not
   // ----------------------------------------
-  bool isValid(const std::string strCommand);
+  bool isValid(std::string strCommand);
 
   // ----------------------------------------
   // distributes all territories evenly between the players
@@ -152,6 +152,11 @@ private:
   // convert current state to string
   // ----------------------------------------
   std::string getCurrentStateToString();
+
+  // ----------------------------------------
+  // remove players with no territories
+  // ----------------------------------------
+  void removePlayersWithNoTerritories();
 
 public:
   // ----------------------------------------

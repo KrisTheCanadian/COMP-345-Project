@@ -16,8 +16,7 @@ private:
     std::vector<Territory*> adjacentTerritories;
 
     int armies = 0;
-    int ownerId = -1;
-    Player* player;
+    Player* player = nullptr;
 
     int x = -1;
     int y = -1;
@@ -34,8 +33,6 @@ public:
   // ----------------------------------------
   // getters and setters
   // ----------------------------------------
-  void setOwnerId(int id);
-  int getOwnerId() const;
 
   Player* getPlayer();
   void setPlayer(Player*);

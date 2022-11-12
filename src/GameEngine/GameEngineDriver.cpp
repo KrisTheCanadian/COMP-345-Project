@@ -58,7 +58,7 @@ void testGameLoop(){
     player2->addTerritory(*t);
   }
 
-  for(auto t : *continents->at(1)->getTerritories()){
+  for(auto t : *continents->at(2)->getTerritories()){
     player3->addTerritory(*t);
   }
 

@@ -299,14 +299,6 @@ std::ostream &operator<<(std::ostream &stream, const Territory &other) {
   return stream ;
 }
 
-void Territory::setOwnerId(int id) {
-  this->ownerId = id;
-}
-
-int Territory::getOwnerId() const {
-  return this->ownerId;
-}
-
 int Territory::getArmies() const {
   return this->armies;
 }

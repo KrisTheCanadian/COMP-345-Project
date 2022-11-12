@@ -1,9 +1,7 @@
 #include "Player.h"
 
-int Player::nextId = 0;
-
 Player::Player(GameEngine* game, Hand* cards, std::string  name)
-  : game(game), hand(cards), id(nextId++), name(std::move(name)), reinforcementPool(0)
+  : game(game), hand(cards), name(std::move(name)), reinforcementPool(0)
 {
   orders = new OrdersList();
   game->addPlayer(this);
@@ -19,7 +17,7 @@ std::vector<Territory *> Player::toDefend() {
     auto adjacentTerritories = territory->getAdjacentTerritories();
     for(auto& adjTerritory: *adjacentTerritories){
       // check the playerID
-      if(adjTerritory->getOwnerId() != id && adjTerritory->getOwnerId() != -1){
+      if(adjTerritory->getPlayer() != this && adjTerritory->getPlayer() != nullptr && canAttack(adjTerritory->getPlayer())){
         enemiesTerritories++;
       }
     }
@@ -48,7 +46,7 @@ std::vector<Territory *> Player::toAttack() {
     auto adjacentTerritories = territory->getAdjacentTerritories();
     for(auto& adjTerritory: *adjacentTerritories){
       // check the playerID
-      if(adjTerritory->getOwnerId() != id && adjTerritory->getOwnerId() != -1){
+      if(adjTerritory->getPlayer() != this && adjTerritory->getPlayer() != nullptr && canAttack(adjTerritory->getPlayer())){
         listOfTerritories.push_back(adjTerritory);
       }
     }
@@ -67,7 +65,7 @@ std::vector<Territory *> Player::toAttack() {
 void Player::issueOrder() {
 
   // if army units in reinforcement pool, then can only create deploy orders
-  if(reinforcementPool > 0){
+  if(reinforcementPool >= deployedArmiesThisTurn){
 
     // get player toDefend vector
     auto defend = toDefend();
@@ -75,7 +73,7 @@ void Player::issueOrder() {
     // deploy a random amount
     std::random_device dev1;
     std::mt19937 rng1(dev1());
-    std::uniform_int_distribution<std::mt19937::result_type> randomAmount(1, reinforcementPool);
+    std::uniform_int_distribution<std::mt19937::result_type> randomAmount(1, reinforcementPool - deployedArmiesThisTurn);
 
     // deploy to a random friendly territory
     int deploymentAmount = (int) randomAmount(rng1);
@@ -87,6 +85,7 @@ void Player::issueOrder() {
 
     Territory* randomTerritory = defend.at(randomIndex);
     orders->add(new Deploy(randomTerritory, this, deploymentAmount));
+    deployedArmiesThisTurn += deploymentAmount;
     return;
   }
 
@@ -130,26 +129,28 @@ void Player::issueOrder() {
     }
     attack++;
   }
-
 }
 
 void Player::addTerritory(Territory& territory) {
-  territory.setPlayer(this);
-  territory.setOwnerId(this->id);
+  // yeet original owner to avoid conflicts
+  if(territory.getPlayer()){
+    territory.getPlayer()->removeTerritory(territory);
+  }
   territory.setPlayer(this);
   territories.push_back(&territory);
 }
 
 void Player::removeTerritory(Territory& territory) {
   territory.setPlayer(nullptr);
-  territory.setOwnerId(-1);
   auto end = territories.end();
   for(auto it = territories.begin(); it != end; it++){
     if(territory.getName() == (*it)->getName()){
-      territory.setOwnerId(-1);
+      territory.setPlayer(nullptr);
       territories.erase(it);
+      return;
     }
   }
+  throw std::runtime_error("Territory wasn't in the player's list.");
 }
 
 Player::~Player() {
@@ -161,7 +162,6 @@ Player &Player::operator=(const Player &other) {
   if(this == &other){
     return *this;
   }
-  this->id = other.id;
   this->game = other.game;
   this->orders = other.orders;
   this->hand = other.hand;
@@ -193,10 +193,6 @@ Hand *Player::getHand() {
 
 OrdersList* Player::getOrdersListObject() {
   return orders;
-}
-
-int Player::getId() const {
-  return id;
 }
 
 string Player::getPhase()
@@ -257,7 +253,13 @@ void Player::clearFriendly() {
   friendlyPlayers.erase(friendlyPlayers.begin(), friendlyPlayers.end());
 }
 bool Player::canAttack(Player *pPlayer) {
-  return std::find(friendlyPlayers.begin(), friendlyPlayers.end(), pPlayer) == friendlyPlayers.end();
+  if(pPlayer == this){return false;}
+  for(auto& player : friendlyPlayers){
+    if(player == pPlayer){
+      return false;
+    }
+  }
+  return true;
 }
 Territory* Player::findFirstNeighbourTerritory(Territory* target) {
   for(auto& t: *target->getAdjacentTerritories()){
@@ -266,4 +268,126 @@ Territory* Player::findFirstNeighbourTerritory(Territory* target) {
     }
   }
   return nullptr;
+}
+Order* Player::decideOrder(CardType cardType) {
+  switch (cardType) {
+    case CT_Bomb:
+      return decideCardOrderBomb();
+    case CT_Reinforcement:
+      decideCardReinforcement();
+      return nullptr;
+    case CT_Blockade:
+      return decideCardOrderBlockade();
+    case CT_Airlift:
+      return decideCardOrderAirlift();
+    case CT_Diplomacy:
+      return decideCardOrderNegotiate();
+  }
+  throw std::runtime_error("Player::decideOrder::Assert CardType invalid");
+}
+
+Airlift* Player::decideCardOrderAirlift() {
+  if(territories.size() < 2){
+    // we can't really decide because there's not enough territories
+    return nullptr;
+  }
+
+  auto priorityDefendTerritories = toDefend();
+  // no territories to defend (cannot decide)
+  if(priorityDefendTerritories.empty()){ return nullptr; }
+  Territory* source = nullptr;
+  Territory* target = nullptr;
+
+  while(source == target || !source || !target){
+    std::random_device dev2;
+    std::mt19937 rng2(dev2());
+
+    std::uniform_int_distribution<std::mt19937::result_type> distRandomIndexTerritory(0, territories.size() - 1);
+    int randomIndex1 = (int) distRandomIndexTerritory(rng2);
+
+    // source should only be a territory with a big enough army
+    if(territories.at(randomIndex1)->getArmies() > 1){
+      source = territories.at(randomIndex1);
+    }
+
+    std::uniform_int_distribution<std::mt19937::result_type> distRandomIndexTerritory1(0, priorityDefendTerritories.size() - 1);
+    int randomIndex2 = (int) distRandomIndexTerritory1(rng2);
+    target = priorityDefendTerritories.at(randomIndex2);
+  }
+  return new Airlift(source, target, this, (source->getArmies() / 2) + 1);
+}
+
+Bomb* Player::decideCardOrderBomb() {
+  auto attack = toAttack();
+  if(attack.empty()){
+    // for now, we will just grab a random player's to defend
+    // get enemies
+    auto enemies = getEnemies();
+    if(enemies.empty()){ return nullptr; }
+    // attack random enemy
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> distEnemy(0, enemies.size() - 1);
+    int randomEnemy = (int) distEnemy(rng);
+
+    auto enemy = enemies.at(randomEnemy);
+    if(!enemy->toDefend().empty()){
+      auto biggestArmy = enemy->toDefend().back();
+      return new Bomb(biggestArmy, this);
+    }
+  }
+  // bomb the priority territory
+  return new Bomb(attack[0], this);
+}
+
+Blockade* Player::decideCardOrderBlockade() {
+  auto defend = toDefend();
+  if(defend.empty()){
+    return nullptr;
+  }
+  return new Blockade(defend.back(), this);
+}
+
+Negotiate* Player::decideCardOrderNegotiate() {
+  // return nullptr if failed to decide on an order
+  auto enemies = getEnemies();
+  if(enemies.empty()){ return nullptr; }
+  auto target = enemies[0];
+  for(auto& enemy : enemies){
+    if(enemy->territories.size() > target->territories.size()){
+      target = enemy;
+    }
+  }
+  return new Negotiate(this, target);
+}
+
+void Player::decideCardReinforcement() {
+  reinforcementPool += 5;
+}
+
+std::vector<Player *> Player::getEnemies() {
+  vector<Player*> enemies;
+  for(auto p: *game->getPlayers()){
+    if(this->canAttack(p)){
+      enemies.push_back(p);
+    }
+  }
+  return enemies;
+}
+
+void Player::addDeployedArmies(int a) {
+  deployedArmiesThisTurn += a;
+}
+
+int Player::getDeployedArmiesThisTurn() const {
+  return deployedArmiesThisTurn;
+}
+void Player::clearDeploymentArmies() {
+  deployedArmiesThisTurn = 0;
+}
+void Player::removeArmies(int n) {
+  reinforcementPool -= n;
+  if(reinforcementPool < 0){
+    throw std::runtime_error("ASSERT: reinforcementPool overdrawn!");
+  }
 }

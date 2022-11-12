@@ -14,45 +14,159 @@ TEST(OrdersListSuite, listInitialized)
 
 TEST(OrdersListSuite, listAddOrders)
 {
-  // arrange
-  OrdersList list{};
-  // act
-    Deploy *deploy = new Deploy();
-    Advance *advance = new Advance();
-    Bomb *bomb = new Bomb();
-    Blockade *blockade = new Blockade();
-    Airlift *airlift = new Airlift();
-    Negotiate *negotiate = new Negotiate();
 
-  list.add(deploy);
-  list.add(advance);
-  list.add(bomb);
-  list.add(blockade);
-  list.add(airlift);
-  list.add(negotiate);
+  // arrange
+
+  // create a game engine
+  auto gameEngine = GameEngine();
+
+  // add cards to the gameEngine deck
+  auto deck = gameEngine.getDeck();
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+
+
+  // load a map before game starts
+  gameEngine.loadMap("../res/TestMap1_valid.map");
+
+  // create players
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
+  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg");
+
+  // adding sets of territories just for testing
+  auto map = gameEngine.getMap();
+  auto continents = map->getContinents();
+  auto mapTerritories = map->getTerritories();
+
+  for(auto t : *continents->at(0)->getTerritories()){
+    player1->addTerritory(*t);
+  }
+
+  for(auto t : *continents->at(1)->getTerritories()){
+    player2->addTerritory(*t);
+  }
+
+  for(auto t : *continents->at(1)->getTerritories()){
+    player3->addTerritory(*t);
+  }
+
+
+  // act
+  player1->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+
+  gameEngine.reinforcementPhase();
+
+  // issue orders
+
+  player1->decideCardReinforcement();
+  player1->decideCardOrderBlockade();
+  player1->decideCardOrderBomb();
+  player1->decideCardOrderNegotiate();
+
+
   // assert
-  auto orders = list.getList();
+  auto orders = player1->getOrdersListObject()->getList();
   EXPECT_EQ(orders->size(), 6);
 }
 
 TEST(OrdersListSuite, listRemoveOrder)
 {
   // arrange
-  OrdersList list{};
-  // act
-    Deploy *deploy = new Deploy();
-    Advance *advance = new Advance();
-    Bomb *bomb = new Bomb();
-    Blockade *blockade = new Blockade();
-    Airlift *airlift = new Airlift();
-    Negotiate *negotiate = new Negotiate();
 
-    list.add(deploy);
-    list.add(advance);
-    list.add(airlift);
-  list.remove(0);
+  // create a game engine
+  auto gameEngine = GameEngine();
+
+  // add cards to the gameEngine deck
+  auto deck = gameEngine.getDeck();
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+
+
+  // load a map before game starts
+  gameEngine.loadMap("../res/TestMap1_valid.map");
+
+  // create players
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
+  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg");
+
+  // adding sets of territories just for testing
+  auto map = gameEngine.getMap();
+  auto continents = map->getContinents();
+  auto mapTerritories = map->getTerritories();
+
+  for(auto t : *continents->at(0)->getTerritories()){
+    player1->addTerritory(*t);
+  }
+
+  for(auto t : *continents->at(1)->getTerritories()){
+    player2->addTerritory(*t);
+  }
+
+  for(auto t : *continents->at(1)->getTerritories()){
+    player3->addTerritory(*t);
+  }
+
+
+  // act
+  player1->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+
+  gameEngine.reinforcementPhase();
+
+  // issue orders
+
+  player1->decideCardReinforcement();
+  player1->decideCardOrderBlockade();
+  player1->decideCardOrderBomb();
+  player1->decideCardOrderNegotiate();
+
+  auto list = player1->getOrdersListObject();
+  list->remove(0);
   // assert
-  auto orders = list.getList();
+  auto orders = list->getList();
 
   EXPECT_EQ(orders->size(), 2);
   EXPECT_EQ(orders->at(0)->getLabel(), "Advance");
@@ -61,121 +175,71 @@ TEST(OrdersListSuite, listRemoveOrder)
 
 TEST(OrdersListSuite, listExecuteOrder)
 {
-    int temp;
-    Deploy *deploy = new Deploy();
+  // arrange
 
-    {
-        // --------------------------------
-        // DUMMY VALUES FOR TESTING
-        // --------------------------------
-        int id1 = 10;
-        int id2 = 20;
+  // create a game engine
+  auto gameEngine = GameEngine();
 
-        int reinforcementPool1 = 20;
-        int reinforcementPool2 = 20;
+  // add cards to the gameEngine deck
+  auto deck = gameEngine.getDeck();
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
 
-        cout << "-> Creating territories" << endl;
-        Territory *t1 = new Territory("t1");
-        t1->addArmyUnits(10);
-        Territory *t2 = new Territory("t2");
-        t2->addArmyUnits(10);
-        Territory *t3 = new Territory("t3");
-        t3->addArmyUnits(10);
-        Territory *t4 = new Territory("t4");
-        t4->addArmyUnits(10);
-        Territory *t5 = new Territory("t5");
-        t5->addArmyUnits(10);
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
 
-        t1->addAdjacentTerritory(t2);
-        t2->addAdjacentTerritory(t1);
-        t2->addAdjacentTerritory(t3);
-        t3->addAdjacentTerritory(t2);
-        t3->addAdjacentTerritory(t4);
-        t3->addAdjacentTerritory(t5);
-        t4->addAdjacentTerritory(t3);
-        t4->addAdjacentTerritory(t5);
-        t5->addAdjacentTerritory(t3);
-        t5->addAdjacentTerritory(t4);
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
 
-        vector<Territory *> tList1 = {t1, t2, t4};
-        vector<Territory *> tList2 = {t3, t5};
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
 
-        Deck *deck = new Deck();
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
 
-        deck->create_deck();
 
-        Hand *hand1 = new Hand;
-        Hand *hand2 = new Hand;
+  // load a map before game starts
+  gameEngine.loadMap("../res/TestMap1_valid.map");
 
-        for (int i = 0; i < 6; i++) {
-            deck->draw(*hand1);
-        }
-        for (int i = 0; i < 6; i++) {
-            deck->draw(*hand2);
-        }
+  // create players
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
+  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg");
 
-        Deploy *deploy = new Deploy();
+  // adding sets of territories just for testing
+  auto map = gameEngine.getMap();
+  auto continents = map->getContinents();
 
-        cout << "-> Creating list of orders" << endl;
-        OrdersList *ordersList1 = new OrdersList();
-        OrdersList *ordersList2 = new OrdersList();
-        //OrdersFactory factory;
+  for(auto t : *continents->at(0)->getTerritories()){
+    player1->addTerritory(*t);
+  }
 
-        ordersList1->add(deploy);
-        ordersList2->add(deploy);
+  for(auto t : *continents->at(1)->getTerritories()){
+    player2->addTerritory(*t);
+  }
 
-        cout << "-> Creating the players" << endl;
-        Player *player1 = new Player(id1, reinforcementPool1, tList1, hand1, ordersList1);
-        Player *player2 = new Player(id2, reinforcementPool2, tList2, hand2, ordersList2);
+  for(auto t : *continents->at(1)->getTerritories()){
+    player3->addTerritory(*t);
+  }
 
-        cout << "-> Setting the players as territory owners" << endl;
-        for (int i = 0; i < tList1.size(); i++) {
-            tList1.at(i)->setOwnerId(player1->getId());
-        }
-        for (int i = 0; i < tList2.size(); i++) {
-            tList2.at(i)->setOwnerId(player2->getId());
-        }
 
-        cout << "-> Adding the players to a list" << endl;
-        Player *allPlayers = new Player();
-        allPlayers->addPlayer(player1);
-        allPlayers->addPlayer(player2);
+  player1->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+  gameEngine.reinforcementPhase();
+  // act
+  player1->getOrdersListObject()->execute();
 
-        // --------------------------------
-        // USER INPUTS
-        // --------------------------------
-        string sourceTerritory;
-        string targetTerritory;
-        int nbArmies;
-        int negotiatePlayerID;
 
-        // --------------------------------
-        // DEPLOY EXECUTION WITH PLAYER 1
-        // --------------------------------
-    cout << "-> Deploy Execution with Player 1" << endl;
-    cout << "Your territories are: " << endl;
-    for (int i = 0; i < player1->getTerritories()->size(); i++) {
-        cout << "\t" << player1->getTerritories()->at(i)->getName() << endl;
-    }
-
-        cout << "Which territory do you wish to deploy to?" << endl;
-        targetTerritory = "t1";
-        cout << "How many units from reinforcement pool do you wish to deploy?" << endl;
-        nbArmies= 5;
-
-        for (int i = 0; i < allPlayers->getListOfPlayers().size(); i++) {
-            for (int j = 0; j < allPlayers->getListOfPlayers().at(i)->getTerritories()->size(); j++)
-            {
-                if (allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)->getName() == targetTerritory) {
-                    deploy = new Deploy(*(allPlayers->getListOfPlayers().at(i)->getTerritories()->at(j)), *player1, nbArmies);
-                }
-            }
-        }
-    deploy->execute();
-         temp = t1->getArmies();
-    }
   // assert
-  EXPECT_EQ(temp, 15);
+  EXPECT_FALSE(player1->getOrdersListObject()->getList()->empty());
 }
 
 int main(int argc, char **argv)
