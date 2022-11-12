@@ -642,6 +642,7 @@ void Negotiate::execute()
       targetPlayer->addFriendly(currentPlayer);
   }
     cout << "Negotiate has finished executing." << endl;
+    Subject::notify(this);
 }
 
 
