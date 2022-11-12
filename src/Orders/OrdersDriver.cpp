@@ -1,29 +1,68 @@
 #include "Orders.h"
 #include "OrdersDriver.h"
 #include "GameEngine/GameEngine.h"
+using namespace std;
 
-void testOrdersLists()
+void testOrderExecution()
 {
-  auto gameEngine = new GameEngine;
-  auto player = new Player(gameEngine, new Hand());
-  gameEngine->addPlayer(player);
+  // arrange
 
-  auto orderList = player->getOrdersListObject();
-  std::cout << "-> Order Addition" << std::endl;
-  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Reinforcement));
-  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Bomb));
-  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Blockade));
-  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Airlift));
-  orderList->add(OrdersFactory::CreateOrder(CardType::CT_Diplomacy));
+  // create a game engine
+  auto gameEngine = GameEngine();
 
-  std::cout << "-> Move 4 with 2 and remove the new 2" << std::endl;
-  orderList->move(4, 2);
-  orderList->remove(2);
+  // add cards to the gameEngine deck
+  auto deck = gameEngine.getDeck();
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
 
-  auto list = *orderList->getList();
-  std::cout << "-> Orders can be validated" << std::endl;
-  std::cout << "Example: First Order is valid: " << (orderList->getList()->at(0)->validate() ? "True": "False") << endl;
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
 
-  std::cout << "-> List order execution" << std::endl;
-  orderList->execute();
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+
+
+  // load a map before game starts
+  gameEngine.loadMap("../res/TestMap1_valid.map");
+
+  // create players
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
+  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg");
+
+  // adding sets of territories just for testing
+  auto map = gameEngine.getMap();
+  auto continents = map->getContinents();
+
+  for(auto t : *continents->at(0)->getTerritories()){
+    player1->addTerritory(*t);
+  }
+
+  for(auto t : *continents->at(1)->getTerritories()){
+    player2->addTerritory(*t);
+  }
+
+  for(auto t : *continents->at(2)->getTerritories()){
+    player3->addTerritory(*t);
+  }
+
+
+  player1->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+  player1->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+
+  gameEngine.mainGameLoop();
 }

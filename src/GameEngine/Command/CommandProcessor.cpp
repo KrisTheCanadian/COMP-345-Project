@@ -10,10 +10,10 @@ CommandProcessor::CommandProcessor(GameEngine* game) :game(game){
     commandCollection = {};
 }
 
-CommandProcessor::CommandProcessor(const CommandProcessor &c){
+CommandProcessor::CommandProcessor(const CommandProcessor &c) : Subject(c) {
     commandCollection = {};
-    for(int i = 0; i < c.commandCollection.size(); i++){
-        commandCollection.push_back(new Command(*c.commandCollection[i]));
+    for(auto i : c.commandCollection){
+        commandCollection.push_back(new Command(*i));
     }
     this->game = c.game;
 }
@@ -43,9 +43,9 @@ int CommandProcessor::getCurrentState(){
     return game->getCurrentState();
 }
 
-Command* CommandProcessor::validate(string _userInput){
+Command* CommandProcessor::validate(const string& _userInput){
 
-    Command *currentCommandObj = new Command(_userInput);
+    auto currentCommandObj = new Command(_userInput);
     currentCommandObj->attach((ILogObserver*)game->getLogObserver());
     GameEngineState current_game_state = game->getCurrentState();
 
@@ -102,6 +102,12 @@ Command* CommandProcessor::validate(string _userInput){
                 cout << "Quit";
             };
             break;
+        case GE_Reinforcement:
+          throw std::runtime_error("CommandProcessor::GE_Reinforcement Not Implemented Yet");
+        case GE_Issue_Orders:
+          throw std::runtime_error("CommandProcessor::GE_Issue_Orders Not Implemented Yet");
+        case GE_Execute_Orders:
+          throw std::runtime_error("CommandProcessor::GE_Issue_Orders Not Implemented Yet");
     }
 
     currentCommandObj->saveEffect("Invalid Command");
@@ -110,9 +116,9 @@ Command* CommandProcessor::validate(string _userInput){
 }
 
 
-void CommandProcessor::printCommandCollection(std::vector<Command*> commandCollection){
-    for(int i = 0; i < commandCollection.size(); i++){
-        cout << (*commandCollection[i]) << endl;
+void CommandProcessor::printCommandCollection(const std::vector<Command*>& collection){
+    for(auto & i : collection){
+        cout << (*i) << endl;
     }
     cout << "Current Game State: " << StateToString() << endl;
 }
@@ -135,7 +141,12 @@ string CommandProcessor::StateToString() {
         return "Assign Reinforcement";
     case GE_Win:
         return "Win";
+    case GE_Issue_Orders:
+      return "Issue Orders";
+    case GE_Execute_Orders:
+      return "Execute Orders";
   }
+  throw std::runtime_error("CommandProcessor::StateToString Assert:Invalid State");
 }
 
 ostream & operator << (ostream &out, const CommandProcessor &c)

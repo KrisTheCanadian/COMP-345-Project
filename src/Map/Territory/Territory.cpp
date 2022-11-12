@@ -1,6 +1,5 @@
 #include "Territory.h"
 
-#include <utility>
 
 Territory::Territory(std::string name)
   : name(std::move(name)), continent(nullptr), player(nullptr)
@@ -63,7 +62,6 @@ Territory& Territory::operator=(const Territory &other) {
   this->continent = other.continent;
 
   this->armies = other.armies;
-  this->ownerId = other.ownerId;
   this->player = other.player;
 
   this->x = other.x;
@@ -78,14 +76,6 @@ std::ostream &operator<<(std::ostream &stream, const Territory &other) {
   << "Territory Coordinates: " << '(' << other.x << ", " << other.y << ')' << '\n'
   << "Territory Continent: " << other.continent << '\n';
   return stream ;
-}
-
-void Territory::setOwnerId(int id) {
-  this->ownerId = id;
-}
-
-int Territory::getOwnerId() const {
-  return this->ownerId;
 }
 
 int Territory::getArmies() const {

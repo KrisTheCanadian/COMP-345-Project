@@ -6,5 +6,7 @@
 
 // tester for main driver
 void testGameStates();
+// tester for game loop
+void testGameLoop();
 // helper function to print invalid command to std out
-void printInvalidCommand(const std::string& command);
+void printInvalidCommand(std::string& command);

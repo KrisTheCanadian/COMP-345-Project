@@ -10,10 +10,11 @@ using namespace std;
 
 int main()
 {
+  testGameLoop();
   testCommandProcessor();
   testLoadMaps();
   testGameStates();
-  testOrdersLists();
+  testOrderExecution();
   testCards();
   testPlayers();
   testLoggingObserver();

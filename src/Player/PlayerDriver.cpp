@@ -5,7 +5,7 @@ void testPlayers(){
   // setting up game engine
   auto gameEngine = new GameEngine();
   // creating player
-  auto p = new Player(gameEngine, new Hand());
+  auto p = new Player(gameEngine, new Hand(), "Bob");
 
   // loading map to get access of territories
   gameEngine->loadMap("res/TestMap1_valid.map");
@@ -62,7 +62,7 @@ void testPlayers(){
   std::cout << "\n " << std::endl;
   std::cout << "Testing player issueOrder Airlift" << std::endl;
   // issue an order
-  p->issueOrder(CT_Airlift);
+  p->issueOrder();
   auto orders = p->getOrdersListObject()->getList();
   std::cout << "Order that has been added to Player OrderList: " << std::endl;
   std::cout << *orders->at(0) << std::endl;

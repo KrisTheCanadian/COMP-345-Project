@@ -36,6 +36,7 @@ private:
   // Players
   unsigned int playerTurn = 0;
   std::string fileName;
+  Player* currentPlayerTurn;
   std::vector<Player*> players;
 
   std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
@@ -46,18 +47,17 @@ private:
   // Map
   Map* map = nullptr;
 
-
   // Logger
   LogObserver* logObserver = nullptr;
 
   // Command Processor
   CommandProcessor* commandProcessor = nullptr;
-    FileCommandProcessorAdapter* adapter = nullptr;
-    FileLineReader* flr = nullptr;
+  FileCommandProcessorAdapter* adapter = nullptr;
+  FileLineReader* flr = nullptr;
 
 
 public:
-   bool isConsole;
+  bool isConsole;
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
@@ -73,11 +73,6 @@ public:
   // Destructor
   // ----------------------------------------
   ~GameEngine() override;
-
-  // ----------------------------------------
-  // add players to game
-  // ----------------------------------------
-  void addPlayer(Player* player);
 
   // ----------------------------------------
   // load game map
@@ -99,50 +94,84 @@ public:
   // ----------------------------------------
   std::string stringToLog() override;
 
+  // ----------------------------------------
+  // reinforcement phase
+  // ----------------------------------------
+  void reinforcementPhase();
+
+  // ----------------------------------------
+  // Issuing Orders Phase
+  // ----------------------------------------
+  void issueOrdersPhase();
+
+  // ----------------------------------------
+  // Execute Orders Phase
+  // ----------------------------------------
+  void executeOrdersPhase();
+
+  // ----------------------------------------
+  // Main Game Loop
+  // ----------------------------------------
+  void mainGameLoop();
+
+  // ----------------------------------------
+  // add players to game (THIS IS DONE AUTOMATICALLY IN PLAYER CONSTRUCTOR)
+  // ----------------------------------------
+  void addPlayer(Player* player);
+
 private:
-    // ----------------------------------------
-    // initiates startup phase for commands read from the console
-    // ----------------------------------------
-    void startupPhase();
+  // ----------------------------------------
+  // initiates startup phase for commands read from the console
+  // ----------------------------------------
+  void startupPhase();
+  // check win state
+  Player* checkWinState();
+  void nextTurn(int& turn);
 
-    // ----------------------------------------
-    // prints all the commands available for the user to use
-    // ----------------------------------------
-    void printCommands();
+  // ----------------------------------------
+  // prints all the commands available for the user to use
+  // ----------------------------------------
+  void printCommands();
 
-    // ----------------------------------------
-    // checks whether a command is valid or not
-    // ----------------------------------------
-    bool isValid(const std::string strCommand);
+  // ----------------------------------------
+  // checks whether a command is valid or not
+  // ----------------------------------------
+  bool isValid(std::string strCommand);
 
-    // ----------------------------------------
-    // distributes all territories evenly between the players
-    // ----------------------------------------
-    void distributeTerritories();
+  // ----------------------------------------
+  // distributes all territories evenly between the players
+  // ----------------------------------------
+  void distributeTerritories();
 
-    // ----------------------------------------
-    // determines a random order of play for players
-    // ----------------------------------------
-    void playerOrder();
+  // ----------------------------------------
+  // determines a random order of play for players
+  // ----------------------------------------
+  void playerOrder();
 
-    // ----------------------------------------
-    // convert current state to string
-    // ----------------------------------------
-    std::string getCurrentStateToString();
+  // ----------------------------------------
+  // convert current state to string
+  // ----------------------------------------
+  std::string getCurrentStateToString();
+
+  // ----------------------------------------
+  // remove players with no territories
+  // ----------------------------------------
+  void removePlayersWithNoTerritories();
 
 public:
-    // ----------------------------------------
-    // redirects to the appropriate startup method
-    // ----------------------------------------
-    void preStartupPhase();
+  // ----------------------------------------
+  // redirects to the appropriate startup method
+  // ----------------------------------------
+  void preStartupPhase();
 
-    // getters
-    std::vector<Player*>* getPlayers();
-    Player* getCurrentPlayerTurn();
-    Deck* getDeck();
-    Map* getMap();
-    GameEngineState getCurrentState();
-    
+  // getters
+  std::vector<Player*>* getPlayers();
+  Player* getCurrentPlayerTurn();
+  Deck* getDeck();
+  Map* getMap();
+  GameEngineState getCurrentState();
+  // setters
+  void setCurrentPlayer(Player* player);
   LogObserver* getLogObserver();
   CommandProcessor* getCommandProcessor();
 };

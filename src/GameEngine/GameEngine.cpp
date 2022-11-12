@@ -105,8 +105,8 @@ void GameEngine::startupPhase() {
             }
             size_t pos = strCommand.find(' ');
             std::string playerName = strCommand.substr(pos);
-            Player* p = new Player(this, new Hand());
-            cout<< "Player " << playerName << " was successfully added!"<<endl;
+            auto p = new Player(this, new Hand(), playerName);
+            cout<< "Player " << p->getName() << " was successfully added!"<<endl;
 
             if(players.size() < 2){
                 cout << "Please add at least one more player! Minimum number of players required is two(2)." << endl;
@@ -161,8 +161,6 @@ void GameEngine::distributeTerritories(){
             player = players.at(currPlayer);
             tempTerr = 0;
         }
-        t->setOwnerId(player->getId());
-        t->setPlayer(player);
         player->addTerritory(*t);
         tempTerr++;
     }
@@ -224,7 +222,7 @@ std::vector<Player *> *GameEngine::getPlayers() {
 }
 
 Player* GameEngine::getCurrentPlayerTurn() {
-  return players.at(playerTurn);
+  return currentPlayerTurn;
 }
 
 Deck* GameEngine::getDeck() {
@@ -315,4 +313,171 @@ std::string GameEngine::stringToLog() {
   ss << "State transition to ";
   ss << getCurrentStateToString();
   return ss.str();
+}
+
+/*
+* REINFORCEMENT PHASE
+*/
+void GameEngine::reinforcementPhase()
+{
+  for (auto& player : players)
+  {
+    currentPlayerTurn = player;
+    player->setPhase("Reinforcement");
+    cout << "Player: " << player->getName() << "'s current Reinforcement Pool: "<< player->getReinforcementPool() << endl;
+    // check for continents bonus before territories themselves
+    // check if players owned number of territories matches a continent that hold n amount of territories in order to gain control bonus
+    int reinforcementsToAdd = 0;
+
+    // get continent bonus
+    reinforcementsToAdd += player->getContinentBonus();
+    if(reinforcementsToAdd > 0){cout << "Player: " << player->getName() << "'s continent bonus is: "<< player->getReinforcementPool() << endl;}
+
+    // get territories reinforcement
+    reinforcementsToAdd += (int)(player->getTerritories()->size() / 3) * 3;
+
+    // check if they have min
+    if(reinforcementsToAdd < 3){ reinforcementsToAdd = 3;}
+
+    player->addReinforcement(reinforcementsToAdd);
+
+    cout << "Player: " << player->getName() << "'s updated Reinforcement Pool: "<< player->getReinforcementPool() << endl;
+  }
+}
+
+/*
+* ISSUE ORDERS PHASE
+*/
+
+void GameEngine::issueOrdersPhase() {
+  int phaseTurn = 0;
+  vector<bool> completed(players.size());
+  for(auto& player : players){ player->setPhase("Issue Orders"); }
+
+  while(!std::all_of(completed.begin(), completed.end(), [](bool v) { return v; })){
+    if(completed[phaseTurn]){ nextTurn(phaseTurn); continue; }
+    currentPlayerTurn = players[phaseTurn];
+
+    cout << "Player: " << currentPlayerTurn->getName() << "'s turn to issue an order!" << endl;
+
+    // when no more orders need to be issued
+    if(currentPlayerTurn->getDeployedArmiesThisTurn() >= currentPlayerTurn->getReinforcementPool()){
+      cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
+      completed[phaseTurn] = true;
+      continue;
+    }
+
+    currentPlayerTurn->issueOrder();
+
+    nextTurn(phaseTurn);
+  }
+
+  for(auto& player : players){
+    player->clearDeploymentArmies();
+  }
+}
+
+/*
+* Execute Orders PHASE
+*/
+
+void GameEngine::executeOrdersPhase() {
+  int phaseTurn = 0;
+  vector<bool> completed(players.size());
+  for(auto& player : players){ player->setPhase("Execute Orders Phase"); }
+
+  while(!std::all_of(completed.begin(), completed.end(), [](bool v) { return v; })){
+    if(completed[phaseTurn]){nextTurn(phaseTurn); continue; }
+    currentPlayerTurn = players[phaseTurn];
+    auto currentPlayerOrders = currentPlayerTurn->getOrdersListObject()->getList();
+
+    // when no more orders need to be issued
+    if(currentPlayerOrders->empty()){
+      cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to execute." << endl;
+      completed[phaseTurn] = true;
+      continue;
+    }
+
+    auto topOrder = currentPlayerOrders->at(0);
+    cout << "Player: " << currentPlayerTurn->getName() << "'s order: " + topOrder->getLabel() + " is being executed." << endl;
+    topOrder->execute();
+    currentPlayerOrders->erase(currentPlayerOrders->cbegin());
+
+    delete topOrder;
+
+    nextTurn(phaseTurn);
+  }
+
+  // reset player friendly
+  for(auto player : players){
+    player->clearFriendly();
+  }
+}
+
+void GameEngine::mainGameLoop() {
+  if(players.empty()){throw std::runtime_error("GameEngine::mainGameLoop::Assert Player size is 0.");}
+  Player* winner = nullptr;
+  // check win state
+  int round = 0;
+  while((winner = checkWinState()) == nullptr){
+    cout << "-----------------------------------------------------------------------" << endl;
+    cout << "Round: " << round << "" << endl;
+    cout << "-----------------------------------------------------------------------" << endl;
+    reinforcementPhase();
+    issueOrdersPhase();
+    executeOrdersPhase();
+    removePlayersWithNoTerritories();
+    round++;
+    if(round % 500 == 0){
+      cout << "-----------------------------------------------------------------------" << endl;
+      cout << "Entering Round: " << round << endl;
+      cout << "-----------------------------------------------------------------------" << endl;
+    }
+  }
+  cout << "Congratulations " << winner->getName() << "!" << endl;
+}
+
+Player* GameEngine::checkWinState() {
+  if(map == nullptr){throw std::runtime_error("checkWinState::Assert Map is null.");}
+
+  int totalAmountOfTerritories = (int) map->getTerritories()->size();
+
+  for(auto& player: players){
+    // check if a player has all the territories
+    if(player->getTerritories()->size() == totalAmountOfTerritories){
+      return player;
+    }
+  }
+  return nullptr;
+}
+
+void GameEngine::nextTurn(int &turn) {
+  turn++;
+  turn %= (int)players.size();
+}
+
+void GameEngine::setCurrentPlayer(Player* player) {
+  currentPlayerTurn = player;
+}
+
+void GameEngine::removePlayersWithNoTerritories() {
+  auto playersToBeDeleted = vector<Player*>();
+
+  for(auto& player : players){
+    if(player->getTerritories()->empty()){
+      playersToBeDeleted.push_back(player);
+    }
+  }
+
+  // remove from game
+  players.erase(std::remove_if(players.begin(), players.end(), [&](Player* p) {
+                  return p->getTerritories()->empty();
+                }), players.end());
+
+
+  // free memory
+  for(auto& player : playersToBeDeleted){
+    cout << player->getName() << " has been conquered!" << endl;
+    delete player;
+  }
 }

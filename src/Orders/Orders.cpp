@@ -1,4 +1,8 @@
+#include <iomanip> // To format output.
+#include <cstdlib>
 #include "Orders.h"
+#include "Map/Map.h"
+#include "Player/Player.h"
 
 // -----------------------------------------------------------------------------------------------------------------
 //
@@ -6,8 +10,6 @@
 //                                                Orders
 //
 // -----------------------------------------------------------------------------------------------------------------
-
-Order::~Order() = default;
 std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderCout(stream); }
 
 
@@ -20,15 +22,14 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-
-
-
-
+/**
+ * Destructor
+ */
 OrdersList::~OrdersList(){ for(auto order: orders){ delete order; } }
 
 // Copy constructor to make deep copy of the order list
 OrdersList::OrdersList(const OrdersList &oldList)
-{
+ : Subject(oldList) {
   unsigned listLength = oldList.orders.size();
   orders = std::vector<Order *>(listLength);
   // cloning the same object into another memory slot
@@ -133,6 +134,19 @@ OrdersList &OrdersList::operator=(const OrdersList &copyList)
   return *this;
 }
 
+size_t OrdersList::getOrdersListSize()
+{
+    return orders.size();
+}
+Order* OrdersList::getOrder(int index)
+{
+    if(index < orders.size() && index >= 0)
+    {
+        return orders[index];
+    }
+    return nullptr;
+}
+
 // print out the order list
 std::ostream &operator<<(std::ostream &stream, const OrdersList &ol)
 {
@@ -152,23 +166,23 @@ std::vector<Order *> *OrdersList::getList() {
 
 
 std::string OrdersList::castOrderType(Order * o){
-  if(Advance *order = dynamic_cast<Advance*>(o)){
-      return order->getLabel();
+  if(auto advance = dynamic_cast<Advance*>(o)){
+      return advance->getLabel();
   }
-  else if(Airlift *order = dynamic_cast<Airlift*>(o)){
-      return order->getLabel();
+  else if(auto airlift = dynamic_cast<Airlift*>(o)){
+      return airlift->getLabel();
   }
-  else if(Blockade *order = dynamic_cast<Blockade*>(o)){
-      return order->getLabel();
+  else if(auto blockade = dynamic_cast<Blockade*>(o)){
+      return blockade->getLabel();
   }
-  else if(Bomb *order = dynamic_cast<Bomb*>(o)){
-      return order->getLabel();
+  else if(auto bomb = dynamic_cast<Bomb*>(o)){
+      return bomb->getLabel();
   }
-  else if(Deploy *order = dynamic_cast<Deploy*>(o)){
-      return order->getLabel();
+  else if(auto deploy = dynamic_cast<Deploy*>(o)){
+      return deploy->getLabel();
   }
-  else if(Negotiate *order = dynamic_cast<Negotiate*>(o)){
-      return order->getLabel();
+  else if(auto negotiate = dynamic_cast<Negotiate*>(o)){
+      return negotiate->getLabel();
   }
   throw std::runtime_error("OrderList::Error Order is null");
 }
@@ -191,29 +205,64 @@ std::string OrdersList::stringToLog() {
 //                                                Advance
 //
 // -----------------------------------------------------------------------------------------------------------------
-
-
-
-
+Advance::Advance(Territory* source, Territory* target, Player* currentPlayer, int amount) : source(source), target(target), currentPlayer(currentPlayer), amount(amount){}
 
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
 
 std::string Advance::getLabel() const { return label; }
-
-Advance::~Advance() = default;
 
 const std::string Advance::label = "Advance";
 
 bool Advance::validate() const
 {
   std::cout << "-> Advance order validation check" << std::endl;
+
+    if (source->getPlayer() != currentPlayer)
+    {
+        cout << "The source territory is not your own!\n" << endl;
+        return false;
+    }
+
+    else if (!(std::find(source->getAdjacentTerritories()->begin(), source->getAdjacentTerritories()->end(), target) != source->getAdjacentTerritories()->end()))
+    {
+        cout << "The target territory is not adjacent to the source territory!\n" << endl;
+        return false;
+    }
+    else if (amount > source->getArmies())
+    {
+        cout << "You do not have this many armies in this territory!\n" << endl;
+        return false;
+    }
+    else if (amount < 1)
+    {
+        cout << "Please enter a value that is at least 1 for this order\n" << endl;
+    }
+    cout << "Your order has been validated!\n" << endl;
   return true;
 }
 
 void Advance::execute()
 {
-  if (validate()) { std::cout << "Advance execution." << std::endl; }
-  Subject::notify(this);
+    if (validate())
+    {
+        std::cout << "Advance execution." << std::endl;
+        if (source->getPlayer() == target->getPlayer()) // Transferring army to another territory
+        {
+            source->setArmies(source->getArmies() - amount);
+            target->setArmies(target->getArmies() + amount);
+        }
+        else // If you try to transfer on enemy territory, considered as attack.
+        {
+            if (!currentPlayer->canAttack(target->getPlayer()))
+            {
+                cout << "You cannot attack this player!\n" << endl;
+                return;
+            }
+            attackSimulation(source, target, currentPlayer, amount);
+        }
+        cout << "Advance has finished executing!\n" << endl;
+        Subject::notify(this);
+    }
 }
 
 Order *Advance::clone() const { return new Advance(*this); }
@@ -226,10 +275,84 @@ std::string Advance::stringToLog() {
   return ss.str();
 }
 
+void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* pCurrentPlayer, int army) {
+  pSource->setArmies(pSource->getArmies() - army); // Attackers leave home territory
 
+  int successAttack = 0;
+  int successDefend = 0;
 
+  for (int i = 1; i <= army; i++) // Attacking Phase
+  {
 
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> range(0, 100);
 
+    int roll = (int)range(rng) % 100 + 1;
+    if (roll <= 60)
+    {
+      successAttack++;
+    }
+  }
+
+  for (int i = 1; i <= pTarget->getArmies(); i++) // Defending Phase
+  {
+
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> range(0, 100);
+
+    int roll = (int)range(rng) % 100 + 1;
+
+    if (roll <= 70)
+    {
+      successDefend++;
+    }
+  }
+
+  int remainingAttackArmies = max(army - successDefend, 0);
+  int remainingDefendArmies = max(pTarget->getArmies() - successAttack, 0);
+
+  if (remainingAttackArmies > 0 && remainingDefendArmies == 0) // Win
+  {
+    cout << "Territory conquered! " << pCurrentPlayer->getName() << " has won this battle for " << pTarget->getName() << "!" << endl;
+    if(pTarget->getPlayer() != nullptr){
+      pTarget->getPlayer()->removeTerritory(*pTarget);
+    }
+    pCurrentPlayer->addTerritory(*pTarget);// territory added to player list
+    pTarget->setArmies(remainingAttackArmies); // Attackers advance to conquered territory
+
+    // give player army card from deck (if there is one)
+    if(!pCurrentPlayer->getGameInstance()->getDeck()->getDeckCards()->empty()){
+      cout << pCurrentPlayer->getName() <<" has won a card" << endl;
+      pCurrentPlayer->getGameInstance()->getDeck()->draw(*pCurrentPlayer->getHand());
+    }
+  }
+  else // Lose. A draw is considered army loss. If any, attackers retreat. If any, defenders retreat.
+  {
+    cout << "Territory " << pTarget->getName() << " has not been conquered. " << pCurrentPlayer->getName() << " has lost this battle!" << endl;
+    pSource->setArmies(pSource->getArmies() + remainingAttackArmies); // Attackers retreat
+    pTarget->setArmies(remainingDefendArmies);
+  }
+
+  if (pSource->getArmies() == 0)
+  {
+    cout << pCurrentPlayer->getName()  << " has lost their territory: " + pSource->getName() + " in the process!" << endl;
+    if(pSource->getPlayer() != nullptr){
+      pSource->getPlayer()->removeTerritory(*pSource);
+    }
+    pSource->setPlayer(nullptr);
+  }
+
+  if (pTarget->getArmies() == 0)
+  {
+    if(pTarget->getPlayer() != nullptr){
+      cout << pTarget->getPlayer()->getName() << " has lost their territory " + pTarget->getName() + " in the process!\n" << endl;
+      pTarget->getPlayer()->removeTerritory(*pTarget);
+    }
+    pTarget->setPlayer(nullptr);
+  }
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -240,13 +363,9 @@ std::string Advance::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-
-
-
+Airlift::Airlift(Territory* source, Territory* target, Player* currentPlayer, int amount) : source(source), target(target), currentPlayer(currentPlayer), amount(amount){}
 
 const std::string Airlift::label = "Airlift";
-
-Airlift::~Airlift() = default;
 
 std::string Airlift::getLabel() const { return label; }
 
@@ -255,13 +374,40 @@ std::ostream &Airlift::orderCout(std::ostream &output) const { return output << 
 bool Airlift::validate() const
 {
   std::cout << "-> Airlift order validation check" << std::endl;
+    if (source->getPlayer() != currentPlayer && target->getPlayer() != currentPlayer)
+    {
+        cout << "The territory is not your own!\n" << endl;
+        return false;
+    }
+    else if (amount > source->getArmies())
+    {
+        cout << "You do not have this many armies in this territory!\n" << endl;
+    }
+    else if (amount < 1)
+    {
+        cout << "Please enter a value that is at least 1 for this order\n" << endl;
+    }
+    cout << "Your order has been validated!\n" << endl;
   return true;
 }
 
 void Airlift::execute()
 {
-  if (validate()) { std::cout << "Airlift execution." << std::endl; }
-  Subject::notify(this);
+  if (validate()) {
+      std::cout << "Airlift execution." << std::endl;
+      if (source->getPlayer() == target->getPlayer()) // Transferring army to another territory
+      {
+          source->setArmies(source->getArmies() - amount);
+          target->setArmies(target->getArmies() + amount);
+      }
+      if(source->getArmies() == 0){
+        if(source->getPlayer()){
+          source->getPlayer()->removeTerritory(*source);
+        }
+        source->setPlayer(nullptr);
+      }
+      Subject::notify(this);
+  }
 }
 
 Order *Airlift::clone() const { return new Airlift(*this); }
@@ -277,10 +423,6 @@ std::string Airlift::stringToLog() {
 
 
 
-
-
-
-
 // -----------------------------------------------------------------------------------------------------------------
 //
 //
@@ -289,14 +431,9 @@ std::string Airlift::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-
-
-
-
+Blockade::Blockade(Territory* target, Player* currentPlayer) : target(target), currentPlayer(currentPlayer){}
 
 const std::string Blockade::label = "Blockade";
-
-Blockade::~Blockade() = default;
 
 std::string Blockade::getLabel() const { return label; }
 
@@ -305,13 +442,27 @@ std::ostream &Blockade::orderCout(std::ostream &output) const { return output <<
 bool Blockade::validate() const
 {
   std::cout << "-> Blockade order validation check" << std::endl;
+    if(target->getPlayer() != currentPlayer)
+    {
+        cout << "This is not your territory! This order can only be played on your own territory!\n" << endl;
+        return false;
+    }
+    cout << "Your order has been validated!\n" << endl;
   return true;
 }
 
 void Blockade::execute()
 {
-  if (validate()) { std::cout << "Blockade execution." << std::endl; }
-  Subject::notify(this);
+  if (validate()) {
+      std::cout << "Blockade execution." << std::endl;
+      target->setArmies(target->getArmies() * 3);
+      if(target->getPlayer()){
+        target->getPlayer()->removeTerritory(*target);
+      }
+      target->setPlayer(nullptr); // Transfer to neutral
+      cout << "Blockade has finished executing!\n" << endl;
+      Subject::notify(this);
+  }
 }
 
 Order *Blockade::clone() const { return new Blockade(*this); }
@@ -337,13 +488,9 @@ std::string Blockade::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-
-
-
+Bomb::Bomb(Territory* target, Player* currentPlayer) : target(target), currentPlayer(currentPlayer){}
 
 const std::string Bomb::label = "Bomb";
-
-Bomb::~Bomb() = default;
 
 std::string Bomb::getLabel() const { return label; }
 
@@ -352,13 +499,36 @@ std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "->
 bool Bomb::validate() const
 {
   std::cout << "-> Bomb order validation check" << std::endl;
+    if(target->getPlayer() == currentPlayer)
+    {
+        cout << "This territory is your own!\n" << endl;
+        return false;
+    }
+    cout << "Your order has been validated!\n" << endl;
   return true;
 }
 
 void Bomb::execute()
 {
-  if (validate()) { std::cout << "Bomb execution." << std::endl; }
-  Subject::notify(this);
+
+  if (validate()) {
+      if (!currentPlayer->canAttack(target->getPlayer()))
+      {
+          cout << "You cannot attack this player!\n" << endl;
+          return;
+      }
+      std::cout << "Bomb execution." << std::endl;
+      target->setArmies((target->getArmies() / 2) + 1);
+      // if target army is cleared. Remove player from ownership
+      if(target->getArmies() == 0){
+        if(target->getPlayer()){
+          target->getPlayer()->removeTerritory(*target);
+        }
+        target->setPlayer(nullptr);
+      }
+      cout << "Bomb has finished executing!\n" << endl;
+      Subject::notify(this);
+  }
 }
 
 Order *Bomb::clone() const { return new Bomb(*this); }
@@ -383,13 +553,9 @@ std::string Bomb::stringToLog() {
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-
-
-
+Deploy::Deploy(Territory* target, Player* currentPlayer, int amount) : target(target), currentPlayer(currentPlayer), amount(amount){}
 
 const std::string Deploy::label = "Deploy";
-
-Deploy::~Deploy() = default;
 
 std::string Deploy::getLabel() const { return label; }
 
@@ -398,13 +564,35 @@ std::ostream &Deploy::orderCout(std::ostream &output) const { return output << "
 bool Deploy::validate() const
 {
   std::cout << "-> Deploy order validation check" << std::endl;
+
+    if (target->getPlayer() != currentPlayer)
+    {
+        cout << "You do not own this territory!\n" << endl;
+        return false;
+    }
+    else if (amount > currentPlayer->getReinforcementPool())
+    {
+        cout << "You do not have this many armies in the reinforcement pool!\n" << endl;
+        return false;
+    }
+    else if (amount < 1)
+    {
+        cout << "Please enter a value that is at least 1 for this order\n" << endl;
+        return false;
+    }
+    cout << "Your order has been validated!\n" << endl;
   return true;
 }
 
 void Deploy::execute()
 {
-  if (validate()) { std::cout << "Deploy execution." << std::endl; }
-  Subject::notify(this);
+  if (validate()) {
+      std::cout << "Deploy execution." << std::endl;
+      target->setArmies(amount + target->getArmies());
+      currentPlayer->removeArmies(amount);
+      cout << "Deploy has finished executing!\n" << endl;
+      Subject::notify(this);
+  }
 }
 
 Order *Deploy::clone() const { return new Deploy(*this); }
@@ -420,8 +608,6 @@ std::string Deploy::stringToLog() {
 
 
 
-
-
 // -----------------------------------------------------------------------------------------------------------------
 //
 //
@@ -430,26 +616,33 @@ std::string Deploy::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-
-
-
-
+Negotiate::Negotiate(Player* targetPlayer, Player* currentPlayer) : targetPlayer(targetPlayer), currentPlayer(currentPlayer){}
 
 const std::string Negotiate::label = "Negotiate";
-
-Negotiate::~Negotiate() = default;
 
 std::string Negotiate::getLabel() const { return label; }
 
 bool Negotiate::validate() const
 {
   std::cout << "-> Negotiate order validation check" << std::endl;
+    if(targetPlayer == currentPlayer)
+    {
+        cout << "You cannot negotiate with yourself.\n" << endl;
+        return false;
+    }
+    cout << "Your order has been validated.\n" << endl;
   return true;
 }
 
-void Negotiate::execute() {
-  if (validate()) { std::cout << "Negotiate execution." << std::endl; }
-  Subject::notify(this);
+void Negotiate::execute()
+{
+  if (validate()) {
+      std::cout << "Negotiate execution." << std::endl;
+      currentPlayer->addFriendly(targetPlayer);
+      targetPlayer->addFriendly(currentPlayer);
+  }
+    cout << "Negotiate has finished executing." << endl;
+    Subject::notify(this);
 }
 
 
@@ -465,31 +658,4 @@ std::string Negotiate::stringToLog() {
   ss << "Order Executed ";
   ss << *this;
   return ss.str();
-}
-
-// -----------------------------------------------------------------------------------------------------------------
-//
-//
-//                                                OrdersFactory
-//
-// -----------------------------------------------------------------------------------------------------------------
-
-
-
-Order* OrdersFactory::CreateOrder(CardType cardType) {
-  switch(cardType){
-    case CT_Bomb:
-      return new Bomb();
-    case CT_Reinforcement:
-      // TODO: Assignment 2 -> remove deploy and add new logic
-      return new Deploy();
-    case CT_Blockade:
-      return new Blockade();
-    case CT_Airlift:
-      return new Airlift();
-    case CT_Diplomacy:
-      return new Negotiate();
-    default:
-      throw std::runtime_error("ASSERT: Unhandled CardType Value");
-  }
 }

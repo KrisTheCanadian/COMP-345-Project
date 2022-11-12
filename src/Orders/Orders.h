@@ -7,6 +7,8 @@
 #include "Logger/LogObserver.h"
 
 class Card;
+class Player;
+class Territory;
 enum CardType : int;
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -22,17 +24,15 @@ enum CardType : int;
 class Order
 {
 public:
+  virtual ~Order() = default;
   // gets label
   virtual std::string getLabel() const = 0;
   // validates order
   virtual bool validate() const = 0;
   // executes order
   virtual void execute() = 0;
-  // destructor
-  virtual ~Order() = 0;
   // cloner (copy)
   virtual Order *clone() const = 0;
-
 private:
   // --------------------------------
   // Operator Overloads
@@ -82,13 +82,16 @@ public:
   // Run user orders and remove them from order list
   void execute();
 
+  size_t getOrdersListSize();
+  Order* getOrder(int index);
+
   // --------------------------------
   // Getters
   // --------------------------------
   std::vector<Order *>* getList();
 
   // Logging
-  std::string castOrderType(Order * o);
+  static std::string castOrderType(Order * o);
   std::string stringToLog() override;
 
 private:
@@ -107,25 +110,27 @@ private:
 //
 // -----------------------------------------------------------------------------------------------------------------
 
+class Advance : public Order, Subject, ILoggable{
+private:
+  Player* currentPlayer;
+  Territory* source;
+  Territory* target;
+  int amount = 0;
 
-
-
-class Advance : public Order, Subject, ILoggable
-{
 public:
+  Advance(Territory* src, Territory* dest, Player* player, int amount);
+  ~Advance() override = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() override;
-  ~Advance() override;
-
   std::string stringToLog() override;
+  static void attackSimulation(Territory*, Territory*, Player*, int);
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
-
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -139,12 +144,18 @@ private:
 
 class Airlift : public Order, Subject, ILoggable
 {
+private:
+  Player* currentPlayer;
+  Territory* source;
+  Territory* target;
+  int amount = 0;
+
 public:
+  Airlift(Territory* source, Territory* target, Player* player, int amount);
+  ~Airlift() override = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() override;
-  ~Airlift() override;
-
   std::string stringToLog() override;
 
 private:
@@ -167,12 +178,16 @@ private:
 
 class Blockade : public Order, Subject, ILoggable
 {
+private:
+  Territory* target;
+  Player* currentPlayer;
+
 public:
+  Blockade(Territory* target, Player* player);
+  ~Blockade() override = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() override;
-  ~Blockade() override;
-
   std::string stringToLog() override;
 
 private:
@@ -193,18 +208,23 @@ private:
 
 class Bomb : public Order, Subject, ILoggable
 {
+private:
+  Territory* target;
+  Player* currentPlayer;
+
 public:
+  Bomb(Territory* target, Player* player);
+  ~Bomb() override = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() override;
-  ~Bomb() override;
-
   std::string stringToLog() override;
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
+
 };
 
 
@@ -220,18 +240,24 @@ private:
 
 class Deploy : public Order, Subject, ILoggable
 {
+private:
+  Player* currentPlayer;
+  Territory* target;
+  int amount;
+
 public:
+  Deploy(Territory* target, Player* player, int amount);
+  ~Deploy() override = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() override;
-  ~Deploy() override;
-
   std::string stringToLog() override;
 
 private:
   const static std::string label;
-  Order *clone() const override;
+  Order* clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
+
 };
 
 
@@ -247,34 +273,21 @@ private:
 
 class Negotiate : public Order, Subject, ILoggable
 {
+private:
+  Player* currentPlayer;
+  Player* targetPlayer;
+  std::vector<Player*> friendlyPlayers;
+
 public:
+  Negotiate(Player* currentPlayer, Player* targetPlayer);
+  ~Negotiate() override = default;
   std::string getLabel() const override;
   bool validate() const override;
   void execute() override;
-  ~Negotiate() override;
-
   std::string stringToLog() override;
 
 private:
   const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
-};
-
-// -----------------------------------------------------------------------------------------------------------------
-//
-//
-//                                                OrdersFactory
-//
-// -----------------------------------------------------------------------------------------------------------------
-
-
-// --------------------------------
-// Static Class : OrdersFactory to create order subclasses according to card type enum
-// --------------------------------
-class OrdersFactory {
-
-public:
-  static Order* CreateOrder(CardType cardType);
-
 };

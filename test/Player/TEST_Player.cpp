@@ -7,7 +7,7 @@ TEST(PlayerTestSuite, PlayerAddTerritories)
 {
   // arrange
   GameEngine gameEngine = GameEngine();
-  auto p = new Player(&gameEngine, new Hand());
+  auto p = new Player(&gameEngine, new Hand(), "Bob");
 
   gameEngine.loadMap("res/TestMap1_valid.map");
   auto map_territories = gameEngine.getMap()->getTerritories();
@@ -32,7 +32,7 @@ TEST(PlayerTestSuite, PlayerRemoveTerritories)
 {
   // arrange
   GameEngine gameEngine = GameEngine();
-  auto p = new Player(&gameEngine, new Hand());
+  auto p = new Player(&gameEngine, new Hand(), "Bob");
 
   gameEngine.loadMap("res/TestMap1_valid.map");
   auto map_territories = gameEngine.getMap()->getTerritories();
@@ -62,49 +62,41 @@ TEST(PlayerTestSuite, PlayerAttacknDefendTerritories)
 {
   // arrange
   GameEngine gameEngine = GameEngine();
-  auto p = new Player(&gameEngine, new Hand());
+  auto p1 = new Player(&gameEngine, new Hand(), "Bob");
+  auto p2 = new Player(&gameEngine, new Hand(), "Joe");
 
   gameEngine.loadMap("res/TestMap1_valid.map");
-  auto map_territories = gameEngine.getMap()->getTerritories();
+  auto mapContinents = gameEngine.getMap()->getContinents();
+  auto continentOneTerritories = *mapContinents->at(0)->getTerritories();
 
-  auto t1 = *map_territories->at(0);
-  auto t2 = *map_territories->at(1);
-  auto t3 = *map_territories->at(2);
-  auto t4 = *map_territories->at(3);
+  auto players = *gameEngine.getPlayers();
 
-  p->addTerritory(t1);
-  p->addTerritory(t2);
-  p->addTerritory(t3);
-  p->addTerritory(t4);
+  for(int i = 0; i < continentOneTerritories.size(); i++){
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist6(1,100);
+    int randomReinforcement = (int) dist6(rng);
+
+    auto t = continentOneTerritories.at(i);
+    t->setArmies(randomReinforcement);
+    players.at(i % players.size())->addTerritory(*t);
+  }
+
+  // set armies for testing
 
   // act
-  auto defend = p->toDefend();
-  auto attack = p->toAttack();
-  // assert
-  EXPECT_FALSE(defend.empty());
-  EXPECT_FALSE(attack.empty());
-}
+  auto defend1 = p1->toDefend();
+  auto attack1 = p1->toAttack();
 
-TEST(PlayerTestSuite, PlayerIssueOrders)
-{
-  // arrange
-  GameEngine gameEngine = GameEngine();
-  auto p = new Player(&gameEngine, new Hand());
+  auto defend2 = p1->toDefend();
+  auto attack2 = p1->toAttack();
 
-  gameEngine.loadMap("res/TestMap1_valid.map");
-  auto map_territories = gameEngine.getMap()->getTerritories();
-  // act
-  p->issueOrder(CT_Bomb);
-  p->issueOrder(CT_Airlift);
-  p->issueOrder(CT_Blockade);
-  p->issueOrder(CT_Diplomacy);
   // assert
-  auto orderList = p->getOrdersListObject()->getList();
-  EXPECT_EQ(orderList->size(), 4);
-  EXPECT_EQ(orderList->at(0)->getLabel(), "Bomb");
-  EXPECT_EQ(orderList->at(1)->getLabel(), "Airlift");
-  EXPECT_EQ(orderList->at(2)->getLabel(), "Blockade");
-  EXPECT_EQ(orderList->at(3)->getLabel(), "Negotiate");
+  EXPECT_FALSE(defend1.empty());
+  EXPECT_FALSE(attack1.empty());
+
+  EXPECT_FALSE(defend2.empty());
+  EXPECT_FALSE(attack2.empty());
 }
 
 int main(int argc, char **argv)

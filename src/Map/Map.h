@@ -32,7 +32,6 @@ private:
   std::vector<Territory*> adjacentTerritories;
 
   int armies = 0;
-  int ownerId = -1;
   Player* player;
 
   int x = -1;
@@ -50,9 +49,6 @@ public:
   // ----------------------------------------
   // getters and setters
   // ----------------------------------------
-  void setOwnerId(int id);
-  int getOwnerId() const;
-
   int getArmies() const;
   void setArmies(int);
 
@@ -87,6 +83,7 @@ public:
   // ostream overload
   // ----------------------------------------
   friend std::ostream& operator<<(std::ostream& stream, const Territory& other);
+
 };
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -98,6 +95,8 @@ public:
 
 class Map
 {
+public:
+  std::vector<Continent*> continents;
 
 private:
   std::string name;
@@ -109,7 +108,7 @@ private:
   bool warn{};
 
   std::vector<Territory*> territories;
-  std::vector<Continent*> continents;
+
 
   // Object Owner
   GameEngine* game;
@@ -175,10 +174,12 @@ public:
 
 class Continent
 {
+public:
+    std::vector<Territory*> territories;
+
 private:
   std::string name;
   int bonus;
-  std::vector<Territory*> territories;
 
 public:
   // ----------------------------------------

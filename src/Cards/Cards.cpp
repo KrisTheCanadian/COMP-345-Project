@@ -1,6 +1,4 @@
 #include "Cards.h"
-
-
 using namespace std;
 
 //Card constructor with a type parameter
@@ -17,7 +15,7 @@ Card::Card(const Card &initial)
   if(game == nullptr){throw std::runtime_error("Card::Error | Cannot set Card Game Engine to null");}
 }
 
-void Card::setCardType(CardType& type)
+void Card::setCardType(const CardType& type)
 {
     cardType = type;
 }
@@ -30,7 +28,16 @@ CardType Card::getCardType()
 void Card::play() {
   // check to see whose turn it is
   Player* currentPlayer = game->getCurrentPlayerTurn();
-  currentPlayer->issueOrder(cardType);
+  auto orders = currentPlayer->getOrdersListObject();
+  auto order = currentPlayer->decideOrder(cardType);
+
+  if(order){orders->add(order);}
+  else if (cardType != CardType::CT_Reinforcement) {
+    cout << "Order was not decided " << currentPlayer->getName() << ". Skipping card..." << endl;
+    return;
+  }
+
+
   Card* card = currentPlayer->getHand()->removeCard(cardType);
 
   if(card == nullptr){ throw std::runtime_error(&"Hand did not contain card type: " [cardType]); }
@@ -57,11 +64,6 @@ std::string Card::CardTypeToString(CardType& c) {
 
 // Destructor
 Card::~Card() = default;
-
-
-
-
-
 
 //Copy construct
 Hand::Hand(const Hand &initial)
@@ -101,7 +103,8 @@ void Hand::addToHand(Card *card) {
 Card* Hand::removeCard(CardType type) {
 
   for(int i = 0; i < handCards.size(); i++){
-    if(handCards.at(i)->getCardType() == type){
+    auto cardType = handCards.at(i)->getCardType();
+    if(cardType == (int)type){
       Card* card = handCards.at(i);
       handCards.erase(handCards.begin() + i);
       return card;
@@ -182,3 +185,39 @@ Card *Deck::removeCardRandom() {
 std::vector<Card *> *Deck::getDeckCards() {
   return &this->deckCards;
 };
+
+//for the testing purpose
+void Deck::create_deck() {
+    // Assign 40 cards in deck vector, each type has 8 cards, 5 types
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 5; j++) {
+            Card *cardPtr = new Card();
+
+            // Type 1 = Bomb
+            if (j == 0) {
+                cardPtr->setCardType(CT_Bomb);
+                deckCards.push_back(cardPtr);
+            }
+                // Type 2 = Reinforcement
+            else if (j == 1) {
+                cardPtr->setCardType(CT_Reinforcement);
+                deckCards.push_back(cardPtr);
+            }
+                // Type 3 = Blockade
+            else if (j == 2) {
+                cardPtr->setCardType(CT_Blockade);
+                deckCards.push_back(cardPtr);
+            }
+                // Type 4 = Airlift
+            else if (j == 3) {
+                cardPtr->setCardType(CT_Airlift);
+                deckCards.push_back(cardPtr);
+            }
+                // Type 5 = Diplomacy
+            else if (j == 4) {
+                cardPtr->setCardType(CT_Diplomacy);
+                deckCards.push_back(cardPtr);
+            }
+        }
+    }
+}
