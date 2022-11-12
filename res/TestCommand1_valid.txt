@@ -1,7 +1,7 @@
 loadmap error
-loadmap test.map
+loadmap TestMap1_valid.map
 loadmap error
-loadmap test2.map
+loadmap TestMap2_valid.map
 validatemap
 validatemap
 addplayer zafir

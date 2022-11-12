@@ -1,5 +1,5 @@
-loadmap test.map
-loadmap test2.map
+loadmap TestMap1_valid.map
+loadmap TestMap2_valid.map
 validatemap
 addplayer zafir
 addplayer kris
