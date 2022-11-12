@@ -17,8 +17,12 @@ TEST(OrdersListSuite, listAddOrders)
 
   // arrange
 
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
   // create a game engine
-  auto gameEngine = GameEngine();
+  auto gameEngine = GameEngine(argc, argv);
 
   // add cards to the gameEngine deck
   auto deck = gameEngine.getDeck();
@@ -94,8 +98,12 @@ TEST(OrdersListSuite, listRemoveOrder)
 {
   // arrange
 
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
   // create a game engine
-  auto gameEngine = GameEngine();
+  auto gameEngine = GameEngine(argc, argv);
 
   // add cards to the gameEngine deck
   auto deck = gameEngine.getDeck();

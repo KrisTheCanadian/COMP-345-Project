@@ -6,8 +6,10 @@ using namespace std;
 regex regexRuleLoadMap("loadmap .+.map$");
 regex regexRulePlayerAdd("addplayer .+");
 
-CommandProcessor::CommandProcessor(GameEngine* game) :game(game){
-    commandCollection = {};
+CommandProcessor::CommandProcessor(GameEngine* game, int argc, char** argv) : game(game) {
+  commandCollection = {};
+  // add all program arguments to a raw string
+  for(int i = 0; i < argc; i++){ rawCommands.emplace_back(argv[i]); }
 }
 
 CommandProcessor::CommandProcessor(const CommandProcessor &c) : Subject(c) {
@@ -15,6 +17,7 @@ CommandProcessor::CommandProcessor(const CommandProcessor &c) : Subject(c) {
     for(auto i : c.commandCollection){
         commandCollection.push_back(new Command(*i));
     }
+    this->rawCommands = c.rawCommands;
     this->game = c.game;
 }
 
@@ -240,4 +243,7 @@ std::string CommandProcessor::stringToLog() {
   ss << commandCollection.back()->getEffect();
   ss << "\"";
   return ss.str();
+}
+std::vector<std::string> *CommandProcessor::getRawCommands() {
+  return &rawCommands;
 }

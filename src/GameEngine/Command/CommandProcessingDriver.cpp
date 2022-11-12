@@ -1,8 +1,7 @@
 #include "CommandProcessingDriver.h"
 
-void testCommandProcessor() {
-
-    auto gameEngine = new GameEngine;
+void testCommandProcessor(int argc, char* argv[]) {
+  auto gameEngine = new GameEngine(argc, argv);
 
     // Command line or file
     std::string decision;
@@ -12,25 +11,26 @@ void testCommandProcessor() {
     std::string moreCommandsDecision;
 
     // Initializing file reading classes
-    FileLineReader flr;
-    FileCommandProcessorAdapter adapter(gameEngine);
+    FileCommandProcessorAdapter adapter(gameEngine, argc, argv);
 
     // Initializing command line reading class
-    CommandProcessor cpr = CommandProcessor(gameEngine);
+    CommandProcessor cpr = CommandProcessor(gameEngine, argc, argv);
 
-
-    // Get user input (command line or file)
-    std::cout << "\nDo you want to read from the console or from a file?" << std::endl;
-    std::cout << "Enter 1 for console or 0 for file" << std::endl;
-    getline(std::cin, decision);
+    // get raw command line inputs
+    auto inputCommandsRaw = cpr.getRawCommands();
+    if(inputCommandsRaw->empty()){
+      std::cout << "You must choose between -console or -file <filename>" << endl;
+      exit(0);
+    }
 
     // Command line
-    if (decision == "1"){
+    if (inputCommandsRaw->at(0) == "-console"){
         do {
             cpr.getCommand();
             cpr.printCommandCollection(cpr.getCommandCollection());
-            std::cout << "Do you want to enter another command? (y/n)" << std::endl;
+            std::cout << "Please enter a command: ";
             getline(std::cin, moreCommandsDecision);
+            std::cout << std::endl;
             if (!(moreCommandsDecision == "y")){
                 moreCommands = false;
             }
@@ -38,24 +38,28 @@ void testCommandProcessor() {
 
 
     // File
-    } else if (decision == "0"){
-        std::string fileName;
-        std::cout << "Enter File Name: " << std::endl;
-        std::cin >> fileName;
-        flr.setFile(fileName);
+    } else if (inputCommandsRaw->at(0) == "-file"){
 
-        // Adapter functionality
-        adapter.commandLineToFile(&flr);
-        
-        while(!flr.getReadComplete()){
+      // check for file name
+      if(inputCommandsRaw->size() < 2) {
+        std::cout << "You must give a file as an argument" << std::endl;
+        exit(0);
+      }
 
-            adapter.getCommand();
-        }
-        
-        adapter.printCommandCollection(adapter.getCommandCollection());
+      gameEngine->getFlir()->setFile(inputCommandsRaw->at(0));
+
+      // Adapter functionality
+      adapter.commandLineToFile(gameEngine->getFlir());
+
+      while(!gameEngine->getFlir()->getReadComplete()){
+
+          adapter.getCommand();
+      }
+
+      adapter.printCommandCollection(adapter.getCommandCollection());
 
     }
     else {
-        throw std::runtime_error("Invalid User Input");
+        throw std::runtime_error("Invalid Command line arguments");
     }
 }

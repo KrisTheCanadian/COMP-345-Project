@@ -6,7 +6,11 @@ TEST(GameEngineTestSuite, GameEngineInit)
 {
   // arrange
   // act
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   // assert
 
   EXPECT_FALSE(gameEngine.getMap() == nullptr);
@@ -20,7 +24,11 @@ TEST(GameEngineTestSuite, GameEngineInit)
 TEST(GameEngineTestSuite, GameEngineLoadMap)
 {
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   // act
 
   gameEngine.loadMap("res/TestMap1_valid.map");
@@ -34,7 +42,11 @@ TEST(GameEngineTestSuite, GameEngineLoadMap)
 TEST(GameEngineTestSuite, GameEngineReinforcementPhase)
 {
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   gameEngine.loadMap("res/TestMap1_valid.map");
 
   // add cards to the gameEngine deck
@@ -95,7 +107,11 @@ TEST(GameEngineTestSuite, GameEngineReinforcementPhase)
 TEST(GameEngineTestSuite, GameEngineIssueOrderPhase)
 {
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   gameEngine.loadMap("res/TestMap1_valid.map");
 
   // add cards to the gameEngine deck
@@ -166,7 +182,11 @@ TEST(GameEngineTestSuite, GameEngineIssueOrderPhase)
 TEST(GameEngineTestSuite, GameEngineExecuteOrdersPhase)
 {
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   gameEngine.loadMap("res/TestMap1_valid.map");
 
   // add cards to the gameEngine deck

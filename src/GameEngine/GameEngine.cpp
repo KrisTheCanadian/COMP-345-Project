@@ -11,13 +11,13 @@ GameEngineState GameEngine::getCurrentState() {
   return this->state;
 }
 
-GameEngine::GameEngine(GameEngineState state) {
+GameEngine::GameEngine(GameEngineState state, int argc, char** argv) {
   this->state = state;
   this->deck = new Deck(this);
   this->map = new Map(this);
   this->logObserver = new LogObserver(this);
-  this->commandProcessor = new CommandProcessor(this);
-  this->adapter = new FileCommandProcessorAdapter(this);
+  this->commandProcessor = new CommandProcessor(this, argc, argv);
+  this->adapter = new FileCommandProcessorAdapter(this, argc, argv);
   this->flr = new FileLineReader();
 }
 
@@ -218,13 +218,13 @@ GameEngine::~GameEngine() {
   }
 }
 
-GameEngine::GameEngine() {
+GameEngine::GameEngine(int argc, char** argv) {
   this->map = new Map(this);
   this->deck = new Deck(this);
-  this->adapter = new FileCommandProcessorAdapter(this);
+  this->adapter = new FileCommandProcessorAdapter(this, argc, argv);
   this->flr = new FileLineReader();
   this->logObserver = new LogObserver(this);
-  this->commandProcessor = new CommandProcessor(this);
+  this->commandProcessor = new CommandProcessor(this, argc, argv);
   Subject::attach((ILogObserver*)logObserver);
 
 }
@@ -411,4 +411,10 @@ void GameEngine::removePlayersWithNoTerritories() {
     cout << player->getName() << " has been conquered!" << endl;
     delete player;
   }
+}
+FileLineReader* GameEngine::getFlir() {
+  return flr;
+}
+FileCommandProcessorAdapter *GameEngine::getFileCommandProcessorAdapter() {
+  return adapter;
 }

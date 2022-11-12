@@ -4,4 +4,4 @@
 
 #include "Cards/Cards.h"
 
-void testCards();
+void testCards(int argc, char** argv);

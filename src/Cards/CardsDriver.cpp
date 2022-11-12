@@ -3,8 +3,8 @@
 
 using namespace std;
 
-void testCards() {
-  auto gameEngine = new GameEngine();
+void testCards(int argc, char** argv) {
+  auto gameEngine = new GameEngine(argc, argv);
   auto player = new Player(gameEngine, new Hand(), "name");
   Deck* deck = gameEngine->getDeck();
 

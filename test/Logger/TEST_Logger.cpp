@@ -4,7 +4,11 @@
 
 // Logging Order and OrderList
 TEST(LoggerTestSuite, ExecuteAndAddOrder){
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   gameEngine.loadMap("res/TestMap1_valid.map");
 
   // add cards to the gameEngine deck
@@ -59,9 +63,11 @@ EXPECT_TRUE(output == "ORDER: Order Executed -> Bomb order.ORDER LIST: Order Lis
 
 // Logging GameState
 TEST(LoggerTestSuite, GameStateChange){
+    // mocking argc and argv
+    int argc = 1;
+    char* argv[] = {(char*)"-console"};
 
-
-    auto gameEngine = new GameEngine;
+    auto gameEngine = new GameEngine(argc, argv);
     std::string output;
     std::fstream file;
     file.open("gamelog.txt", std::ios::in | std::ios::out | std::ios::trunc);

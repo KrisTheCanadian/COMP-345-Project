@@ -2,4 +2,4 @@
 #include "Orders/Orders.h"
 #include "GameEngine/Command/CommandProcessor.h"
 
-void testLoggingObserver();
+void testLoggingObserver(int argc, char** argv);

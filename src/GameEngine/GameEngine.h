@@ -59,8 +59,8 @@ public:
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
-  GameEngine();
-  explicit GameEngine(GameEngineState state);
+  GameEngine(int argc, char** argv);
+  explicit GameEngine(GameEngineState state, int argc, char** argv);
 
   // ----------------------------------------
   // Modifications + setters
@@ -136,6 +136,10 @@ public:
   GameEngineState getCurrentState();
 
   CommandProcessor* getCommandProcessor();
+
+  FileLineReader* getFlir();
+
+  FileCommandProcessorAdapter* getFileCommandProcessorAdapter();
 
   // setters
   void setCurrentPlayer(Player* player);

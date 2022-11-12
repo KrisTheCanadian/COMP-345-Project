@@ -10,39 +10,44 @@ class Command;
 
 class CommandProcessor: public Subject, ILoggable {
 
-  private:
-    //Store all user commands
-    std::vector<Command*> commandCollection;
+private:
+  //Store all user commands
+  std::vector<Command*> commandCollection;
 
-    // Object Owner
-    GameEngine* game;
+  // Object Owner
+  GameEngine* game;
 
-  private:
+  // command line arguments
+  std::vector<std::string> rawCommands;
 
-    virtual std::string readCommand();
-    void saveCommand(Command* c);
-    Command* validate(const std::string& _userInput);
+private:
 
-  public:
+  virtual std::string readCommand();
+  void saveCommand(Command* c);
+  Command* validate(const std::string& _userInput);
 
-    //Constructors
-    explicit CommandProcessor(GameEngine*);
-    CommandProcessor(const CommandProcessor &c);
+public:
 
-    Command* getCommand();
-    int getCurrentState();
+  //Constructors
+  explicit CommandProcessor(GameEngine*, int argc,char* argv[]);
+  CommandProcessor(const CommandProcessor &c);
 
-    //Functions for CommandProcessorDriver.cpp
-    void printCommandCollection(const std::vector<Command *> &collection);
-    std::vector<Command*> getCommandCollection();
-    std::string StateToString();
+  //getters and setters
+  Command* getCommand();
+  int getCurrentState();
 
-    //Operator Overloading
-    friend std::ostream & operator << (std::ostream &out, const CommandProcessor &c);
-    CommandProcessor& operator=(const CommandProcessor& other);
+  std::vector<std::string>* getRawCommands();
 
-    // Logging
-    std::string stringToLog() override;
+  //Functions for CommandProcessorDriver.cpp
+  void printCommandCollection(const std::vector<Command *> &collection);
+  std::vector<Command*> getCommandCollection();
+  std::string StateToString();
 
+  //Operator Overloading
+  friend std::ostream & operator << (std::ostream &out, const CommandProcessor &c);
+  CommandProcessor& operator=(const CommandProcessor& other);
+
+  // Logging
+  std::string stringToLog() override;
 
 };

@@ -4,15 +4,15 @@ void printInvalidCommand(const std::string& command){
   std::cout << "Incorrect Command: \"" << command << "\". Please input a correct command." << std::endl;
 }
 
-void testGameStates(){
-    GameEngine gameEngine;
+void testGameStates(int argc, char** argv){
+    GameEngine gameEngine(argc, argv);
 
     gameEngine.preStartupPhase();
 }
 
-void testGameLoop(){
+void testGameLoop(int argc, char** argv){
   // create a game engine
-  auto gameEngine = GameEngine();
+  auto gameEngine = GameEngine(argc, argv);
 
   // add cards to the gameEngine deck
   auto deck = gameEngine.getDeck();

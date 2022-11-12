@@ -6,92 +6,112 @@
 
 TEST(FileCommandTestSuite, CommandFile2_invalid){
 
-    int final_state;
-    auto game = new GameEngine;
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
 
-    FileLineReader flr;
-    FileCommandProcessorAdapter adapter(game);
-    adapter.commandLineToFile(&flr);
-    flr.setFile("../res/TestCommand2_invalid.txt");
+  int final_state;
+  auto game = new GameEngine(argc, argv);
 
-    while(!flr.getReadComplete()){
-        adapter.getCommand();
-    }
+  FileLineReader* flr = game->getFlir();
+  FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
+  adapter->commandLineToFile(flr);
+  flr->setFile("../res/TestCommand2_invalid.txt");
 
-    final_state = adapter.getCurrentState();
+  while(!flr->getReadComplete()){
+      adapter->getCommand();
+  }
+
+  final_state = adapter->getCurrentState();
 
 
-    EXPECT_FALSE(final_state == 4);
+  EXPECT_FALSE(final_state == 4);
 }
 
 TEST(FileCommandTestSuite, CommandFile3_invalid){
 
-    auto game = new GameEngine;
-    FileLineReader flr;
-    FileCommandProcessorAdapter adapter(game);
-    adapter.commandLineToFile(&flr);
-    flr.setFile("../res/TestCommand3_invalid.txt");
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
 
-    while(!flr.getReadComplete()){
-        adapter.getCommand();
-    }
+  auto game = new GameEngine(argc, argv);
+  FileLineReader* flr = game->getFlir();
+  FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
 
-    int final_state = adapter.getCurrentState();
+  adapter->commandLineToFile(flr);
+  flr->setFile("../res/TestCommand3_invalid.txt");
 
-    EXPECT_FALSE(final_state == 4);
+  while(!flr->getReadComplete()){
+      adapter->getCommand();
+  }
+
+  int final_state = adapter->getCurrentState();
+
+  EXPECT_FALSE(final_state == 4);
 }
 
 
 
 TEST(FileCommandTestSuite, CommandFile5_invalid){
 
-    auto game = new GameEngine;
-    FileLineReader flr;
-    FileCommandProcessorAdapter adapter(game);
-    adapter.commandLineToFile(&flr);
-    flr.setFile("../res/TestCommand5_invalid_format.txt");
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
 
-    while(!flr.getReadComplete()){
-        adapter.getCommand();
-    }
+  auto game = new GameEngine(argc, argv);
+  FileLineReader* flr = game->getFlir();
+  FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
+  adapter->commandLineToFile(flr);
+  flr->setFile("../res/TestCommand5_invalid_format.txt");
 
-    int final_state = adapter.getCurrentState();
-    EXPECT_FALSE(final_state == 4);
+  while(!flr->getReadComplete()){
+      adapter->getCommand();
+  }
+
+  int final_state = adapter->getCurrentState();
+  EXPECT_FALSE(final_state == 4);
 }
 
 
 TEST(FileCommandTestSuite, CommandFile1_Valid){
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
 
-    auto game = new GameEngine;
-    FileLineReader flr;
-    FileCommandProcessorAdapter adapter(game);
-    adapter.commandLineToFile(&flr);
-    flr.setFile("../res/TestCommand1_valid.txt");
+  auto game = new GameEngine(argc, argv);
+  FileLineReader* flr = game->getFlir();
+  FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
+  adapter->commandLineToFile(flr);
+  flr->setFile("../res/TestCommand1_valid.txt");
 
-    while(!flr.getReadComplete()){
-        adapter.getCommand();
-    }
+  while(!flr->getReadComplete()){
+      adapter->getCommand();
+  }
 
-    int final_state = adapter.getCurrentState();
+  int final_state = adapter->getCurrentState();
 
-    EXPECT_TRUE(final_state == 4);
+  EXPECT_TRUE(final_state == 4);
 }
 
 TEST(FileCommandTestSuite, CommandFile4_valid){
 
-    auto game = new GameEngine;
-    FileLineReader flr;
-    FileCommandProcessorAdapter adapter(game);
-    adapter.commandLineToFile(&flr);
-    flr.setFile("../res/TestCommand4_valid.txt");
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
 
-    while(!flr.getReadComplete()){
-        adapter.getCommand();
-    }
+  auto game = new GameEngine(argc, argv);
+  FileLineReader* flr = game->getFlir();
+  FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
+  adapter->commandLineToFile(flr);
+  flr->setFile("../res/TestCommand4_valid.txt");
 
-    int final_state = adapter.getCurrentState();
+  while(!flr->getReadComplete()){
+      adapter->getCommand();
+  }
 
-    EXPECT_TRUE(final_state == 4);
+  int final_state = adapter->getCurrentState();
+
+  EXPECT_TRUE(final_state == 4);
 }
 
 

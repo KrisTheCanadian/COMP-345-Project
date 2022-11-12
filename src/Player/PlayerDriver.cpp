@@ -2,8 +2,11 @@
 
 void testPlayers(){
 
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
   // setting up game engine
-  auto gameEngine = new GameEngine();
+  auto gameEngine = new GameEngine(argc, argv);
   // creating player
   auto p = new Player(gameEngine, new Hand(), "Bob");
 

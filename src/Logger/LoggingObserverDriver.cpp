@@ -1,9 +1,9 @@
 #include "LoggingObserverDriver.h"
 
 
-void testLoggingObserver(){
+void testLoggingObserver(int argc, char** argv){
 
-  auto gameEngine = new GameEngine;
+  auto gameEngine = new GameEngine(argc, argv);
   auto player1 = new Player(gameEngine, new Hand(), "Player1");
   auto player2 = new Player(gameEngine, new Hand(), "Player2");
 
@@ -19,7 +19,7 @@ void testLoggingObserver(){
   ((Subject*)orderList)->attach((ILogObserver*)observer);
 
   // Create commandProcessor and attach observer
-  auto processor = new CommandProcessor(gameEngine);
+  auto processor = new CommandProcessor(gameEngine, argc, argv);
   ((Subject*)processor)->attach((ILogObserver*)observer);
 
   // TEST GAME STATE CHANGE
