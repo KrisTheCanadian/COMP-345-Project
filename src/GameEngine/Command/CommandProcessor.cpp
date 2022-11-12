@@ -57,7 +57,7 @@ Command* CommandProcessor::validate(const string& _userInput){
               try {
                 game->loadMap(mapName);
               }
-              catch(std::runtime_error err){
+              catch(std::runtime_error& err){
                 cout<< err.what() << endl;
                 break;
               }
@@ -74,7 +74,7 @@ Command* CommandProcessor::validate(const string& _userInput){
               try{
                 game->validateMap();
               }
-              catch(std::runtime_error err){
+              catch(std::runtime_error& err){
                 cout<< err.what() << endl;
                 game->setCurrentState(GE_Start);
                 break;
@@ -95,10 +95,10 @@ Command* CommandProcessor::validate(const string& _userInput){
 
                 size_t pos = strCommand.find(' ');
                 std::string playerName = strCommand.substr(pos);
-                new Player(game, new Hand());
-                currentCommandObj->saveEffect("Player successfully added");
+                new Player(game, new Hand(), playerName);
+                currentCommandObj->saveEffect("Player " + playerName + " has been added successfully");
                 game->setCurrentState(GE_Players_Added);
-                cout << currentCommandObj->getEffect() << playerName << endl;
+                cout << currentCommandObj->getEffect() << endl;
                 return currentCommandObj;
             }
             break;
@@ -109,16 +109,16 @@ Command* CommandProcessor::validate(const string& _userInput){
               try {
                 game->validateMaxPlayers();
               }
-              catch(std::runtime_error err){
+              catch(std::runtime_error& err){
                 cout << err.what() << endl;
                 break;
               }
 
               size_t pos = strCommand.find(' ');
               std::string playerName = strCommand.substr(pos);
-              new Player(game, new Hand());
-              currentCommandObj->saveEffect("Player successfully added");
-              cout << currentCommandObj->getEffect() << playerName << endl;
+              new Player(game, new Hand(), playerName);
+              currentCommandObj->saveEffect("Player " + playerName + " has been added successfully");
+              cout << currentCommandObj->getEffect() << endl;
               return currentCommandObj;
             }
             else if(_userInput == "gamestart"){
@@ -127,7 +127,7 @@ Command* CommandProcessor::validate(const string& _userInput){
               try {
                 game->validateMinPlayers();
               }
-              catch(std::runtime_error err){
+              catch(std::runtime_error& err){
                 cout << err.what() << endl;
                 break;
               }
@@ -138,6 +138,9 @@ Command* CommandProcessor::validate(const string& _userInput){
               game->playerOrder();
               cout<< "Order of play of players determined."<<endl;
 
+              // initialize deck
+              game->getDeck()->create_deck();
+
               try{
                 for(Player* player : *game->getPlayers()){
                   Hand &hand = *player->getHand();
@@ -145,7 +148,7 @@ Command* CommandProcessor::validate(const string& _userInput){
                   game->getDeck()->draw(hand);
                 }
               }
-              catch(std::runtime_error err){
+              catch(std::runtime_error& err){
                 cout << err.what() <<endl;
                 break;
               }
@@ -172,7 +175,7 @@ Command* CommandProcessor::validate(const string& _userInput){
         case GE_Issue_Orders:
           throw std::runtime_error("CommandProcessor::GE_Issue_Orders Not Implemented Yet");
         case GE_Execute_Orders:
-          throw std::runtime_error("CommandProcessor::GE_Issue_Orders Not Implemented Yet");
+          throw std::runtime_error("CommandProcessor::GE_Execute_Orders Not Implemented Yet");
     }
 
     currentCommandObj->saveEffect("Invalid Command");

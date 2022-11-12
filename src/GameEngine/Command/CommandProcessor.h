@@ -21,7 +21,7 @@ class CommandProcessor: public Subject, ILoggable {
 
     virtual std::string readCommand();
     void saveCommand(Command* c);
-    Command* validate(std::string userInputCommand);
+    Command* validate(const std::string& _userInput);
 
   public:
 

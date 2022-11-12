@@ -133,11 +133,11 @@ void GameEngine::playerOrder(){
     delete tempPlayer;
 }
 
-bool GameEngine::isValid(const std::string strCommand){return strCommand.find("Invalid") == string::npos;}
+bool GameEngine::isValid(const std::string& strCommand){return strCommand.find("Invalid") == string::npos;}
 
 void GameEngine::printCommands() {
     cout<< "Here are the commands available to you: "<<endl;
-    for (string cmd: commands) {
+    for (const string& cmd: commands) {
         cout << cmd << " ";
     }
     cout << endl;
@@ -231,24 +231,6 @@ void GameEngine::loadMap(const std::string& path) {
 bool GameEngine::validateMap() {
   if(map == nullptr){ throw runtime_error("ASSERT: Map is null."); }
   return map->validate();
-}
-
-void GameEngine::gameStart() {
-  // Loading the map
-  while(this->state != GE_Map_Loaded){
-    std::string mapPath;
-    std::cout << "Enter the path for the map: ";
-    std::cin >> mapPath;
-    std::cout << std::endl;
-    try{
-      loadMap(mapPath);
-    } catch (const runtime_error& error){
-      std::cout << "Please Try Again." << error.what() << endl;
-    }
-
-    std::cout << "Validating Map..." << std::endl;
-    std::cout << "Map is " << (validateMap() ? "Valid":"Invalid") << std::endl;
-  }
 }
 
 std::string GameEngine::stringToLog() {

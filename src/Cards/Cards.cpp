@@ -188,36 +188,29 @@ std::vector<Card *> *Deck::getDeckCards() {
 
 //for the testing purpose
 void Deck::create_deck() {
-    // Assign 40 cards in deck vector, each type has 8 cards, 5 types
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 5; j++) {
-            Card *cardPtr = new Card();
-
-            // Type 1 = Bomb
-            if (j == 0) {
-                cardPtr->setCardType(CT_Bomb);
-                deckCards.push_back(cardPtr);
-            }
-                // Type 2 = Reinforcement
-            else if (j == 1) {
-                cardPtr->setCardType(CT_Reinforcement);
-                deckCards.push_back(cardPtr);
-            }
-                // Type 3 = Blockade
-            else if (j == 2) {
-                cardPtr->setCardType(CT_Blockade);
-                deckCards.push_back(cardPtr);
-            }
-                // Type 4 = Airlift
-            else if (j == 3) {
-                cardPtr->setCardType(CT_Airlift);
-                deckCards.push_back(cardPtr);
-            }
-                // Type 5 = Diplomacy
-            else if (j == 4) {
-                cardPtr->setCardType(CT_Diplomacy);
-                deckCards.push_back(cardPtr);
-            }
-        }
+// Assign 40 cards in deck vector, each type has 8 cards, 5 types
+for (int i = 0; i < 8; i++) {
+  for (int j = 0; j < 5; j++) {
+    // Type 1 = Bomb
+    if (j == 0) {
+      deckCards.push_back(new Card(CardType::CT_Bomb, game));
     }
+    // Type 2 = Reinforcement
+    else if (j == 1) {
+      deckCards.push_back(new Card(CardType::CT_Reinforcement, game));
+    }
+    // Type 3 = Blockade
+    else if (j == 2) {
+      deckCards.push_back(new Card(CardType::CT_Blockade, game));
+    }
+    // Type 4 = Airlift
+    else if (j == 3) {
+      deckCards.push_back(new Card(CardType::CT_Airlift, game));
+    }
+    // Type 5 = Diplomacy
+    else if (j == 4) {
+      deckCards.push_back(new Card(CardType::CT_Diplomacy, game));
+    }
+  }
+}
 }

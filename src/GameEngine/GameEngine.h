@@ -34,9 +34,8 @@ private:
   GameEngineState state = GE_Start;
 
   // Players
-  unsigned int playerTurn = 0;
   std::string fileName;
-  Player* currentPlayerTurn;
+  Player* currentPlayerTurn = nullptr;
   std::vector<Player*> players;
 
   std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
@@ -57,7 +56,6 @@ private:
 
 
 public:
-  bool isConsole;
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
@@ -83,11 +81,6 @@ public:
   // Validate game map
   // ----------------------------------------
   bool validateMap();
-
-  // ----------------------------------------
-  // gameStart
-  // ----------------------------------------
-  void gameStart();
 
   // ----------------------------------------
   // convert current state to string
@@ -119,6 +112,34 @@ public:
   // ----------------------------------------
   void playerOrder();
 
+  Deck* getDeck();
+
+  Map* getMap();
+
+  void preStartupPhase();
+
+  void mainGameLoop();
+
+  LogObserver* getLogObserver();
+
+  Player* getCurrentPlayerTurn();
+
+  void validateMaxPlayers();
+
+  void validateMinPlayers();
+
+  void addPlayer(Player* player);
+
+  // getters
+  std::vector<Player*>* getPlayers();
+
+  GameEngineState getCurrentState();
+
+  CommandProcessor* getCommandProcessor();
+
+  // setters
+  void setCurrentPlayer(Player* player);
+
 private:
   // ----------------------------------------
   // initiates startup phase for commands read from the console
@@ -128,30 +149,12 @@ private:
   Player* checkWinState();
   void nextTurn(int& turn);
   // ----------------------------------------
-  // distributes all territories evenly between the players
-  // ----------------------------------------
-  void distributeTerritories();
-  // ----------------------------------------
   // remove players with no territories
   // ----------------------------------------
   void removePlayersWithNoTerritories();
-  // getters
-  std::vector<Player*>* getPlayers();
-  Player* getCurrentPlayerTurn();
-  Deck* getDeck();
-  Map* getMap();
-  GameEngineState getCurrentState();
-  // setters
-  void setCurrentPlayer(Player* player);
-  LogObserver* getLogObserver();
-  CommandProcessor* getCommandProcessor();
+
 
 private:
-    // ----------------------------------------
-    // initiates startup phase for commands read from the console
-    // ----------------------------------------
-    void startupPhase();
-
     // ----------------------------------------
     // prints all the commands available for the user to use
     // ----------------------------------------
@@ -160,7 +163,7 @@ private:
     // ----------------------------------------
     // checks whether a command is valid or not
     // ----------------------------------------
-    bool isValid(const std::string strCommand);
+    static bool isValid(const std::string& strCommand);
 
     // ----------------------------------------
     // convert current state to string

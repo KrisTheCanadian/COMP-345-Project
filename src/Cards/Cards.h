@@ -44,7 +44,6 @@ public:
   // --------------------------------
   // Constructors
   // --------------------------------
-  Card() = default;
   explicit Card(const CardType& type, GameEngine* game);
   Card(const Card &initial);
 
@@ -64,11 +63,6 @@ public:
   // --------------------------------
   static std::string CardTypeToString(CardType& c);
 };
-
-
-
-
-
 
 
 
@@ -101,12 +95,6 @@ public:
 
 
 
-
-
-
-
-
-
 class Deck
 {
 private:
@@ -116,8 +104,6 @@ private:
   GameEngine* game;
 
 public:
-  //default constructor
-  Deck() = default;
   explicit Deck(GameEngine*);
   //destruct
   ~Deck();
