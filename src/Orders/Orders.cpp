@@ -250,11 +250,6 @@ void Advance::execute()
         {
             source->setArmies(source->getArmies() - amount);
             target->setArmies(target->getArmies() + amount);
-
-            if(source->getArmies() == 0 && source->getPlayer()){
-              source->getPlayer()->removeTerritory(*source);
-              source->setPlayer(nullptr);
-            }
         }
         else // If you try to transfer on enemy territory, considered as attack.
         {
@@ -280,13 +275,13 @@ std::string Advance::stringToLog() {
   return ss.str();
 }
 
-void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* pCurrentPlayer, int a) {
-  pSource->setArmies(pSource->getArmies() - a); // Attackers leave home territory
+void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* pCurrentPlayer, int army) {
+  pSource->setArmies(pSource->getArmies() - army); // Attackers leave home territory
 
   int successAttack = 0;
   int successDefend = 0;
 
-  for (int i = 1; i <= a; i++) // Attacking Phase
+  for (int i = 1; i <= army; i++) // Attacking Phase
   {
 
     std::random_device dev;
@@ -315,7 +310,7 @@ void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* p
     }
   }
 
-  int remainingAttackArmies = max(a - successDefend, 0);
+  int remainingAttackArmies = max(army - successDefend, 0);
   int remainingDefendArmies = max(pTarget->getArmies() - successAttack, 0);
 
   if (remainingAttackArmies > 0 && remainingDefendArmies == 0) // Win
@@ -327,13 +322,13 @@ void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* p
     pCurrentPlayer->addTerritory(*pTarget);// territory added to player list
     pTarget->setArmies(remainingAttackArmies); // Attackers advance to conquered territory
 
-    // give player a card from deck (if there is one)
+    // give player army card from deck (if there is one)
     if(!pCurrentPlayer->getGameInstance()->getDeck()->getDeckCards()->empty()){
-      cout << pCurrentPlayer->getName() <<"has won a card" << endl;
+      cout << pCurrentPlayer->getName() <<" has won a card" << endl;
       pCurrentPlayer->getGameInstance()->getDeck()->draw(*pCurrentPlayer->getHand());
     }
   }
-  else // Lose. A draw is considered a loss. If any, attackers retreat. If any, defenders retreat.
+  else // Lose. A draw is considered army loss. If any, attackers retreat. If any, defenders retreat.
   {
     cout << "Territory " << pTarget->getName() << " has not been conquered. " << pCurrentPlayer->getName() << " has lost this battle!" << endl;
     pSource->setArmies(pSource->getArmies() + remainingAttackArmies); // Attackers retreat
@@ -351,11 +346,9 @@ void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* p
 
   if (pTarget->getArmies() == 0)
   {
-    if(pSource->getPlayer() != nullptr){
-      cout << pSource->getPlayer()->getName() << " has lost their territory in the process!\n" << endl;
-    }
-    if(pSource->getPlayer()){
-      pSource->getPlayer()->removeTerritory(*pSource);
+    if(pTarget->getPlayer() != nullptr){
+      cout << pTarget->getPlayer()->getName() << " has lost their territory " + pTarget->getName() + " in the process!\n" << endl;
+      pTarget->getPlayer()->removeTerritory(*pTarget);
     }
     pTarget->setPlayer(nullptr);
   }

@@ -20,21 +20,21 @@ void testGameLoop(){
   deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
   deck->addCardToDeck(new Card(CardType::CT_Reinforcement, &gameEngine));
 
-  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
-  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
-  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
-
-  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
-  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
-  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
-
-  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
-  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
-  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
-
-  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
-  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
-  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+//  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+//  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+//  deck->addCardToDeck(new Card(CardType::CT_Airlift, &gameEngine));
+//
+//  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+//  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+//  deck->addCardToDeck(new Card(CardType::CT_Diplomacy, &gameEngine));
+//
+//  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+//  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+//  deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
+//
+//  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+//  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
+//  deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
 
 
   // load a map before game starts
@@ -78,40 +78,40 @@ void testGameLoop(){
 
   // manually add cards to player
   player1->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
-  player1->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
-  player1->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
-  player1->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
-  player1->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+//  player1->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+//  player1->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+//  player1->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+//  player1->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
 
   player2->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
-  player2->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
-  player2->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
-  player2->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
-  player2->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+//  player2->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+//  player2->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+//  player2->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+//  player2->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
 
   player3->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
-  player3->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
-  player3->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
-  player3->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
-  player3->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+//  player3->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+//  player3->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+//  player3->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+//  player3->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
 
   player4->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
-  player4->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
-  player4->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
-  player4->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
-  player4->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+//  player4->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+//  player4->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+//  player4->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+//  player4->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
 
   player5->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
-  player5->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
-  player5->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
-  player5->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
-  player5->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+//  player5->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+//  player5->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+//  player5->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+//  player5->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
 
   player6->getHand()->addToHand(new Card(CardType::CT_Reinforcement, &gameEngine));
-  player6->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
-  player6->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
-  player6->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
-  player6->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
+//  player6->getHand()->addToHand(new Card(CardType::CT_Blockade, &gameEngine));
+//  player6->getHand()->addToHand(new Card(CardType::CT_Bomb, &gameEngine));
+//  player6->getHand()->addToHand(new Card(CardType::CT_Diplomacy, &gameEngine));
+//  player6->getHand()->addToHand(new Card(CardType::CT_Airlift, &gameEngine));
 
   gameEngine.mainGameLoop();
 }

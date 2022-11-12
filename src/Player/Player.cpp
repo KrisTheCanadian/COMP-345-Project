@@ -134,7 +134,7 @@ void Player::issueOrder() {
       // get random neighbour
       auto target = adj->at(randomIndexAdj);
 
-      return orders->add(new Advance(t, target, this, t->getArmies() / 2));;
+      return orders->add(new Advance(t, target, this, t->getArmies() / 2));
     }
 
     // getting a territory from the priority list

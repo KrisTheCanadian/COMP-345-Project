@@ -428,7 +428,7 @@ void GameEngine::mainGameLoop() {
     executeOrdersPhase();
     removePlayersWithNoTerritories();
     round++;
-    if(round % 10 == 0){
+    if(round % 500 == 0){
       cout << "-----------------------------------------------------------------------" << endl;
       cout << "Entering Round: " << round << endl;
       cout << "-----------------------------------------------------------------------" << endl;
