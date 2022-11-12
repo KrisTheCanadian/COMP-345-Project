@@ -50,7 +50,7 @@ void testCommandProcessor(int argc, char* argv[]) {
         exit(0);
       }
 
-      gameEngine->getFlir()->setFile(inputCommandsRaw->at(3));
+      gameEngine->getFlir()->setFile(inputCommandsRaw->at(2));
 
       // Adapter functionality
       adapter.commandLineToFile(gameEngine->getFlir());
