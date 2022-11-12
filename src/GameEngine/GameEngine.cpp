@@ -45,7 +45,7 @@ void GameEngine::preStartupPhase() {
                 startupPhase();
             }
             catch(std::runtime_error err){
-                cout<< "Invalid file name or file does not exist!"<<endl;
+                cout<< err.what() <<endl;
                 continue;
             }
         }
@@ -71,49 +71,6 @@ void GameEngine::startupPhase() {
             continue;
         }
 
-        if(strCommand.find("loadmap") != string::npos){
-            size_t pos = strCommand.find(' ');
-            std::string mapName = "res/" + MapLoader::trim(strCommand.substr(pos));
-            try{
-                loadMap(mapName);
-            }
-            catch(std::runtime_error err){
-                cout<< err.what()<< endl << "Please enter a valid map name!"<<endl;
-                continue;
-            }
-            cout<<"Map successfully loaded!"<<endl;
-        }
-        else if(strCommand == "validatemap"){
-            try{
-                validateMap();
-            }
-            catch(std::runtime_error err){
-                cout<< "Can't validate map before loading map, please load a map first."<<endl;
-                setCurrentState(GE_Start);
-                continue;
-            }
-            cout<< "Map successfully validated!" << endl;
-        }
-        else if(strCommand.find("addplayer")!= string::npos){
-            if(getCurrentState() < GE_Map_Loaded){
-                cout <<"Please load and validate a map first!" << endl;
-                continue;
-            }
-            if(players.size() == 6){
-                cout << "Maximum number of players(6) reached! Game is ready to be started." << endl;
-                setCurrentState(GE_Players_Added);
-            }
-            size_t pos = strCommand.find(' ');
-            std::string playerName = strCommand.substr(pos);
-            auto p = new Player(this, new Hand(), playerName);
-            cout<< "Player " << p->getName() << " was successfully added!"<<endl;
-
-            if(players.size() < 2){
-                cout << "Please add at least one more player! Minimum number of players required is two(2)." << endl;
-                continue;
-            }
-            setCurrentState(GE_Players_Added);
-        }
         else if(strCommand == "gamestart"){
             distributeTerritories();
             cout<< "Territories distributed."<<endl;
@@ -136,6 +93,19 @@ void GameEngine::startupPhase() {
         }
     }while(strCommand != "quit" );
 }
+
+void GameEngine::validateMaxPlayers() {
+  if(players.size() == 6){
+    throw std::runtime_error("Maximum number of players(6) reached! Game is ready to be started.");
+  }
+}
+
+void GameEngine::validateMinPlayers() {
+  if(players.size() < 2){
+    throw std::runtime_error("Please add at least one more player! Minimum number of players required is two(2).");
+  }
+}
+
 void GameEngine::distributeTerritories(){
     std::vector<Territory*>* territories = map->getTerritories();
     int numPlayers = players.size();
@@ -276,15 +246,11 @@ GameEngine::GameEngine() {
 }
 
 void GameEngine::loadMap(const std::string& path) {
-  if(state >= GE_Map_Loaded && state != GE_Win){ throw runtime_error("Map is already loaded."); }
   MapLoader::load(path, this->map);
-  setCurrentState(GE_Map_Loaded);
 }
 
 bool GameEngine::validateMap() {
-  if(state != GE_Map_Loaded){ throw runtime_error("ASSERT: Cannot Validate Map Before Loading Map."); }
   if(map == nullptr){ throw runtime_error("ASSERT: Map is null."); }
-  setCurrentState(GE_Map_Validated);
   return map->validate();
 }
 
@@ -298,7 +264,6 @@ void GameEngine::gameStart() {
     try{
       loadMap(mapPath);
     } catch (const runtime_error& error){
-      std::cout << "Error: " << error.what() << endl;
       std::cout << "Please Try Again." << error.what() << endl;
     }
 
