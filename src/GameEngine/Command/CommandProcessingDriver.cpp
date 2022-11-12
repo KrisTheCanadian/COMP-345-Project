@@ -18,13 +18,17 @@ void testCommandProcessor(int argc, char* argv[]) {
 
     // get raw command line inputs
     auto inputCommandsRaw = cpr.getRawCommands();
-    if(inputCommandsRaw->empty()){
+
+    // argv[0] program name
+    // argv[1] decision -file or -console
+    // argv[2] - file name
+    if(inputCommandsRaw->size() < 2){
       std::cout << "You must choose between -console or -file <filename>" << endl;
       exit(0);
     }
 
     // Command line
-    if (inputCommandsRaw->at(0) == "-console"){
+    if (inputCommandsRaw->at(1) == "-console"){
         do {
             cpr.getCommand();
             cpr.printCommandCollection(cpr.getCommandCollection());
@@ -38,15 +42,15 @@ void testCommandProcessor(int argc, char* argv[]) {
 
 
     // File
-    } else if (inputCommandsRaw->at(0) == "-file"){
+    } else if (inputCommandsRaw->at(1) == "-file"){
 
       // check for file name
-      if(inputCommandsRaw->size() < 2) {
+      if(inputCommandsRaw->size() < 3) {
         std::cout << "You must give a file as an argument" << std::endl;
         exit(0);
       }
 
-      gameEngine->getFlir()->setFile(inputCommandsRaw->at(0));
+      gameEngine->getFlir()->setFile(inputCommandsRaw->at(3));
 
       // Adapter functionality
       adapter.commandLineToFile(gameEngine->getFlir());
