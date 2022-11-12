@@ -6,8 +6,11 @@ using namespace std;
 regex regexRuleLoadMap("loadmap .+.map$");
 regex regexRulePlayerAdd("addplayer .+");
 
-CommandProcessor::CommandProcessor(GameEngine* game) :game(game){
-    commandCollection = {};
+CommandProcessor::CommandProcessor(GameEngine* game, int argc, char** argv) : game(game) {
+  commandCollection = {};
+  // add all program arguments to a raw string
+  for(int i = 0; i < argc; i++){ rawCommands.emplace_back(argv[i]); }
+  Subject::attach((ILogObserver*)game->getLogObserver());
 }
 
 CommandProcessor::CommandProcessor(const CommandProcessor &c) : Subject(c) {
@@ -15,22 +18,23 @@ CommandProcessor::CommandProcessor(const CommandProcessor &c) : Subject(c) {
     for(auto i : c.commandCollection){
         commandCollection.push_back(new Command(*i));
     }
+    this->rawCommands = c.rawCommands;
     this->game = c.game;
+    Subject::attach((ILogObserver*)game->getLogObserver());
 }
 
 Command* CommandProcessor::getCommand(){
-    string userInput =  readCommand() ;
+    string userInput = readCommand() ;
     Command* currentCommand = validate(userInput);
     saveCommand(currentCommand);
     return currentCommand;
 }
 
-
 string CommandProcessor::readCommand(){
     string userInput;
-    cout << "Please enter a command: " << endl;
+    cout << "Please enter a command: ";
     getline(cin, userInput);
-    cout << endl;
+    std::cout << std::endl;
     return userInput;
 }
 
@@ -45,51 +49,121 @@ int CommandProcessor::getCurrentState(){
 
 Command* CommandProcessor::validate(const string& _userInput){
 
-    auto currentCommandObj = new Command(_userInput);
+    auto currentCommandObj = new Command(_userInput, game);
     currentCommandObj->attach((ILogObserver*)game->getLogObserver());
     GameEngineState current_game_state = game->getCurrentState();
+    std::string strCommand = currentCommandObj->getCommand();
 
     switch(current_game_state){
         case GE_Start:
             if (std::regex_match(_userInput, regexRuleLoadMap)){
-                game->setCurrentState(GE_Map_Loaded);
-                currentCommandObj->saveEffect("Map successfully loaded");
-                return currentCommandObj;
-            };
+              size_t pos = strCommand.find(' ');
+              std::string mapName = "res/" + MapLoader::trim(strCommand.substr(pos));
+              try {
+                game->loadMap(mapName);
+              }
+              catch(std::runtime_error& err){
+                cout<< err.what() << endl;
+                break;
+              }
+              game->setCurrentState(GE_Map_Loaded);
+              currentCommandObj->saveEffect("Map successfully loaded");
+              cout << currentCommandObj->getEffect() << endl;
+              return currentCommandObj;
+            }
             break;
 
         case GE_Map_Loaded:
             if (_userInput == "validatemap"){
-                game->setCurrentState(GE_Map_Validated);
-                currentCommandObj->saveEffect("Map successfully validated");
-                return currentCommandObj;
-            };
-            if (std::regex_match(_userInput, regexRuleLoadMap)){
-                current_game_state = GE_Map_Loaded;
-                currentCommandObj->saveEffect("Map successfully loaded");
-                return currentCommandObj;
+
+              try{
+                game->validateMap();
+              }
+              catch(std::runtime_error& err){
+                cout<< err.what() << endl;
+                game->setCurrentState(GE_Start);
+                break;
+              }
+
+              game->setCurrentState(GE_Map_Validated);
+              currentCommandObj->saveEffect("Map successfully validated");
+              cout << currentCommandObj->getEffect() << endl;
+              return currentCommandObj;
+            }
+            else if (std::regex_match(_userInput, regexRuleLoadMap)){
+                cout << "Map already loaded" << endl;
             }
             break;
 
         case GE_Map_Validated:
             if (std::regex_match(_userInput, regexRulePlayerAdd)){
+
+                size_t pos = strCommand.find(' ');
+                std::string playerName = strCommand.substr(pos);
+                new Player(game, new Hand(), playerName);
+                currentCommandObj->saveEffect("Player " + playerName + " has been added successfully");
                 game->setCurrentState(GE_Players_Added);
-                currentCommandObj->saveEffect("Player successfully added");
+                cout << currentCommandObj->getEffect() << endl;
                 return currentCommandObj;
-            };
+            }
             break;
 
         case GE_Players_Added:
             if (std::regex_match(_userInput, regexRulePlayerAdd)){
-                game->setCurrentState(GE_Players_Added);
-                currentCommandObj->saveEffect("Player successfully added");
-                return currentCommandObj;
-            };
-            if(_userInput == "gamestart"){
-                game->setCurrentState(GE_Reinforcement);
-                currentCommandObj->saveEffect("Game successfully started");
-                return currentCommandObj;
-            };
+
+              try {
+                game->validateMaxPlayers();
+              }
+              catch(std::runtime_error& err){
+                cout << err.what() << endl;
+                break;
+              }
+
+              size_t pos = strCommand.find(' ');
+              std::string playerName = strCommand.substr(pos);
+              new Player(game, new Hand(), playerName);
+              currentCommandObj->saveEffect("Player " + playerName + " has been added successfully");
+              cout << currentCommandObj->getEffect() << endl;
+              return currentCommandObj;
+            }
+            else if(_userInput == "gamestart"){
+
+              // Check for minimum 2 players before starting
+              try {
+                game->validateMinPlayers();
+              }
+              catch(std::runtime_error& err){
+                cout << err.what() << endl;
+                break;
+              }
+
+              game->distributeTerritories();
+              cout<< "Territories distributed."<<endl;
+
+              game->playerOrder();
+              cout<< "Order of play of players determined."<<endl;
+
+              // initialize deck
+              game->getDeck()->create_deck();
+
+              try{
+                for(Player* player : *game->getPlayers()){
+                  game->setCurrentPlayer(player);
+                  Hand &hand = *player->getHand();
+                  game->getDeck()->draw(hand);
+                  game->getDeck()->draw(hand);
+                }
+              }
+              catch(std::runtime_error& err){
+                cout << err.what() <<endl;
+                break;
+              }
+
+              game->setCurrentState(GE_Reinforcement);
+              currentCommandObj->saveEffect("Game successfully started");
+              cout << currentCommandObj->getEffect() << endl;
+              return currentCommandObj;
+            }
             break;
 
         case GE_Win:
@@ -97,17 +171,17 @@ Command* CommandProcessor::validate(const string& _userInput){
                 game->setCurrentState(GE_Start);
                 currentCommandObj->saveEffect("Game successfully restarted");
                 return currentCommandObj;
-            };
+            }
             if(_userInput == "quit"){
                 cout << "Quit";
-            };
+            }
             break;
         case GE_Reinforcement:
           throw std::runtime_error("CommandProcessor::GE_Reinforcement Not Implemented Yet");
         case GE_Issue_Orders:
           throw std::runtime_error("CommandProcessor::GE_Issue_Orders Not Implemented Yet");
         case GE_Execute_Orders:
-          throw std::runtime_error("CommandProcessor::GE_Issue_Orders Not Implemented Yet");
+          throw std::runtime_error("CommandProcessor::GE_Execute_Orders Not Implemented Yet");
     }
 
     currentCommandObj->saveEffect("Invalid Command");
@@ -161,7 +235,7 @@ CommandProcessor& CommandProcessor::operator=(const CommandProcessor &other) {
   }
 
   this->commandCollection = other.commandCollection;
-
+  Subject::attach((ILogObserver*)game->getLogObserver());
   return *this;
 }
 
@@ -172,4 +246,12 @@ std::string CommandProcessor::stringToLog() {
   ss << commandCollection.back()->getEffect();
   ss << "\"";
   return ss.str();
+}
+std::vector<std::string> *CommandProcessor::getRawCommands() {
+  return &rawCommands;
+}
+CommandProcessor::~CommandProcessor() {
+  if(game){
+    Subject::detach((ILogObserver* )game->getLogObserver());
+  }
 }

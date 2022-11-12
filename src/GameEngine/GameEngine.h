@@ -34,9 +34,8 @@ private:
   GameEngineState state = GE_Start;
 
   // Players
-  unsigned int playerTurn = 0;
   std::string fileName;
-  Player* currentPlayerTurn;
+  Player* currentPlayerTurn = nullptr;
   std::vector<Player*> players;
 
   std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
@@ -57,12 +56,11 @@ private:
 
 
 public:
-  bool isConsole;
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
-  GameEngine();
-  explicit GameEngine(GameEngineState state);
+  GameEngine(int argc, char** argv);
+  explicit GameEngine(GameEngineState state, int argc, char** argv);
 
   // ----------------------------------------
   // Modifications + setters
@@ -85,11 +83,6 @@ public:
   bool validateMap();
 
   // ----------------------------------------
-  // gameStart
-  // ----------------------------------------
-  void gameStart();
-
-  // ----------------------------------------
   // convert current state to string
   // ----------------------------------------
   std::string stringToLog() override;
@@ -110,35 +103,6 @@ public:
   void executeOrdersPhase();
 
   // ----------------------------------------
-  // Main Game Loop
-  // ----------------------------------------
-  void mainGameLoop();
-
-  // ----------------------------------------
-  // add players to game (THIS IS DONE AUTOMATICALLY IN PLAYER CONSTRUCTOR)
-  // ----------------------------------------
-  void addPlayer(Player* player);
-
-private:
-  // ----------------------------------------
-  // initiates startup phase for commands read from the console
-  // ----------------------------------------
-  void startupPhase();
-  // check win state
-  Player* checkWinState();
-  void nextTurn(int& turn);
-
-  // ----------------------------------------
-  // prints all the commands available for the user to use
-  // ----------------------------------------
-  void printCommands();
-
-  // ----------------------------------------
-  // checks whether a command is valid or not
-  // ----------------------------------------
-  bool isValid(std::string strCommand);
-
-  // ----------------------------------------
   // distributes all territories evenly between the players
   // ----------------------------------------
   void distributeTerritories();
@@ -148,30 +112,66 @@ private:
   // ----------------------------------------
   void playerOrder();
 
-  // ----------------------------------------
-  // convert current state to string
-  // ----------------------------------------
-  std::string getCurrentStateToString();
+  Deck* getDeck();
 
+  Map* getMap();
+
+  void preStartupPhase();
+
+  void mainGameLoop();
+
+  LogObserver* getLogObserver();
+
+  Player* getCurrentPlayerTurn();
+
+  void validateMaxPlayers();
+
+  void validateMinPlayers();
+
+  void addPlayer(Player* player);
+
+  // getters
+  std::vector<Player*>* getPlayers();
+
+  GameEngineState getCurrentState();
+
+  CommandProcessor* getCommandProcessor();
+
+  FileLineReader* getFlir();
+
+  FileCommandProcessorAdapter* getFileCommandProcessorAdapter();
+
+  // setters
+  void setCurrentPlayer(Player* player);
+
+private:
+  // ----------------------------------------
+  // initiates startup phase for commands read from the console
+  // ----------------------------------------
+  void startupPhase();
+  // check win state
+  Player* checkWinState();
+  void nextTurn(int& turn);
   // ----------------------------------------
   // remove players with no territories
   // ----------------------------------------
   void removePlayersWithNoTerritories();
 
-public:
-  // ----------------------------------------
-  // redirects to the appropriate startup method
-  // ----------------------------------------
-  void preStartupPhase();
 
-  // getters
-  std::vector<Player*>* getPlayers();
-  Player* getCurrentPlayerTurn();
-  Deck* getDeck();
-  Map* getMap();
-  GameEngineState getCurrentState();
-  // setters
-  void setCurrentPlayer(Player* player);
-  LogObserver* getLogObserver();
-  CommandProcessor* getCommandProcessor();
+private:
+    // ----------------------------------------
+    // prints all the commands available for the user to use
+    // ----------------------------------------
+    void printCommands();
+
+    // ----------------------------------------
+    // checks whether a command is valid or not
+    // ----------------------------------------
+    static bool isValid(const std::string& strCommand);
+
+    // ----------------------------------------
+    // convert current state to string
+    // ----------------------------------------
+    std::string getCurrentStateToString();
+
 };

@@ -4,7 +4,11 @@
 
 // Logging Order and OrderList
 TEST(LoggerTestSuite, ExecuteAndAddOrder){
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   gameEngine.loadMap("res/TestMap1_valid.map");
 
   // add cards to the gameEngine deck
@@ -26,20 +30,17 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
 
   gameEngine.reinforcementPhase();
 
-  auto observer = gameEngine.getLogObserver();
   std::string output;
   std::fstream file;
   file.open("gamelog.txt", std::ios::in | std::ios::out | std::ios::trunc);
 
   // create a scenario for the bomb
-  // Create order and attach observer
+  // Create order
   auto order = player1->decideCardOrderBomb();
-  ((Subject*)order)->attach((ILogObserver*)observer);
   order->execute();
 
-  // Get orderList and attach observer
+  // Get orderList
   auto orderList = player1->getOrdersListObject();
-  ((Subject*)orderList)->attach((ILogObserver*)observer);
   orderList->add(order);
 
 
@@ -59,9 +60,11 @@ EXPECT_TRUE(output == "ORDER: Order Executed -> Bomb order.ORDER LIST: Order Lis
 
 // Logging GameState
 TEST(LoggerTestSuite, GameStateChange){
+    // mocking argc and argv
+    int argc = 1;
+    char* argv[] = {(char*)"-console"};
 
-
-    auto gameEngine = new GameEngine;
+    auto gameEngine = new GameEngine(argc, argv);
     std::string output;
     std::fstream file;
     file.open("gamelog.txt", std::ios::in | std::ios::out | std::ios::trunc);

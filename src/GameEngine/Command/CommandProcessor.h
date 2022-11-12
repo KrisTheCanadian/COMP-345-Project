@@ -7,44 +7,50 @@
 #include "Logger/LogObserver.h"
 
 class Command;
-class GameEngine;
 
 class CommandProcessor: public Subject, ILoggable {
 
-  protected:
-    virtual std::string readCommand();
-    void saveCommand(Command* c);
+private:
+  //Store all user commands
+  std::vector<Command*> commandCollection;
 
-  private:
-    //Store all user commands
-    std::vector<Command*> commandCollection;
+  // Object Owner
+  GameEngine* game;
 
-    // Object Owner
-    GameEngine* game;
+  // command line arguments
+  std::vector<std::string> rawCommands;
 
-    //validate a user command
-    Command *validate(const std::string &_userInput);
+private:
 
-  public:
+  virtual std::string readCommand();
+  void saveCommand(Command* c);
+  Command* validate(const std::string& _userInput);
 
-    //Constructors
-    explicit CommandProcessor(GameEngine*);
-    CommandProcessor(const CommandProcessor &c);
+public:
 
-    Command* getCommand();
-    int getCurrentState();
 
-    //Functions for CommandProcessorDriver.cpp
-    void printCommandCollection(const std::vector<Command *> &collection);
-    std::vector<Command*> getCommandCollection();
-    std::string StateToString();
+  //Constructors
+  explicit CommandProcessor(GameEngine*, int argc,char* argv[]);
+  CommandProcessor(const CommandProcessor &c);
 
-    //Operator Overloading
-    friend std::ostream & operator << (std::ostream &out, const CommandProcessor &c);
-    CommandProcessor& operator=(const CommandProcessor& other);
+  ~CommandProcessor() override;
 
-    // Logging
-    std::string stringToLog() override;
+  //getters and setters
+  Command* getCommand();
+  int getCurrentState();
 
+  std::vector<std::string>* getRawCommands();
+
+  //Functions for CommandProcessorDriver.cpp
+  void printCommandCollection(const std::vector<Command *> &collection);
+  std::vector<Command*> getCommandCollection();
+  std::string StateToString();
+
+  //Operator Overloading
+  friend std::ostream & operator << (std::ostream &out, const CommandProcessor &c);
+  CommandProcessor& operator=(const CommandProcessor& other);
+
+  // Logging
+  std::string stringToLog() override;
 
 };

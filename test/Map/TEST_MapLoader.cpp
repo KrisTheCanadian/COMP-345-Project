@@ -5,8 +5,12 @@
 
 TEST(MapLoaderTestSuite, TestMap1LoadBasic)
 {
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
   // arrange
-  GameEngine gameEngine = GameEngine();
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto map = gameEngine.getMap();
   // act
 
@@ -41,8 +45,12 @@ TEST(MapLoaderTestSuite, TestMap1LoadBasic)
 
 TEST(MapLoaderTestSuite, TestMap1LoadTerritoriesCorrectly)
 {
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
   // arrange
-  GameEngine gameEngine = GameEngine();
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto map = gameEngine.getMap();
 
   // act
@@ -86,8 +94,12 @@ TEST(MapLoaderTestSuite, TestMap1LoadTerritoriesCorrectly)
 }
 
 TEST(MapLoaderTestSuite, TestMap1LoadContinentsCorrectly){
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
   // arrange
-  GameEngine gameEngine = GameEngine();
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto map = gameEngine.getMap();
   // act
   MapLoader::load("../res/TestMap1_valid.map", map);
@@ -110,8 +122,12 @@ TEST(MapLoaderTestSuite, TestMap1LoadContinentsCorrectly){
 }
 
 TEST(MaploaderTestSuite, TestMap1LoadValid){
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
   // arrange
-  GameEngine gameEngine = GameEngine();
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto map = gameEngine.getMap();
 
   MapLoader::load("../res/TestMap1_valid.map", map);
@@ -123,7 +139,11 @@ TEST(MaploaderTestSuite, TestMap1LoadValid){
 
 TEST(MaploaderTestSuite, TestMap4LoadValid){
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto map = gameEngine.getMap();
   MapLoader::load("../res/TestMap4_valid.map", map);
   // act
@@ -134,7 +154,11 @@ TEST(MaploaderTestSuite, TestMap4LoadValid){
 
 TEST(MaploaderTestSuite, TestMap2LoadInvalid) {
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto map = gameEngine.getMap();
   MapLoader::load("../res/TestMap2_invalid.map", map);
   // act
@@ -145,7 +169,11 @@ TEST(MaploaderTestSuite, TestMap2LoadInvalid) {
 
 TEST(MaploaderTestSuite, TestMap3LoadInvalid){
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto map = gameEngine.getMap();
   MapLoader::load("../res/TestMap3_invalid.map", map);
   // act
@@ -156,7 +184,11 @@ TEST(MaploaderTestSuite, TestMap3LoadInvalid){
 
 TEST(MaploaderTestSuite, TestMap5LoadInvalidFormat){
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto map = gameEngine.getMap();
   MapLoader::load("../res/TestMap5_invalid_format.map", map);
   // act

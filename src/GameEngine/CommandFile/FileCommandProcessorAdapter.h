@@ -6,15 +6,15 @@
 class FileCommandProcessorAdapter : public CommandProcessor {
     
     private:
-        FileLineReader *flr;
+        FileLineReader *flr = nullptr;
     public:
         void commandLineToFile(FileLineReader* _flr);
-        std::string readCommand();
-
-        FileCommandProcessorAdapter(GameEngine* game);
+        std::string readCommand() override;
+        ~FileCommandProcessorAdapter() override = default;
+        FileCommandProcessorAdapter(GameEngine* game, int argc, char** argv);
 
         // Copy constructor
-        FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpA, GameEngine* game);
+        FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpA) = default;
         
         //Operator Overloading
         friend std::ostream & operator << (std::ostream &out, const FileCommandProcessorAdapter &ffcpAr);

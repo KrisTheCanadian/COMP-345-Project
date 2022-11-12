@@ -3,8 +3,8 @@
 
 using namespace std;
 
-void testCards() {
-  auto gameEngine = new GameEngine();
+void testCards(int argc, char** argv) {
+  auto gameEngine = new GameEngine(argc, argv);
   auto player = new Player(gameEngine, new Hand(), "name");
   Deck* deck = gameEngine->getDeck();
 
@@ -47,6 +47,7 @@ void testCards() {
   cout << "-> Number of Cards in Player's hand: " << player_hand->getHandCards()->size() << endl;
 
   cout << "-> Player Plays a card" << endl;
+  gameEngine->setCurrentPlayer(player);
   // play most left hand size card
   Card* card_to_play = player_hand->getHandCards()->at(0);
   card_to_play->play();

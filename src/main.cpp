@@ -8,16 +8,13 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char** argv)
 {
-  testGameLoop();
-  testCommandProcessor();
-  testLoadMaps();
-  testGameStates();
+  testGameLoop(argc, argv);
+  testCommandProcessor(argc, argv);
   testOrderExecution();
-  testCards();
-  testPlayers();
-  testLoggingObserver();
+  testCards(argc, argv);
+  testLoggingObserver(argc, argv);
   return 0;
 }
 

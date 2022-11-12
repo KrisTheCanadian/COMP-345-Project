@@ -1,30 +1,37 @@
 #pragma once
+#include "GameEngine/GameEngine.h"
+#include "Logger/LogObserver.h"
 #include <iostream>
 #include <sstream>
-#include "Logger/LogObserver.h"
+
+class GameEngine;
+class ILogObserver;
 
 class Command: public Subject, ILoggable{
 
-  private:
-    std::string command;
-    std::string effect;
+private:
+  std::string command;
+  std::string effect;
 
-  public:
+  GameEngine* game = nullptr;
 
-    //Constructors
-    Command(std::string _command);
-    Command(const Command &c);
+public:
 
-    //Getters & Setters
-    void saveEffect(std::string effect);
-    std::string getEffect();
-    std::string getCommand();
-    void setCommand(std::string _command);
+  //Constructors
+  explicit Command(std::string _command, GameEngine* gameEngine);
+  Command(const Command &c);
+  ~Command() override;
 
-    //Operator Overloading
-    friend std::ostream & operator << (std::ostream &out, const Command &c);
-    Command& operator=(const Command& other);
+  //Getters & Setters
+  void saveEffect(std::string effect);
+  std::string getEffect();
+  std::string getCommand();
+  void setCommand(std::string _command);
 
-    // Logging
-    std::string stringToLog() override;
+  //Operator Overloading
+  friend std::ostream & operator << (std::ostream &out, const Command &c);
+  Command& operator=(const Command& other);
+
+  // Logging
+  std::string stringToLog() override;
 };

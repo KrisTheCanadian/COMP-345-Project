@@ -293,8 +293,7 @@ Territory& Territory::operator=(const Territory &other) {
 
 std::ostream &operator<<(std::ostream &stream, const Territory &other) {
   stream << "Territory Name: " << other.name << '\n'
-         << "Territory Coordinates: " << '(' << other.x << ", " << other.y << ')' << '\n'
-         << "Territory Continent: " << other.continent << '\n';
+         << "Territory Coordinates: " << '(' << other.x << ", " << other.y << ')' << '\n';
   return stream ;
 }
 

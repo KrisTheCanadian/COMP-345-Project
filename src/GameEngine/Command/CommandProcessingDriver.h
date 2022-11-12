@@ -5,4 +5,4 @@
 #include <iostream>
 
 // test for driver
-void testCommandProcessor();
+void testCommandProcessor(int argc, char** argv);

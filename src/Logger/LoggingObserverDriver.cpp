@@ -1,19 +1,19 @@
 #include "LoggingObserverDriver.h"
-#include "Orders/Orders.h"
-#include "GameEngine/Command/CommandProcessor.h"
 
 
-void testLoggingObserver(){
+void testLoggingObserver(int argc, char** argv){
 
-  auto gameEngine = new GameEngine;
+  auto gameEngine = new GameEngine(argc, argv);
   auto player1 = new Player(gameEngine, new Hand(), "Player1");
   auto player2 = new Player(gameEngine, new Hand(), "Player2");
+
+  gameEngine->loadMap("../res/TestMap1_valid.map");
 
   player2->addTerritory(*gameEngine->getMap()->getTerritories()->at(0));
 
   auto observer = gameEngine->getLogObserver();
   // Create order and attach observer
-  auto order = new Bomb(player2->getTerritories()->at(0), player1);
+  auto order = new Bomb(gameEngine, player2->getTerritories()->at(0), player1);
   ((Subject*)order)->attach((ILogObserver*)observer);
 
   // Get orderList and attach observer
@@ -21,7 +21,7 @@ void testLoggingObserver(){
   ((Subject*)orderList)->attach((ILogObserver*)observer);
 
   // Create commandProcessor and attach observer
-  auto processor = new CommandProcessor(gameEngine);
+  auto processor = new CommandProcessor(gameEngine, argc, argv);
   ((Subject*)processor)->attach((ILogObserver*)observer);
 
   // TEST GAME STATE CHANGE

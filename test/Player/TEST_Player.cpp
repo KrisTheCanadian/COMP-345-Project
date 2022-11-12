@@ -6,7 +6,11 @@
 TEST(PlayerTestSuite, PlayerAddTerritories)
 {
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto p = new Player(&gameEngine, new Hand(), "Bob");
 
   gameEngine.loadMap("res/TestMap1_valid.map");
@@ -31,7 +35,11 @@ TEST(PlayerTestSuite, PlayerAddTerritories)
 TEST(PlayerTestSuite, PlayerRemoveTerritories)
 {
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto p = new Player(&gameEngine, new Hand(), "Bob");
 
   gameEngine.loadMap("res/TestMap1_valid.map");
@@ -61,7 +69,11 @@ TEST(PlayerTestSuite, PlayerRemoveTerritories)
 TEST(PlayerTestSuite, PlayerAttacknDefendTerritories)
 {
   // arrange
-  GameEngine gameEngine = GameEngine();
+  // mocking argc and argv
+  int argc = 1;
+  char* argv[] = {(char*)"-console"};
+
+  GameEngine gameEngine = GameEngine(argc, argv);
   auto p1 = new Player(&gameEngine, new Hand(), "Bob");
   auto p2 = new Player(&gameEngine, new Hand(), "Joe");
 

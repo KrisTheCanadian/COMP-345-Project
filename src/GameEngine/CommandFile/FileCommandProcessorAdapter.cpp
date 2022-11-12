@@ -9,11 +9,7 @@ std::string FileCommandProcessorAdapter::readCommand(){
     return flr->readLineFromFile();
 }
 
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(GameEngine* game): CommandProcessor(game){}
-
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(const FileCommandProcessorAdapter &fcpA, GameEngine* game): CommandProcessor(game){
-    flr = fcpA.flr;
-}
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(GameEngine* game, int argc, char** argv): CommandProcessor(game, argc, argv){}
 
 std::ostream & operator << (std::ostream &out, const FileCommandProcessorAdapter &fcpA){
     out << "Adapter connected to: " << fcpA.flr << std::endl;

@@ -25,13 +25,18 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
 /**
  * Destructor
  */
-OrdersList::~OrdersList(){ for(auto order: orders){ delete order; } }
+OrdersList::~OrdersList(){
+  for(auto order: orders){ delete order; }
+  if(game){Subject::detach((ILogObserver* )game->getLogObserver());}
+}
 
 // Copy constructor to make deep copy of the order list
 OrdersList::OrdersList(const OrdersList &oldList)
  : Subject(oldList) {
   unsigned listLength = oldList.orders.size();
   orders = std::vector<Order *>(listLength);
+  game = oldList.game;
+  Subject::attach((ILogObserver*)game->getLogObserver());
   // cloning the same object into another memory slot
   for (unsigned o = 0; o < listLength; o++) { orders[o] = oldList.orders[o]->clone(); }
 }
@@ -197,6 +202,9 @@ std::string OrdersList::stringToLog() {
   ss << orderType;
   return ss.str();
 }
+OrdersList::OrdersList(GameEngine *gameEngine) : game(gameEngine) {
+  Subject::attach((ILogObserver*)game->getLogObserver());
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -205,7 +213,9 @@ std::string OrdersList::stringToLog() {
 //                                                Advance
 //
 // -----------------------------------------------------------------------------------------------------------------
-Advance::Advance(Territory* source, Territory* target, Player* currentPlayer, int amount) : source(source), target(target), currentPlayer(currentPlayer), amount(amount){}
+Advance::Advance(GameEngine* game, Territory* source, Territory* target, Player* currentPlayer, int amount) : source(source), target(target), currentPlayer(currentPlayer), amount(amount), game(game){
+  Subject::attach((ILogObserver*)game->getLogObserver());
+}
 
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "-> Advance order."; }
 
@@ -353,6 +363,9 @@ void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* p
     pTarget->setPlayer(nullptr);
   }
 }
+Advance::~Advance() {
+  if(game){ Subject::detach((ILogObserver* )game->getLogObserver()); }
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -363,7 +376,9 @@ void Advance::attackSimulation(Territory* pSource, Territory* pTarget, Player* p
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Airlift::Airlift(Territory* source, Territory* target, Player* currentPlayer, int amount) : source(source), target(target), currentPlayer(currentPlayer), amount(amount){}
+Airlift::Airlift(GameEngine* game, Territory* source, Territory* target, Player* currentPlayer, int amount) : source(source), target(target), currentPlayer(currentPlayer), amount(amount), game(game){
+  Subject::attach((ILogObserver*)game->getLogObserver());
+}
 
 const std::string Airlift::label = "Airlift";
 
@@ -419,8 +434,9 @@ std::string Airlift::stringToLog() {
   ss << *this;
   return ss.str();
 }
-
-
+Airlift::~Airlift() {
+  if(game){ Subject::detach((ILogObserver* )game->getLogObserver()); }
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -431,7 +447,9 @@ std::string Airlift::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Blockade::Blockade(Territory* target, Player* currentPlayer) : target(target), currentPlayer(currentPlayer){}
+Blockade::Blockade(GameEngine* game, Territory* target, Player* currentPlayer) : target(target), currentPlayer(currentPlayer), game(game){
+  Subject::attach((ILogObserver*)game->getLogObserver());
+}
 
 const std::string Blockade::label = "Blockade";
 
@@ -474,10 +492,9 @@ std::string Blockade::stringToLog() {
   ss << *this;
   return ss.str();
 }
-
-
-
-
+Blockade::~Blockade() {
+  if(game){Subject::detach((ILogObserver* )game->getLogObserver());}
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -488,7 +505,9 @@ std::string Blockade::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Bomb::Bomb(Territory* target, Player* currentPlayer) : target(target), currentPlayer(currentPlayer){}
+Bomb::Bomb(GameEngine* game, Territory* target, Player* currentPlayer) : target(target), currentPlayer(currentPlayer), game(game){
+  Subject::attach((ILogObserver*)game->getLogObserver());
+}
 
 const std::string Bomb::label = "Bomb";
 
@@ -540,10 +559,11 @@ std::string Bomb::stringToLog() {
   ss << *this;
   return ss.str();
 }
-
-
-
-
+Bomb::~Bomb() {
+  if(game){
+    Subject::detach((ILogObserver* )game->getLogObserver());
+  }
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -553,7 +573,9 @@ std::string Bomb::stringToLog() {
 //
 // -----------------------------------------------------------------------------------------------------------------
 
-Deploy::Deploy(Territory* target, Player* currentPlayer, int amount) : target(target), currentPlayer(currentPlayer), amount(amount){}
+Deploy::Deploy(GameEngine* game, Territory* target, Player* currentPlayer, int amount) : target(target), currentPlayer(currentPlayer), amount(amount), game(game){
+  Subject::attach((ILogObserver*)game->getLogObserver());
+}
 
 const std::string Deploy::label = "Deploy";
 
@@ -604,8 +626,9 @@ std::string Deploy::stringToLog() {
   ss << *this;
   return ss.str();
 }
-
-
+Deploy::~Deploy() {
+  if(game){ Subject::detach((ILogObserver* )game->getLogObserver()); }
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -616,7 +639,9 @@ std::string Deploy::stringToLog() {
 // -----------------------------------------------------------------------------------------------------------------
 
 
-Negotiate::Negotiate(Player* targetPlayer, Player* currentPlayer) : targetPlayer(targetPlayer), currentPlayer(currentPlayer){}
+Negotiate::Negotiate(GameEngine* game, Player* targetPlayer, Player* currentPlayer) : targetPlayer(targetPlayer), currentPlayer(currentPlayer), game(game){
+  Subject::attach((ILogObserver*)game->getLogObserver());
+}
 
 const std::string Negotiate::label = "Negotiate";
 
@@ -658,4 +683,7 @@ std::string Negotiate::stringToLog() {
   ss << "Order Executed ";
   ss << *this;
   return ss.str();
+}
+Negotiate::~Negotiate() {
+  if(game){ Subject::detach((ILogObserver* )game->getLogObserver()); }
 }
