@@ -434,7 +434,7 @@ void GameEngine::mainGameLoop() {
       cout << "-----------------------------------------------------------------------" << endl;
     }
   }
-  cout << "Congratulations" << winner->getName() << endl;
+  cout << "Congratulations " << winner->getName() << "!" << endl;
 }
 
 Player* GameEngine::checkWinState() {
