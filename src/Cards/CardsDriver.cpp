@@ -47,6 +47,7 @@ void testCards(int argc, char** argv) {
   cout << "-> Number of Cards in Player's hand: " << player_hand->getHandCards()->size() << endl;
 
   cout << "-> Player Plays a card" << endl;
+  gameEngine->setCurrentPlayer(player);
   // play most left hand size card
   Card* card_to_play = player_hand->getHandCards()->at(0);
   card_to_play->play();
