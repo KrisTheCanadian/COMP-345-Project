@@ -77,6 +77,7 @@ Command* CommandProcessor::validate(const string& _userInput){
               catch(std::runtime_error err){
                 cout<< err.what() << endl;
                 game->setCurrentState(GE_Start);
+                break;
               }
 
               game->setCurrentState(GE_Map_Validated);
@@ -122,6 +123,7 @@ Command* CommandProcessor::validate(const string& _userInput){
             }
             else if(_userInput == "gamestart"){
 
+              // Check for minimum 2 players before starting
               try {
                 game->validateMinPlayers();
               }
@@ -130,8 +132,27 @@ Command* CommandProcessor::validate(const string& _userInput){
                 break;
               }
 
+              game->distributeTerritories();
+              cout<< "Territories distributed."<<endl;
+
+              game->playerOrder();
+              cout<< "Order of play of players determined."<<endl;
+
+              try{
+                for(Player* player : *game->getPlayers()){
+                  Hand &hand = *player->getHand();
+                  game->getDeck()->draw(hand);
+                  game->getDeck()->draw(hand);
+                }
+              }
+              catch(std::runtime_error err){
+                cout << err.what() <<endl;
+                break;
+              }
+
               game->setCurrentState(GE_Reinforcement);
               currentCommandObj->saveEffect("Game successfully started");
+              cout << currentCommandObj->getEffect() << endl;
               return currentCommandObj;
             }
             break;

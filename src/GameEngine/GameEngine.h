@@ -110,35 +110,6 @@ public:
   void executeOrdersPhase();
 
   // ----------------------------------------
-  // Main Game Loop
-  // ----------------------------------------
-  void mainGameLoop();
-
-  // ----------------------------------------
-  // add players to game (THIS IS DONE AUTOMATICALLY IN PLAYER CONSTRUCTOR)
-  // ----------------------------------------
-  void addPlayer(Player* player);
-
-private:
-  // ----------------------------------------
-  // initiates startup phase for commands read from the console
-  // ----------------------------------------
-  void startupPhase();
-  // check win state
-  Player* checkWinState();
-  void nextTurn(int& turn);
-
-  // ----------------------------------------
-  // prints all the commands available for the user to use
-  // ----------------------------------------
-  void printCommands();
-
-  // ----------------------------------------
-  // checks whether a command is valid or not
-  // ----------------------------------------
-  bool isValid(std::string strCommand);
-
-  // ----------------------------------------
   // distributes all territories evenly between the players
   // ----------------------------------------
   void distributeTerritories();
@@ -148,22 +119,22 @@ private:
   // ----------------------------------------
   void playerOrder();
 
+private:
   // ----------------------------------------
-  // convert current state to string
+  // initiates startup phase for commands read from the console
   // ----------------------------------------
-  std::string getCurrentStateToString();
-
+  void startupPhase();
+  // check win state
+  Player* checkWinState();
+  void nextTurn(int& turn);
+  // ----------------------------------------
+  // distributes all territories evenly between the players
+  // ----------------------------------------
+  void distributeTerritories();
   // ----------------------------------------
   // remove players with no territories
   // ----------------------------------------
   void removePlayersWithNoTerritories();
-
-public:
-  // ----------------------------------------
-  // redirects to the appropriate startup method
-  // ----------------------------------------
-  void preStartupPhase();
-
   // getters
   std::vector<Player*>* getPlayers();
   Player* getCurrentPlayerTurn();
@@ -174,4 +145,26 @@ public:
   void setCurrentPlayer(Player* player);
   LogObserver* getLogObserver();
   CommandProcessor* getCommandProcessor();
+
+private:
+    // ----------------------------------------
+    // initiates startup phase for commands read from the console
+    // ----------------------------------------
+    void startupPhase();
+
+    // ----------------------------------------
+    // prints all the commands available for the user to use
+    // ----------------------------------------
+    void printCommands();
+
+    // ----------------------------------------
+    // checks whether a command is valid or not
+    // ----------------------------------------
+    bool isValid(const std::string strCommand);
+
+    // ----------------------------------------
+    // convert current state to string
+    // ----------------------------------------
+    std::string getCurrentStateToString();
+
 };

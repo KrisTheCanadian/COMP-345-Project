@@ -70,28 +70,7 @@ void GameEngine::startupPhase() {
             cout << "The command or its argument is invalid" << endl;
             continue;
         }
-
-        else if(strCommand == "gamestart"){
-            distributeTerritories();
-            cout<< "Territories distributed."<<endl;
-
-            playerOrder();
-            cout<< "Order of play of players determined."<<endl;
-
-            try{
-                for(Player* player : players){
-//                    player->setReinforcementPool(50);
-                    Hand &hand = *player->getHand();
-                    deck->draw(hand);
-                    deck->draw(hand);
-                }
-            }
-            catch(std::runtime_error err){
-                cout << err.what() <<endl;
-            }
-            //mainGameLoop();
-        }
-    }while(strCommand != "quit" );
+    } while(strCommand != "quit" );
 }
 
 void GameEngine::validateMaxPlayers() {
