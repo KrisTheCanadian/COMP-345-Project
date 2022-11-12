@@ -22,43 +22,6 @@ GameEngine::GameEngine(GameEngineState state, int argc, char** argv) {
   Subject::attach((ILogObserver*)logObserver);
 }
 
-void GameEngine::preStartupPhase() {
-    std::string result;
-    cout << "Welcome to the startup phase of the game!"<< endl;
-
-
-    while(true){
-        cout <<"Use \'-console\' if you want to input commands for the startup phase through the console." << endl
-             << "Use \'-file \' if you want to complete the startup phase using commands from a file." << endl;
-        cin >> result;
-        if(result.find("-console") != string::npos) {
-            printCommands();
-            startupPhase();
-        }
-        else if(result.find("-file") != string::npos ){
-            cout << "Please enter the name of the file you would like to use: " << endl;
-            cin >> result;
-            std::string filepath = "res/" + MapLoader::trim(result);
-            try{
-              if(!flr){ throw std::runtime_error("GameEngine::preStartupPhase::ASSERT flr is null");}
-              if(!adapter){ throw std::runtime_error("GameEngine::preStartupPhase::ASSERT adapter is null"); }
-                flr->setFile(filepath);
-                adapter->commandLineToFile(flr);
-                commandProcessor = adapter;
-                startupPhase();
-            }
-            catch(std::runtime_error& err){
-                cout<< err.what() <<endl;
-                continue;
-            }
-        }
-        else{
-            cout<< "Please enter a valid command: " <<endl;
-            continue;
-        }
-    }
-}
-
 void GameEngine::startupPhase() {
     Command* command;
     std::string strCommand;
