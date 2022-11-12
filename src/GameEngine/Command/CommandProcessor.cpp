@@ -29,7 +29,7 @@ string CommandProcessor::readCommand(){
     string userInput;
     cout << "Please enter a command: " << endl;
     getline(cin, userInput);
-    cout << endl;
+    cin.ignore(1,'\n');
     return userInput;
 }
 
