@@ -34,6 +34,7 @@ void Card::play() {
   if(order){orders->add(order);}
   else if (cardType != CardType::CT_Reinforcement) {
     cout << "Order was not decided " << currentPlayer->getName() << ". Skipping card..." << endl;
+    return;
   }
 
 

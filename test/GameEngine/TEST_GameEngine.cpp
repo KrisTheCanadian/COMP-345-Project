@@ -225,10 +225,6 @@ TEST(GameEngineTestSuite, GameEngineExecuteOrdersPhase)
   EXPECT_TRUE(player2->getOrdersListObject()->getList()->empty());
   EXPECT_TRUE(player3->getOrdersListObject()->getList()->empty());
 
-  EXPECT_EQ(player1->getHand()->getHandCards()->size(), 0);
-  EXPECT_EQ(player2->getHand()->getHandCards()->size(), 0);
-  EXPECT_EQ(player3->getHand()->getHandCards()->size(), 0);
-
   EXPECT_EQ(player1->getPhase(), "Execute Orders Phase");
   EXPECT_EQ(player2->getPhase(), "Execute Orders Phase");
   EXPECT_EQ(player3->getPhase(), "Execute Orders Phase");
