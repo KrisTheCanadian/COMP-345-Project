@@ -60,7 +60,7 @@ void testPlayers(){
 
   std::cout << "\n " << std::endl;
   std::cout << "Testing stream insertion overload " << std::endl;
-  std::cout << p << std::endl;
+  std::cout << *p << std::endl;
 
   std::cout << "\n " << std::endl;
   std::cout << "Testing player issueOrder Airlift" << std::endl;
