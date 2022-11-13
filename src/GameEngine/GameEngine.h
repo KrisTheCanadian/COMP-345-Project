@@ -88,6 +88,11 @@ public:
   std::string stringToLog() override;
 
   // ----------------------------------------
+  // initiates startup phase for commands read from the console
+  // ----------------------------------------
+  void startupPhase();
+
+  // ----------------------------------------
   // reinforcement phase
   // ----------------------------------------
   void reinforcementPhase();
@@ -116,8 +121,6 @@ public:
 
   Map* getMap();
 
-  void preStartupPhase();
-
   void mainGameLoop();
 
   LogObserver* getLogObserver();
@@ -145,10 +148,6 @@ public:
   void setCurrentPlayer(Player* player);
 
 private:
-  // ----------------------------------------
-  // initiates startup phase for commands read from the console
-  // ----------------------------------------
-  void startupPhase();
   // check win state
   Player* checkWinState();
   void nextTurn(int& turn);

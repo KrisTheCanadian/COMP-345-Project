@@ -1,9 +1,9 @@
 #include "GameEngineDriver.h"
 
-void printInvalidCommand(const std::string& command){
-  std::cout << "Incorrect Command: \"" << command << "\". Please input a correct command." << std::endl;
+void testStartupPhase(int argc, char** argv){
+  auto gameEngine = GameEngine(argc,argv);
+  gameEngine.startupPhase();
 }
-
 void testGameLoop(int argc, char** argv){
   // create a game engine
   auto gameEngine = GameEngine(argc, argv);

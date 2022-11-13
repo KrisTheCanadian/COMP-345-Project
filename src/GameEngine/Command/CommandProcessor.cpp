@@ -148,6 +148,7 @@ Command* CommandProcessor::validate(const string& _userInput){
 
               try{
                 for(Player* player : *game->getPlayers()){
+                  player->setReinforcementPool(50);
                   game->setCurrentPlayer(player);
                   Hand &hand = *player->getHand();
                   game->getDeck()->draw(hand);
