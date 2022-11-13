@@ -101,7 +101,7 @@ Command* CommandProcessor::validate(const string& _userInput){
                 size_t pos = strCommand.find(' ');
                 std::string playerName = strCommand.substr(pos);
                 new Player(game, new Hand(), playerName);
-                currentCommandObj->saveEffect("Player " + playerName + " has been added successfully");
+                currentCommandObj->saveEffect("Player" + playerName + " has been added successfully");
                 game->setCurrentState(GE_Players_Added);
                 cout << currentCommandObj->getEffect() << endl;
                 return currentCommandObj;
@@ -122,7 +122,7 @@ Command* CommandProcessor::validate(const string& _userInput){
               size_t pos = strCommand.find(' ');
               std::string playerName = strCommand.substr(pos);
               new Player(game, new Hand(), playerName);
-              currentCommandObj->saveEffect("Player " + playerName + " has been added successfully");
+              currentCommandObj->saveEffect("Player" + playerName + " has been added successfully");
               cout << currentCommandObj->getEffect() << endl;
               return currentCommandObj;
             }
@@ -163,6 +163,7 @@ Command* CommandProcessor::validate(const string& _userInput){
               game->setCurrentState(GE_Reinforcement);
               currentCommandObj->saveEffect("Game successfully started");
               cout << currentCommandObj->getEffect() << endl;
+              game->mainGameLoop();
               return currentCommandObj;
             }
             break;
@@ -171,10 +172,13 @@ Command* CommandProcessor::validate(const string& _userInput){
             if (_userInput == "replay"){
                 game->setCurrentState(GE_Start);
                 currentCommandObj->saveEffect("Game successfully restarted");
+                cout << currentCommandObj->getEffect() << "!\n" << endl;
+                game->startupPhase();
                 return currentCommandObj;
             }
-            if(_userInput == "quit"){
-                cout << "Quit";
+            else if(_userInput == "quit"){
+                cout << "Quitting game";
+                exit(0);
             }
             break;
         case GE_Reinforcement:

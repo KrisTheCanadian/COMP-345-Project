@@ -28,13 +28,14 @@ void GameEngine::startupPhase() {
     std::string effect;
 
     if(!commandProcessor){ throw std::runtime_error("GameEngine::startupPhase::ASSERT commandProcessor is null"); }
-
+    cout << "Welcome to the startup phase of the game!\n"<< endl;
+    printCommands();
     do{
         command = commandProcessor->getCommand();
         strCommand = command->getCommand();
         effect = command->getEffect();
 
-        if(!isValid(effect)){
+        if(!isValid(effect) && strCommand != "quit"){
             cout << "The command or its argument is invalid" << endl;
             continue;
         }
@@ -96,7 +97,7 @@ void GameEngine::printCommands() {
     for (const string& cmd: commands) {
         cout << cmd << " ";
     }
-    cout << endl;
+    cout << "\n" << endl;
 }
 
 std::string GameEngine::getCurrentStateToString() {
@@ -316,6 +317,7 @@ void GameEngine::mainGameLoop() {
     }
   }
   cout << "Congratulations " << winner->getName() << "!" << endl;
+  setCurrentState(GE_Win);
 }
 
 Player* GameEngine::checkWinState() {
