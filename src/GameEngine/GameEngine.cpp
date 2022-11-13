@@ -310,14 +310,11 @@ void GameEngine::mainGameLoop() {
     executeOrdersPhase();
     removePlayersWithNoTerritories();
     round++;
-    if(round % 500 == 0){
-      cout << "-----------------------------------------------------------------------" << endl;
-      cout << "Entering Round: " << round << endl;
-      cout << "-----------------------------------------------------------------------" << endl;
-    }
   }
   cout << "Congratulations " << winner->getName() << "!" << endl;
   setCurrentState(GE_Win);
+  // remove the players left
+  removeAllPlayers();
 }
 
 Player* GameEngine::checkWinState() {
@@ -369,4 +366,13 @@ FileLineReader* GameEngine::getFlir() {
 }
 FileCommandProcessorAdapter *GameEngine::getFileCommandProcessorAdapter() {
   return adapter;
+}
+
+void GameEngine::removeAllPlayers() {
+  for(auto& player: players){
+    delete player;
+  }
+
+  players = vector<Player*>();
+
 }

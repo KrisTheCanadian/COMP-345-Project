@@ -133,6 +133,8 @@ public:
 
   void addPlayer(Player* player);
 
+  void removeAllPlayers();
+
   // getters
   std::vector<Player*>* getPlayers();
 
