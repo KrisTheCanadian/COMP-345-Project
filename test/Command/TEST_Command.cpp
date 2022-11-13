@@ -90,7 +90,7 @@ TEST(FileCommandTestSuite, CommandFile1_Valid){
 
   int final_state = adapter->getCurrentState();
 
-  EXPECT_TRUE(final_state == 4);
+  EXPECT_TRUE(final_state == 7);
 }
 
 TEST(FileCommandTestSuite, CommandFile4_valid){
@@ -111,7 +111,7 @@ TEST(FileCommandTestSuite, CommandFile4_valid){
 
   int final_state = adapter->getCurrentState();
 
-  EXPECT_TRUE(final_state == 4);
+  EXPECT_TRUE(final_state == 7);
 }
 
 
