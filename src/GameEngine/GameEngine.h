@@ -54,6 +54,10 @@ private:
   FileCommandProcessorAdapter* adapter = nullptr;
   FileLineReader* flr = nullptr;
 
+  // CL Args
+  int argc;
+  char** argv;
+
 
 public:
   // ----------------------------------------
@@ -133,7 +137,7 @@ public:
 
   void addPlayer(Player* player);
 
-  void removeAllPlayers();
+  void resetGame();
 
   // getters
   std::vector<Player*>* getPlayers();

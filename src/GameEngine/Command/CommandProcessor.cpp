@@ -173,7 +173,6 @@ Command* CommandProcessor::validate(const string& _userInput){
                 game->setCurrentState(GE_Start);
                 currentCommandObj->saveEffect("Game successfully restarted");
                 cout << currentCommandObj->getEffect() << "!\n" << endl;
-                game->startupPhase();
                 return currentCommandObj;
             }
             else if(_userInput == "quit"){

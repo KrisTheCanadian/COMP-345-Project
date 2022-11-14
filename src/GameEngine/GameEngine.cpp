@@ -35,7 +35,12 @@ void GameEngine::startupPhase() {
         strCommand = command->getCommand();
         effect = command->getEffect();
 
-        if(!isValid(effect) && strCommand != "quit"){
+        if(effect == "Game successfully restarted") {
+          resetGame();
+          startupPhase();
+        }
+
+        else if(!isValid(effect) && strCommand != "quit"){
             cout << "The command or its argument is invalid" << endl;
             continue;
         }
@@ -177,6 +182,8 @@ GameEngine::GameEngine(int argc, char** argv) {
   this->adapter = new FileCommandProcessorAdapter(this, argc, argv);
   this->flr = new FileLineReader();
   this->commandProcessor = new CommandProcessor(this, argc, argv);
+  this->argc = argc;
+  this->argv = argv;
   Subject::attach((ILogObserver*)logObserver);
 }
 
@@ -313,8 +320,6 @@ void GameEngine::mainGameLoop() {
   }
   cout << "Congratulations " << winner->getName() << "!" << endl;
   setCurrentState(GE_Win);
-  // remove the players left
-  removeAllPlayers();
 }
 
 Player* GameEngine::checkWinState() {
@@ -368,11 +373,30 @@ FileCommandProcessorAdapter *GameEngine::getFileCommandProcessorAdapter() {
   return adapter;
 }
 
-void GameEngine::removeAllPlayers() {
-  for(auto& player: players){
+void GameEngine::resetGame() {
+
+  for(auto player : players){
     delete player;
   }
 
-  players = vector<Player*>();
+  delete deck;
+  delete map;
+  delete adapter;
+  delete flr;
+  delete logObserver;
+  delete commandProcessor;
+
+  this->players = vector<Player*>();
+  this->currentPlayerTurn = nullptr;
+
+  this->logObserver = new LogObserver(this);
+  this->map = new Map(this);
+  this->deck = new Deck(this);
+  this->adapter = new FileCommandProcessorAdapter(this, argc, argv);
+  this->flr = new FileLineReader();
+  this->commandProcessor = new CommandProcessor(this, argc, argv);
+  this->resetObservers();
+
+  Subject::attach((ILogObserver*)logObserver);
 
 }
