@@ -54,6 +54,10 @@ private:
   FileCommandProcessorAdapter* adapter = nullptr;
   FileLineReader* flr = nullptr;
 
+  // CL Args
+  int argc;
+  char** argv;
+
 
 public:
   // ----------------------------------------
@@ -88,6 +92,11 @@ public:
   std::string stringToLog() override;
 
   // ----------------------------------------
+  // initiates startup phase for commands read from the console
+  // ----------------------------------------
+  void startupPhase();
+
+  // ----------------------------------------
   // reinforcement phase
   // ----------------------------------------
   void reinforcementPhase();
@@ -116,8 +125,6 @@ public:
 
   Map* getMap();
 
-  void preStartupPhase();
-
   void mainGameLoop();
 
   LogObserver* getLogObserver();
@@ -129,6 +136,8 @@ public:
   void validateMinPlayers();
 
   void addPlayer(Player* player);
+
+  void resetGame();
 
   // getters
   std::vector<Player*>* getPlayers();
@@ -145,10 +154,6 @@ public:
   void setCurrentPlayer(Player* player);
 
 private:
-  // ----------------------------------------
-  // initiates startup phase for commands read from the console
-  // ----------------------------------------
-  void startupPhase();
   // check win state
   Player* checkWinState();
   void nextTurn(int& turn);

@@ -35,6 +35,7 @@ public:
   virtual void attach(ILogObserver* observer) = 0;
   virtual void detach(ILogObserver* observer) = 0;
   virtual void notify(ILoggable*) = 0;
+  virtual void resetObservers() = 0;
 };
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -54,6 +55,7 @@ public:
   void attach(ILogObserver* observer) override;
   void detach(ILogObserver* observer) override;
   void notify(ILoggable*) override;
+  void resetObservers() override;
 
 };
 

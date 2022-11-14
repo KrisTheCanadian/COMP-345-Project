@@ -27,6 +27,10 @@ void Subject::notify(ILoggable* loggable) {
   }
 }
 
+void Subject::resetObservers() {
+  this->observers = std::vector<ILogObserver*>();
+}
+
 // -----------------------------------------------------------------------------------------------------------------
 //
 //
