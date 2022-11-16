@@ -11,18 +11,14 @@ void testLoggingObserver(int argc, char** argv){
 
   player2->addTerritory(*gameEngine->getMap()->getTerritories()->at(0));
 
-  auto observer = gameEngine->getLogObserver();
   // Create order and attach observer
   auto order = new Bomb(gameEngine, player2->getTerritories()->at(0), player1);
-  ((Subject*)order)->attach((ILogObserver*)observer);
 
   // Get orderList and attach observer
   auto orderList = player1->getOrdersListObject();
-  ((Subject*)orderList)->attach((ILogObserver*)observer);
 
   // Create commandProcessor and attach observer
   auto processor = new CommandProcessor(gameEngine, argc, argv);
-  ((Subject*)processor)->attach((ILogObserver*)observer);
 
   // TEST GAME STATE CHANGE
   gameEngine->setCurrentState(GE_Map_Loaded);

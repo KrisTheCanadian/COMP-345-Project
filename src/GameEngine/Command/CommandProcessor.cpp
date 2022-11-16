@@ -50,7 +50,6 @@ int CommandProcessor::getCurrentState(){
 Command* CommandProcessor::validate(const string& _userInput){
 
     auto currentCommandObj = new Command(_userInput, game);
-    currentCommandObj->attach((ILogObserver*)game->getLogObserver());
     GameEngineState current_game_state = game->getCurrentState();
     std::string strCommand = currentCommandObj->getCommand();
 
