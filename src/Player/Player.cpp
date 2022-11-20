@@ -1,155 +1,163 @@
 #include "Player.h"
+#include "PlayerStrategies.h"
 
-Player::Player(GameEngine* game, Hand* cards, std::string  name)
+#include <utility>
+
+Player::Player(GameEngine* game, Hand* cards, std::string name, const std::string& strategy)
   : game(game), hand(cards), name(std::move(name)), reinforcementPool(0)
 {
   orders = new OrdersList(game);
   game->addPlayer(this);
+  this->strategy = PlayerStrategy::createStrategy(this, strategy);
 }
 
 std::vector<Territory *> Player::toDefend() {
-  vector<tuple<Territory*, int>> listOfTerritories;
-  // check all neighbours for enemies
-  // prioritize defending the territories that are connected to enemies
-  for(auto& territory: territories){
-    int enemiesTerritories = 0;
-    // check for all territories the surrounding territories for enemies
-    auto adjacentTerritories = territory->getAdjacentTerritories();
-    for(auto& adjTerritory: *adjacentTerritories){
-      // check the playerID
-      if(adjTerritory->getPlayer() != this && adjTerritory->getPlayer() != nullptr && canAttack(adjTerritory->getPlayer())){
-        enemiesTerritories++;
-      }
-    }
-    listOfTerritories.emplace_back(territory, enemiesTerritories);
-  }
-
-  // let's sort this stuff
-  std::sort(listOfTerritories.begin(), listOfTerritories.end(), [](auto const &t1, auto const &t2) {
-    return get<1>(t1) > get<1>(t2); // compare the enemies
-  });
-  vector<Territory*> response;
-
-  for(auto& t: listOfTerritories){
-    response.push_back(std::get<0>(t));
-  }
-
-  return response;
+  return strategy->toDefend();
+//  vector<tuple<Territory*, int>> listOfTerritories;
+//  // check all neighbours for enemies
+//  // prioritize defending the territories that are connected to enemies
+//  for(auto& territory: territories){
+//    int enemiesTerritories = 0;
+//    // check for all territories the surrounding territories for enemies
+//    auto adjacentTerritories = territory->getAdjacentTerritories();
+//    for(auto& adjTerritory: *adjacentTerritories){
+//      // check the playerID
+//      if(adjTerritory->getPlayer() != this && adjTerritory->getPlayer() != nullptr && canAttack(adjTerritory->getPlayer())){
+//        enemiesTerritories++;
+//      }
+//    }
+//    listOfTerritories.emplace_back(territory, enemiesTerritories);
+//  }
+//
+//  // let's sort this stuff
+//  std::sort(listOfTerritories.begin(), listOfTerritories.end(), [](auto const &t1, auto const &t2) {
+//    return get<1>(t1) > get<1>(t2); // compare the enemies
+//  });
+//  vector<Territory*> response;
+//
+//  for(auto& t: listOfTerritories){
+//    response.push_back(std::get<0>(t));
+//  }
+//
+//  return response;
 }
 
 std::vector<Territory *> Player::toAttack() {
-  vector<Territory*> listOfTerritories;
-  // check all neighbours for enemies
-  // prioritize the territories with fewer enemies
-  for(auto& territory: territories){
-    // check for all territories the surrounding territories for enemies
-    auto adjacentTerritories = territory->getAdjacentTerritories();
-    for(auto& adjTerritory: *adjacentTerritories){
-      // check the playerID
-      if(adjTerritory->getPlayer() != this && adjTerritory->getPlayer() != nullptr && canAttack(adjTerritory->getPlayer())){
-        listOfTerritories.push_back(adjTerritory);
-      }
-    }
-  }
-
-  // let's sort this stuff
-  sort(listOfTerritories.begin(), listOfTerritories.end(), [ ]( const Territory* lhs, const Territory* rhs)
-  {
-    return lhs->getArmies() > lhs->getArmies();
-  });
-
-  return listOfTerritories;
+  return strategy->toAttack();
+//  vector<Territory*> listOfTerritories;
+//  // check all neighbours for enemies
+//  // prioritize the territories with fewer enemies
+//  for(auto& territory: territories){
+//    // check for all territories the surrounding territories for enemies
+//    auto adjacentTerritories = territory->getAdjacentTerritories();
+//    for(auto& adjTerritory: *adjacentTerritories){
+//      // check the playerID
+//      if(adjTerritory->getPlayer() != this && adjTerritory->getPlayer() != nullptr && canAttack(adjTerritory->getPlayer())){
+//        listOfTerritories.push_back(adjTerritory);
+//      }
+//    }
+//  }
+//
+//  // let's sort this stuff
+//  sort(listOfTerritories.begin(), listOfTerritories.end(), [ ]( const Territory* lhs, const Territory* rhs)
+//  {
+//    return lhs->getArmies() > lhs->getArmies();
+//  });
+//
+//  return listOfTerritories;
 }
 
 // Type of order
 void Player::issueOrder() {
 
-  std::random_device dev3;
-  std::mt19937 rng3(dev3());
-  std::uniform_int_distribution<std::mt19937::result_type> intDistribution(0, 10);
+  strategy->issueOrder();
 
-  int i = (int) intDistribution(rng3);
-
-  // if army units in reinforcement pool, then can only create deploy orders
-  if(deployedArmiesThisTurn < reinforcementPool && i < 3){
-
-    // get player toDefend vector
-    auto defend = toDefend();
-
-    // deploy a random amount
-    std::random_device dev1;
-    std::mt19937 rng1(dev1());
-    std::uniform_int_distribution<std::mt19937::result_type> randomAmount(1, reinforcementPool - deployedArmiesThisTurn);
-
-    // deploy to a random friendly territory
-    int deploymentAmount = (int) randomAmount(rng1);
-
-    std::random_device dev2;
-    std::mt19937 rng2(dev2());
-    std::uniform_int_distribution<std::mt19937::result_type> distRandomIndexTerritory(0, defend.size() - 1);
-    int randomIndex = (int) distRandomIndexTerritory(rng2);
-
-    Territory* randomTerritory = defend.at(randomIndex);
-    orders->add(new Deploy(game, randomTerritory, this, deploymentAmount));
-    deployedArmiesThisTurn += deploymentAmount;
-    return;
-  } else if(i == 4){
-    // then they can create any cards they have
-    auto cards = hand->getHandCards();
-    if(!cards->empty()){
-
-      std::random_device dev;
-      std::mt19937 rng(dev());
-      std::uniform_int_distribution<std::mt19937::result_type> uniformIntDistribution(0, cards->size() - 1);
-      int randomIndex = (int) uniformIntDistribution(rng);
-
-      auto randomCard = cards->at(randomIndex);
-      // play this card
-      randomCard->play();
-      return;
-    }
-  } else {
-
-    // they can also advance to enemy territory (attack)
-    // get to attack vector
-    auto attackTerritories = toAttack();
-
-    // random attack territory
-    std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> uniformIntDistribution(0, attackTerritories.size() - 1);
-
-    // no attacks, let's get some neutral territories (neighbours)
-    if(attackTerritories.empty()){
-      if(territories.empty()){ return; }
-      // grab a random territory of ours
-      std::uniform_int_distribution<std::mt19937::result_type> uniformIntDistribution2(0, territories.size() - 1);
-      int randomIndex = (int)uniformIntDistribution2(rng);
-      auto t = territories.at(randomIndex);
-
-      // get neighbours
-      auto adj = t->getAdjacentTerritories();
-      std::uniform_int_distribution<std::mt19937::result_type> uniformIntDistribution3(0, adj->size() - 1);
-      int randomIndexAdj = (int)uniformIntDistribution3(rng);
-      // get random neighbour
-      auto target = adj->at(randomIndexAdj);
-
-      return orders->add(new Advance(game, t, target, this, t->getArmies() / 2));
-    }
-
-    // getting a territory from the priority list
-    auto attackTerritory = toAttack()[uniformIntDistribution(rng) % attackTerritories.size()];
-    // trying to find a neighbourTerritory
-    auto neighbour = findFirstNeighbourTerritory(attackTerritory);
-
-    // we check if we have a valid neighbour
-    // we also should check if there are enough armies to attack this territory
-    if(neighbour && neighbour->getArmies() > 1){
-      // if so then we actually attack (for now with half our troops) -> to keep it simple
-      orders->add(new Advance(game, neighbour, attackTerritory, this, neighbour->getArmies() / 2));
-    }
-
-  }
+//  std::random_device dev3;
+//  std::mt19937 rng3(dev3());
+//  std::uniform_int_distribution<std::mt19937::result_type> intDistribution(0, 10);
+//
+//  int i = (int) intDistribution(rng3);
+//
+//  // if army units in reinforcement pool, then can only create deploy orders
+//  if(deployedArmiesThisTurn < reinforcementPool && i < 3){
+//
+//    // get player toDefend vector
+//    auto defend = toDefend();
+//
+//    // deploy a random amount
+//    std::random_device dev1;
+//    std::mt19937 rng1(dev1());
+//    std::uniform_int_distribution<std::mt19937::result_type> randomAmount(1, reinforcementPool - deployedArmiesThisTurn);
+//
+//    // deploy to a random friendly territory
+//    int deploymentAmount = (int) randomAmount(rng1);
+//
+//    std::random_device dev2;
+//    std::mt19937 rng2(dev2());
+//    std::uniform_int_distribution<std::mt19937::result_type> distRandomIndexTerritory(0, defend.size() - 1);
+//    int randomIndex = (int) distRandomIndexTerritory(rng2);
+//
+//    Territory* randomTerritory = defend.at(randomIndex);
+//    orders->add(new Deploy(game, randomTerritory, this, deploymentAmount));
+//    deployedArmiesThisTurn += deploymentAmount;
+//    return;
+//  } else if(i == 4){
+//    // then they can create any cards they have
+//    auto cards = hand->getHandCards();
+//    if(!cards->empty()){
+//
+//      std::random_device dev;
+//      std::mt19937 rng(dev());
+//      std::uniform_int_distribution<std::mt19937::result_type> uniformIntDistribution(0, cards->size() - 1);
+//      int randomIndex = (int) uniformIntDistribution(rng);
+//
+//      auto randomCard = cards->at(randomIndex);
+//      // play this card
+//      randomCard->play();
+//      return;
+//    }
+//  } else {
+//
+//    // they can also advance to enemy territory (attack)
+//    // get to attack vector
+//    auto attackTerritories = toAttack();
+//
+//    // random attack territory
+//    std::random_device dev;
+//    std::mt19937 rng(dev());
+//    std::uniform_int_distribution<std::mt19937::result_type> uniformIntDistribution(0, attackTerritories.size() - 1);
+//
+//    // no attacks, let's get some neutral territories (neighbours)
+//    if(attackTerritories.empty()){
+//      if(territories.empty()){ return; }
+//      // grab a random territory of ours
+//      std::uniform_int_distribution<std::mt19937::result_type> uniformIntDistribution2(0, territories.size() - 1);
+//      int randomIndex = (int)uniformIntDistribution2(rng);
+//      auto t = territories.at(randomIndex);
+//
+//      // get neighbours
+//      auto adj = t->getAdjacentTerritories();
+//      std::uniform_int_distribution<std::mt19937::result_type> uniformIntDistribution3(0, adj->size() - 1);
+//      int randomIndexAdj = (int)uniformIntDistribution3(rng);
+//      // get random neighbour
+//      auto target = adj->at(randomIndexAdj);
+//
+//      return orders->add(new Advance(game, t, target, this, t->getArmies() / 2));
+//    }
+//
+//    // getting a territory from the priority list
+//    auto attackTerritory = toAttack()[uniformIntDistribution(rng) % attackTerritories.size()];
+//    // trying to find a neighbourTerritory
+//    auto neighbour = findFirstNeighbourTerritory(attackTerritory);
+//
+//    // we check if we have a valid neighbour
+//    // we also should check if there are enough armies to attack this territory
+//    if(neighbour && neighbour->getArmies() > 1){
+//      // if so then we actually attack (for now with half our troops) -> to keep it simple
+//      orders->add(new Advance(game, neighbour, attackTerritory, this, neighbour->getArmies() / 2));
+//    }
+//
+//  }
 }
 
 void Player::addTerritory(Territory& territory) {
@@ -180,10 +188,16 @@ Player &Player::operator=(const Player &other) {
   if(this == &other){
     return *this;
   }
+
   this->game = other.game;
   this->orders = other.orders;
   this->hand = other.hand;
   this->territories = other.territories;
+  this->reinforcementPool = other.reinforcementPool;
+  this->deployedArmiesThisTurn = other.deployedArmiesThisTurn;
+  this->name = other.name;
+  this->strategy = other.strategy;
+
   return *this;
 }
 
@@ -270,6 +284,7 @@ void Player::addFriendly(Player* pPlayer) {
 void Player::clearFriendly() {
   friendlyPlayers.erase(friendlyPlayers.begin(), friendlyPlayers.end());
 }
+
 bool Player::canAttack(Player *pPlayer) {
   if(pPlayer == this){return false;}
   for(auto& player : friendlyPlayers){
@@ -279,6 +294,7 @@ bool Player::canAttack(Player *pPlayer) {
   }
   return true;
 }
+
 Territory* Player::findFirstNeighbourTerritory(Territory* target) {
   for(auto& t: *target->getAdjacentTerritories()){
     if(t->getPlayer() == this){
@@ -287,21 +303,9 @@ Territory* Player::findFirstNeighbourTerritory(Territory* target) {
   }
   return nullptr;
 }
-Order* Player::decideOrder(CardType cardType) {
-  switch (cardType) {
-    case CT_Bomb:
-      return decideCardOrderBomb();
-    case CT_Reinforcement:
-      decideCardReinforcement();
-      return nullptr;
-    case CT_Blockade:
-      return decideCardOrderBlockade();
-    case CT_Airlift:
-      return decideCardOrderAirlift();
-    case CT_Diplomacy:
-      return decideCardOrderNegotiate();
-  }
-  throw std::runtime_error("Player::decideOrder::Assert CardType invalid");
+
+Order* Player::createOrderFromCard(Card* card) {
+  return strategy->decideCard(card);
 }
 
 Airlift* Player::decideCardOrderAirlift() {

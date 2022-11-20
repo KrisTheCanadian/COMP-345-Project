@@ -99,7 +99,7 @@ Command* CommandProcessor::validate(const string& _userInput){
 
                 size_t pos = strCommand.find(' ');
                 std::string playerName = strCommand.substr(pos);
-                new Player(game, new Hand(), playerName);
+                new Player(game, new Hand(), playerName, "Human");
                 currentCommandObj->saveEffect("Player" + playerName + " has been added successfully");
                 game->setCurrentState(GE_Players_Added);
                 cout << currentCommandObj->getEffect() << endl;
@@ -120,7 +120,7 @@ Command* CommandProcessor::validate(const string& _userInput){
 
               size_t pos = strCommand.find(' ');
               std::string playerName = strCommand.substr(pos);
-              new Player(game, new Hand(), playerName);
+              new Player(game, new Hand(), playerName, "Human");
               currentCommandObj->saveEffect("Player" + playerName + " has been added successfully");
               cout << currentCommandObj->getEffect() << endl;
               return currentCommandObj;

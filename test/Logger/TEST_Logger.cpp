@@ -15,8 +15,8 @@ TEST(LoggerTestSuite, ExecuteAndAddOrder){
   auto deck = gameEngine.getDeck();
   deck->addCardToDeck(new Card(CardType::CT_Bomb, &gameEngine));
 
-  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
-  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley", "Aggressive");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross", "Aggressive");
 
   // adding sets of territories just for testing
   auto map = gameEngine.getMap();

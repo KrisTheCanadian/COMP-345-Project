@@ -35,12 +35,12 @@ void testGameLoop(int argc, char** argv){
   gameEngine.loadMap("../res/TestMap1_valid.map");
 
   // create players
-  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
-  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
-  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg");
-  auto player4 = new Player(&gameEngine, new Hand(), "Elon Musk");
-  auto player5 = new Player(&gameEngine, new Hand(), "Steve Jobs");
-  auto player6 = new Player(&gameEngine, new Hand(), "James Bond");
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley", "Aggressive");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross", "Aggressive");
+  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg", "Aggressive");
+  auto player4 = new Player(&gameEngine, new Hand(), "Elon Musk", "Aggressive");
+  auto player5 = new Player(&gameEngine, new Hand(), "Steve Jobs", "Aggressive");
+  auto player6 = new Player(&gameEngine, new Hand(), "James Bond", "Aggressive");
 
   // adding sets of territories just for testing
   auto map = gameEngine.getMap();

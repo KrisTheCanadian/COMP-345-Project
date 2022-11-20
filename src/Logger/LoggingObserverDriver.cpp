@@ -4,8 +4,8 @@
 void testLoggingObserver(int argc, char** argv){
 
   auto gameEngine = new GameEngine(argc, argv);
-  auto player1 = new Player(gameEngine, new Hand(), "Player1");
-  auto player2 = new Player(gameEngine, new Hand(), "Player2");
+  auto player1 = new Player(gameEngine, new Hand(), "Player1", "Aggressive");
+  auto player2 = new Player(gameEngine, new Hand(), "Player2", "Aggressive");
 
   gameEngine->loadMap("../res/TestMap1_valid.map");
 

@@ -39,9 +39,9 @@ void testOrderExecution()
   gameEngine.loadMap("../res/TestMap1_valid.map");
 
   // create players
-  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
-  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
-  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg");
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley", "Aggressive");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross", "Aggressive");
+  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg", "Aggressive");
 
   // adding sets of territories just for testing
   auto map = gameEngine.getMap();

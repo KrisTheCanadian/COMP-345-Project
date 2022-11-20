@@ -8,7 +8,7 @@ void testPlayers(){
   // setting up game engine
   auto gameEngine = new GameEngine(argc, argv);
   // creating player
-  auto p = new Player(gameEngine, new Hand(), "Bob");
+  auto p = new Player(gameEngine, new Hand(), "Bob", "Aggressive");
 
   // loading map to get access of territories
   gameEngine->loadMap("res/TestMap1_valid.map");

@@ -71,9 +71,9 @@ TEST(GameEngineTestSuite, GameEngineReinforcementPhase)
   deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
   deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
 
-  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
-  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
-  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg");
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley", "Aggressive");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross", "Aggressive");
+  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg", "Aggressive");
 
   // adding sets of territories just for testing
   auto map = gameEngine.getMap();
@@ -136,9 +136,9 @@ TEST(GameEngineTestSuite, GameEngineIssueOrderPhase)
   deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
   deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
 
-  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
-  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
-  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg");
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley", "Aggressive");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross", "Aggressive");
+  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg", "Aggressive");
 
   // adding sets of territories just for testing
   auto map = gameEngine.getMap();
@@ -211,9 +211,9 @@ TEST(GameEngineTestSuite, GameEngineExecuteOrdersPhase)
   deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
   deck->addCardToDeck(new Card(CardType::CT_Blockade, &gameEngine));
 
-  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley");
-  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross");
-  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg");
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley", "Aggressive");
+  auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross", "Aggressive");
+  auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg", "Aggressive");
 
   // adding sets of territories just for testing
   auto map = gameEngine.getMap();

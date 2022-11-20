@@ -5,7 +5,7 @@ using namespace std;
 
 void testCards(int argc, char** argv) {
   auto gameEngine = new GameEngine(argc, argv);
-  auto player = new Player(gameEngine, new Hand(), "name");
+  auto player = new Player(gameEngine, new Hand(), "name", "Aggressive");
   Deck* deck = gameEngine->getDeck();
 
   cout << "-> Adding 10 cards to deck..." << endl;

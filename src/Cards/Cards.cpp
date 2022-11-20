@@ -29,7 +29,7 @@ void Card::play() {
   // check to see whose turn it is
   Player* currentPlayer = game->getCurrentPlayerTurn();
   auto orders = currentPlayer->getOrdersListObject();
-  auto order = currentPlayer->decideOrder(cardType);
+  auto order = currentPlayer->createOrderFromCard(this);
 
   if(order){orders->add(order);}
   else if (cardType != CardType::CT_Reinforcement) {

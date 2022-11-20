@@ -1,13 +1,12 @@
 #pragma once
 
 #include "GameEngine/GameEngine.h"
-#include "Cards/Cards.h"
-#include "Orders/Orders.h"
 #include "Map/Map.h"
+#include "Orders/Orders.h"
 
-#include <vector>
-#include <utility>
 #include <algorithm>
+#include <utility>
+#include <vector>
 
 class Territory;
 enum CardType : int;
@@ -19,6 +18,8 @@ class Airlift;
 class Bomb;
 class Blockade;
 class Negotiate;
+class PlayerStrategy;
+class Card;
 
 class Player {
 private:
@@ -31,6 +32,8 @@ private:
   std::string name;
   std::vector<Player*> friendlyPlayers;
 
+  PlayerStrategy* strategy;
+
 
   int deployedArmiesThisTurn = 0;
 
@@ -38,7 +41,7 @@ public:
   // --------------------------------
   // Constructors
   // --------------------------------
-  Player(GameEngine* game, Hand* cards, std::string name);
+  Player(GameEngine* game, Hand* cards, std::string  name, const std::string& strategy);
   ~Player();
   Player(const Player &p) = default;
 
@@ -63,10 +66,10 @@ public:
   Territory* findFirstNeighbourTerritory(Territory* target);
   std::vector<Player*> getEnemies();
 
-  // --------------------------------
-  // Strategies
-  // --------------------------------
-  Order* decideOrder(CardType);
+
+  Order* createOrderFromCard(Card* card);
+
+  // TODO REMOVE
   Airlift* decideCardOrderAirlift();
   Bomb* decideCardOrderBomb();
   Blockade* decideCardOrderBlockade();
@@ -94,6 +97,7 @@ public:
   std::string getName() const;
   int getDeployedArmiesThisTurn() const;
   GameEngine* getGameInstance();
+
 
 
 public:
