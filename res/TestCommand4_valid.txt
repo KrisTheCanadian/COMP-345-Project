@@ -1,4 +1,4 @@
-loadmap TestMap1_valid.map
+loadmap TestMap4_valid.map
 loadmap TestMap2_valid.map
 validatemap
 addplayer zafir

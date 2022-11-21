@@ -10,7 +10,7 @@ TEST(GameEngineTestSuite, GameEngineInit)
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   // assert
 
   EXPECT_FALSE(gameEngine.getMap() == nullptr);
@@ -28,7 +28,7 @@ TEST(GameEngineTestSuite, GameEngineLoadMap)
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   // act
 
   gameEngine.loadMap("res/TestMap1_valid.map");
@@ -46,7 +46,7 @@ TEST(GameEngineTestSuite, GameEngineReinforcementPhase)
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   gameEngine.loadMap("res/TestMap1_valid.map");
 
   // add cards to the gameEngine deck
@@ -111,7 +111,7 @@ TEST(GameEngineTestSuite, GameEngineIssueOrderPhase)
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   gameEngine.loadMap("res/TestMap1_valid.map");
 
   // add cards to the gameEngine deck
@@ -186,7 +186,7 @@ TEST(GameEngineTestSuite, GameEngineExecuteOrdersPhase)
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   gameEngine.loadMap("res/TestMap1_valid.map");
 
   // add cards to the gameEngine deck

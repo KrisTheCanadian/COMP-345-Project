@@ -69,13 +69,6 @@ public:
 
   Order* createOrderFromCard(Card* card);
 
-  // TODO REMOVE
-  Airlift* decideCardOrderAirlift();
-  Bomb* decideCardOrderBomb();
-  Blockade* decideCardOrderBlockade();
-  Negotiate* decideCardOrderNegotiate();
-  void decideCardReinforcement();
-
   // --------------------------------
   // Setters
   // --------------------------------
@@ -85,6 +78,8 @@ public:
   void setPhase(std::string ph);
   void addDeployedArmies(int a);
   void clearDeploymentArmies();
+  void setDeployedArmiesThisTurn(int a);
+  void setStrategy(const std::string& strategy);
 
   // --------------------------------
   // Getters

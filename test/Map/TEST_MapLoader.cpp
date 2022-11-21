@@ -10,7 +10,7 @@ TEST(MapLoaderTestSuite, TestMap1LoadBasic)
   char* argv[] = {(char*)"-console"};
 
   // arrange
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   auto map = gameEngine.getMap();
   // act
 
@@ -50,7 +50,7 @@ TEST(MapLoaderTestSuite, TestMap1LoadTerritoriesCorrectly)
   char* argv[] = {(char*)"-console"};
 
   // arrange
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   auto map = gameEngine.getMap();
 
   // act
@@ -99,7 +99,7 @@ TEST(MapLoaderTestSuite, TestMap1LoadContinentsCorrectly){
   char* argv[] = {(char*)"-console"};
 
   // arrange
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   auto map = gameEngine.getMap();
   // act
   MapLoader::load("../res/TestMap1_valid.map", map);
@@ -127,7 +127,7 @@ TEST(MaploaderTestSuite, TestMap1LoadValid){
   char* argv[] = {(char*)"-console"};
 
   // arrange
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   auto map = gameEngine.getMap();
 
   MapLoader::load("../res/TestMap1_valid.map", map);
@@ -143,7 +143,7 @@ TEST(MaploaderTestSuite, TestMap4LoadValid){
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   auto map = gameEngine.getMap();
   MapLoader::load("../res/TestMap4_valid.map", map);
   // act
@@ -158,7 +158,7 @@ TEST(MaploaderTestSuite, TestMap2LoadInvalid) {
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   auto map = gameEngine.getMap();
   MapLoader::load("../res/TestMap2_invalid.map", map);
   // act
@@ -173,7 +173,7 @@ TEST(MaploaderTestSuite, TestMap3LoadInvalid){
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   auto map = gameEngine.getMap();
   MapLoader::load("../res/TestMap3_invalid.map", map);
   // act
@@ -188,7 +188,7 @@ TEST(MaploaderTestSuite, TestMap5LoadInvalidFormat){
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   auto map = gameEngine.getMap();
   MapLoader::load("../res/TestMap5_invalid_format.map", map);
   // act

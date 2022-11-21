@@ -11,7 +11,7 @@ TEST(OrdersListSuite, listAddOrders)
   char* argv[] = {(char*)"-console"};
 
   // create a game engine
-  auto gameEngine = GameEngine(argc, argv);
+  auto gameEngine = GameEngine(argc, argv, true);
 
   // add cards to the gameEngine deck
   auto deck = gameEngine.getDeck();
@@ -74,9 +74,8 @@ TEST(OrdersListSuite, listAddOrders)
   // issue orders
 
   gameEngine.setCurrentPlayer(player1);
-  auto cards = player1->getHand()->getCards();
-  for(auto& card : *cards){
-    card->play();
+  while(!player1->getHand()->getCards()->empty()){
+    player1->getHand()->getHandCards()->at(0)->play();
   }
 
   // assert
@@ -92,7 +91,7 @@ TEST(OrdersListSuite, listRemoveOrder)
   char* argv[] = {(char*)"-console"};
 
   // create a game engine
-  auto gameEngine = GameEngine(argc, argv);
+  auto gameEngine = GameEngine(argc, argv, true);
 
   // add cards to the gameEngine deck
   auto deck = gameEngine.getDeck();

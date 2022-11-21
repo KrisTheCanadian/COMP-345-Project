@@ -40,7 +40,9 @@ void Card::play() {
 
   Card* card = currentPlayer->getHand()->removeCard(cardType);
 
-  if(card == nullptr){ throw std::runtime_error(&"Hand did not contain card type: " [cardType]); }
+  if(card == nullptr){
+    throw std::runtime_error("Hand did not contain card type: " + Card::CardTypeToString(cardType));
+  }
   Deck* gameDeck = game->getDeck();
   gameDeck->addCardToDeck(card);
 }

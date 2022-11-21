@@ -66,8 +66,8 @@ public:
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
-  GameEngine(int argc, char** argv);
-  explicit GameEngine(GameEngineState state, int argc, char** argv);
+  GameEngine(int argc, char** argv, bool testing = false);
+  explicit GameEngine(GameEngineState state, int argc, char** argv, bool testing = false);
 
   // ----------------------------------------
   // Modifications + setters
@@ -131,6 +131,8 @@ public:
   void mainGameLoop();
 
   LogObserver* getLogObserver();
+
+  bool isTesting() const;
 
   Player* getCurrentPlayerTurn();
 

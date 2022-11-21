@@ -1,0 +1,139 @@
+[Map]
+author=Bluebird
+image=Canada.bmp
+wrap=yes
+scroll=none
+warn=yes
+
+[Continents]
+Northern Islands=12
+Southern Islands=10
+Yukon=6
+Northwest Territories=14
+British Columbia=7
+Alberta=4
+Saskatchewan=5
+Manitoba=6
+Ontario=5
+Quebec=8
+Newfoundland=5
+Nova Scotia=2
+Prince Edward Island=1
+New Brunswick=2
+
+[Territories]
+1,548,116,Northern Islands,2,12
+2,510,124,Northern Islands,1,3
+3,487,139,Northern Islands,2,4
+4,463,136,Northern Islands,3,5
+5,433,132,Northern Islands,4,6
+6,424,145,Northern Islands,5,7
+7,389,145,Northern Islands,6,8
+8,422,181,Northern Islands,7,9,22
+9,449,160,Northern Islands,8,10
+10,471,184,Northern Islands,9,11,12
+11,492,195,Northern Islands,10
+12,540,192,Northern Islands,1,10,14
+
+13,577,217,Southern Islands,14
+14,594,255,Southern Islands,12,13,15,16,18,42
+15,673,330,Southern Islands,14,16,77
+16,620,306,Southern Islands,14,15
+17,470,295,Southern Islands,21,40
+18,499,225,Southern Islands,14,19,42
+19,465,239,Southern Islands,18,21
+20,429,215,Southern Islands,21
+21,400,250,Southern Islands,17,19,20,22,31
+22,349,202,Southern Islands,8,21,30
+
+23,212,224,Yukon,24,25,29
+24,166,277,Yukon,23,25,26,27
+25,207,269,Yukon,23,24,26,29,30
+26,193,313,Yukon,24,25,27,28,32
+27,160,342,Yukon,24,26,28,44
+28,203,369,Yukon,26,27,34,44,45
+
+29,239,237,Northwest Territories,23,25,30
+30,258,267,Northwest Territories,22,25,29,31,32
+31,314,275,Northwest Territories,21,30,37
+32,251,331,Northwest Territories,26,30,34,36
+34,251,386,Northwest Territories,28,32,35,45,53,54
+35,348,424,Northwest Territories,34,38,39,54,55
+36,320,360,Northwest Territories,32,37
+37,369,338,Northwest Territories,31,36,38,40
+38,421,389,Northwest Territories,35,37,39,40,45
+39,472,417,Northwest Territories,35,38,40,55,65
+40,445,338,Northwest Territories,17,37,38,39,41,42
+41,514,368,Northwest Territories,40,42,43
+42,522,322,Northwest Territories,14,18,40,41
+43,572,372,Northwest Territories,41
+
+44,163,394,British Columbia,27,28,45,46
+45,233,439,British Columbia,28,34,38,44,46,53
+46,180,457,British Columbia,44,45,48,49
+47,126,553,British Columbia,48
+48,159,529,British Columbia,46,47,49
+49,205,538,British Columbia,46,48,50,52
+50,233,577,British Columbia,49,51
+
+51,289,571,Alberta,50,52,57
+52,283,527,Alberta,49,51,53,54,56
+53,262,482,Alberta,34,45,52,54
+54,313,468,Alberta,34,35,52,53,55
+
+55,381,470,Saskatchewan,35,39,54,56,65
+56,372,524,Saskatchewan,52,55,57,58,59,64,65
+57,325,597,Saskatchewan,51,56,58
+58,366,598,Saskatchewan,56,57,59
+59,396,560,Saskatchewan,56,58,60,64
+
+
+60,427,618,Manitoba,59,61,62,64
+61,444,583,Manitoba,60,62,64
+62,459,619,Manitoba,60,61,63,67
+63,489,525,Manitoba,62,64,65,66
+64,440,532,Manitoba,56,59,60,61,63,65
+65,451,469,Manitoba,39,55,56,63,64
+
+66,535,556,Ontario,63,67,68
+67,517,621,Ontario,62,66,69
+68,587,569,Ontario,66,69
+69,616,625,Ontario,67,68,70,71
+70,649,666,Ontario,69,71
+
+71,713,632,Quebec,69,70,72,73
+72,777,659,Quebec,71,87
+73,745,588,Quebec,71,74,75
+74,828,544,Quebec,73,75,80,81,82
+75,716,537,Quebec,73,74,76,80
+76,709,482,Quebec,75,77,78,80
+77,673,426,Quebec,15,76
+78,769,459,Quebec,76,79,80
+
+79,797,456,Newfoundland,78,80,81
+80,793,509,Newfoundland,74,75,76,78,79,81
+81,839,491,Newfoundland,74,79,80,82
+82,879,492,Newfoundland,74,81,83
+83,925,551,Newfoundland,82,84
+
+84,902,611,Nova Scotia,83,85
+85,874,647,Nova Scotia,84,86,88
+
+86,872,612,Prince Edward Island,85
+
+87,830,624,New Brunswick,72,88
+88,839,644,New Brunswick,85,87
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -9,8 +9,8 @@ TEST(CardTestSuite, AddingCards)
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
-  auto player = new Player(&gameEngine, new Hand(), "Rick", "Aggressive");
+  GameEngine gameEngine = GameEngine(argc, argv, true);
+  new Player(&gameEngine, new Hand(), "Rick", "Aggressive");
   Deck* deck = gameEngine.getDeck();
   // act
   deck->addCardToDeck(new Card(CT_Bomb, &gameEngine));
@@ -36,7 +36,7 @@ TEST(CardTestSuite, DrawFromDeck)
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   auto player = new Player(&gameEngine, new Hand(), "Bob", "Aggressive");
   Deck* deck = gameEngine.getDeck();
 
@@ -68,11 +68,14 @@ TEST(CardTestSuite, PlayCard)
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  GameEngine gameEngine = GameEngine(argc, argv);
+  GameEngine gameEngine = GameEngine(argc, argv, true);
   gameEngine.loadMap("../res/TestMap1_valid.map");
   auto player = new Player(&gameEngine, new Hand(), "Bob", "Aggressive");
   auto player2 = new Player(&gameEngine, new Hand(), "Rick", "Aggressive");
-  player2->addTerritory(*gameEngine.getMap()->getTerritories()->at(0));
+
+  auto territories = gameEngine.getMap()->getTerritories();
+  player->addTerritory(*territories->at(0));
+  player2->addTerritory(*territories->at(1));
   Deck* deck = gameEngine.getDeck();
 
   deck->addCardToDeck(new Card(CT_Bomb, &gameEngine));

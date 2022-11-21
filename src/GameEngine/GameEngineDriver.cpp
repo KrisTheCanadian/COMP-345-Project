@@ -6,7 +6,7 @@ void testStartupPhase(int argc, char** argv){
 }
 void testGameLoop(int argc, char** argv){
   // create a game engine
-  auto gameEngine = GameEngine(argc, argv);
+  auto gameEngine = GameEngine(argc, argv, true);
 
   // add cards to the gameEngine deck
   auto deck = gameEngine.getDeck();

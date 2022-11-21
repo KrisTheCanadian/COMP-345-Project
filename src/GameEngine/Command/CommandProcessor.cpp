@@ -1,5 +1,6 @@
 #include "CommandProcessor.h"
 #include "../GameEngine.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -99,7 +100,17 @@ Command* CommandProcessor::validate(const string& _userInput){
 
                 size_t pos = strCommand.find(' ');
                 std::string playerName = strCommand.substr(pos);
-                new Player(game, new Hand(), playerName, "Human");
+
+                // trim spacing
+                std::string::iterator end_pos = std::remove(playerName.begin(), playerName.end(), ' ');
+                playerName.erase(end_pos, playerName.end());
+
+                if(game->isTesting()){
+                  cout << "Game Engine is in testing mode, player will be added automatically as Aggressive." << endl;
+                  new Player(game, new Hand(), playerName, "Random");
+                } else {
+                  new Player(game, new Hand(), playerName, "Human");
+                }
                 currentCommandObj->saveEffect("Player" + playerName + " has been added successfully");
                 game->setCurrentState(GE_Players_Added);
                 cout << currentCommandObj->getEffect() << endl;
@@ -120,7 +131,18 @@ Command* CommandProcessor::validate(const string& _userInput){
 
               size_t pos = strCommand.find(' ');
               std::string playerName = strCommand.substr(pos);
-              new Player(game, new Hand(), playerName, "Human");
+
+              // trim spacing
+              std::string::iterator end_pos = std::remove(playerName.begin(), playerName.end(), ' ');
+              playerName.erase(end_pos, playerName.end());
+
+              if(game->isTesting()){
+                cout << "Game Engine is in testing mode, player will be added automatically as Aggressive." << endl;
+                new Player(game, new Hand(), playerName, "Random");
+              } else {
+                new Player(game, new Hand(), playerName, "Human");
+              }
+
               currentCommandObj->saveEffect("Player" + playerName + " has been added successfully");
               cout << currentCommandObj->getEffect() << endl;
               return currentCommandObj;

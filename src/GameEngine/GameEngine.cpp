@@ -11,7 +11,7 @@ GameEngineState GameEngine::getCurrentState() {
   return this->state;
 }
 
-GameEngine::GameEngine(GameEngineState state, int argc, char** argv) {
+GameEngine::GameEngine(GameEngineState state, int argc, char** argv, bool testing) {
   this->state = state;
   this->deck = new Deck(this);
   this->map = new Map(this);
@@ -20,6 +20,11 @@ GameEngine::GameEngine(GameEngineState state, int argc, char** argv) {
   this->adapter = new FileCommandProcessorAdapter(this, argc, argv);
   this->flr = new FileLineReader();
   Subject::attach((ILogObserver*)logObserver);
+
+  this->argc = argc;
+  this->argv = argv;
+
+  this->testing = testing;
 }
 
 void GameEngine::startupPhase() {
@@ -175,7 +180,7 @@ GameEngine::~GameEngine() {
   delete commandProcessor;
 }
 
-GameEngine::GameEngine(int argc, char** argv) {
+GameEngine::GameEngine(int argc, char** argv, bool testing) {
   this->logObserver = new LogObserver(this);
   this->map = new Map(this);
   this->deck = new Deck(this);
@@ -185,6 +190,7 @@ GameEngine::GameEngine(int argc, char** argv) {
   this->argc = argc;
   this->argv = argv;
   Subject::attach((ILogObserver*)logObserver);
+  this->testing = testing;
 }
 
 void GameEngine::loadMap(const std::string& path) {
@@ -308,17 +314,29 @@ void GameEngine::mainGameLoop() {
   Player* winner;
   // check win state
   int round = 0;
+  int maxRounds = 500;
+  bool isDraw = false;
+
   while((winner = checkWinState()) == nullptr){
     cout << "-----------------------------------------------------------------------" << endl;
     cout << "Round: " << round << "" << endl;
     cout << "-----------------------------------------------------------------------" << endl;
+    removePlayersWithNoTerritories();
     reinforcementPhase();
     issueOrdersPhase();
     executeOrdersPhase();
-    removePlayersWithNoTerritories();
     round++;
+    if(round > maxRounds){
+      cout << "This game is gonna take forever. Draw..";
+      isDraw = true;
+      break;
+    }
   }
-  cout << "Congratulations " << winner->getName() << "!" << endl;
+  
+  if(!isDraw){
+    cout << "Congratulations " << winner->getName() << "!" << endl;
+  }
+
   setCurrentState(GE_Win);
 }
 
@@ -399,4 +417,7 @@ void GameEngine::resetGame() {
 
   Subject::attach((ILogObserver*)logObserver);
 
+}
+bool GameEngine::isTesting() const {
+  return testing;
 }

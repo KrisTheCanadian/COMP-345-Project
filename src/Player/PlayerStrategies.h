@@ -68,9 +68,17 @@ public:
   Order* decideCard(Card* card) override;
   std::vector<Territory *> toDefend() override;
   std::vector<Territory *> toAttack() override;
+
+  Order* playBombCard();
+  Order* playReinforcementCard();
+  Order* playBlockadeCard();
+  Order* playDiplomacyCard();
+  Order* playAirliftCard();
 };
 
 class Neutral : public PlayerStrategy {
+private:
+  int numberOfTerritoriesLastTurn = -1;
 public:
   explicit Neutral(Player* player);
   void issueOrder() override;

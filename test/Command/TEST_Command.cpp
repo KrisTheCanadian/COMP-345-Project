@@ -11,7 +11,7 @@ TEST(FileCommandTestSuite, CommandFile2_invalid){
   char* argv[] = {(char*)"-console"};
 
   int final_state;
-  auto game = new GameEngine(argc, argv);
+  auto game = new GameEngine(argc, argv, true);
 
   FileLineReader* flr = game->getFlir();
   FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
@@ -34,7 +34,7 @@ TEST(FileCommandTestSuite, CommandFile3_invalid){
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  auto game = new GameEngine(argc, argv);
+  auto game = new GameEngine(argc, argv, true);
   FileLineReader* flr = game->getFlir();
   FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
 
@@ -58,7 +58,7 @@ TEST(FileCommandTestSuite, CommandFile5_invalid){
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  auto game = new GameEngine(argc, argv);
+  auto game = new GameEngine(argc, argv, true);
   FileLineReader* flr = game->getFlir();
   FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
   adapter->commandLineToFile(flr);
@@ -78,7 +78,7 @@ TEST(FileCommandTestSuite, CommandFile1_Valid){
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  auto game = new GameEngine(argc, argv);
+  auto game = new GameEngine(argc, argv, true);
   FileLineReader* flr = game->getFlir();
   FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
   adapter->commandLineToFile(flr);
@@ -90,7 +90,7 @@ TEST(FileCommandTestSuite, CommandFile1_Valid){
 
   int final_state = adapter->getCurrentState();
 
-  EXPECT_TRUE(final_state == 3);
+  EXPECT_TRUE(final_state == 7);
 }
 
 TEST(FileCommandTestSuite, CommandFile4_valid){
@@ -99,7 +99,7 @@ TEST(FileCommandTestSuite, CommandFile4_valid){
   int argc = 1;
   char* argv[] = {(char*)"-console"};
 
-  auto game = new GameEngine(argc, argv);
+  auto game = new GameEngine(argc, argv, true);
   FileLineReader* flr = game->getFlir();
   FileCommandProcessorAdapter* adapter = game->getFileCommandProcessorAdapter();
   adapter->commandLineToFile(flr);
@@ -111,7 +111,7 @@ TEST(FileCommandTestSuite, CommandFile4_valid){
 
   int final_state = adapter->getCurrentState();
 
-  EXPECT_TRUE(final_state == 3);
+  EXPECT_TRUE(final_state == 7);
 }
 
 
