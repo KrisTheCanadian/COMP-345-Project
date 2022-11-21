@@ -10,4 +10,3 @@ addplayer raisa
 addplayer valentina
 addplayer alexia
 addplayer kim
-gamestart

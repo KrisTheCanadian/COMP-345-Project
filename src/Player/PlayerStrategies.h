@@ -34,11 +34,11 @@ private:
   void deploy();
   void advance();
 
-  Order* playReinforcementCard(Card*);
-  Order* playBombCard(Card*);
-  Order* playBlockadeCard(Card*);
-  Order* playDiplomacyCard(Card*);
-  Order* playAirliftCard(Card*);
+  Order* playReinforcementCard();
+  Order* playBombCard();
+  Order* playBlockadeCard();
+  Order* playDiplomacyCard();
+  Order* playAirliftCard();
 };
 
 class Aggressive : public PlayerStrategy {
@@ -48,6 +48,17 @@ public:
   Order* decideCard(Card* card) override;
   std::vector<Territory *> toDefend() override;
   std::vector<Territory *> toAttack() override;
+private:
+  void playCard();
+
+  void deploy();
+  void advance();
+
+  Order* playBombCard();
+  Order* playReinforcementCard();
+  Order* playBlockadeCard();
+  Order* playDiplomacyCard();
+  Order* playAirliftCard();
 };
 
 class Benevolent : public PlayerStrategy {

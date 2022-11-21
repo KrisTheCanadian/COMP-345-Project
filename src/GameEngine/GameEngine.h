@@ -58,6 +58,9 @@ private:
   int argc;
   char** argv;
 
+  // testing
+  bool testing = false;
+
 
 public:
   // ----------------------------------------

@@ -44,27 +44,27 @@ std::vector<Territory *> Player::toDefend() {
 
 std::vector<Territory *> Player::toAttack() {
   return strategy->toAttack();
-//  vector<Territory*> listOfTerritories;
-//  // check all neighbours for enemies
-//  // prioritize the territories with fewer enemies
-//  for(auto& territory: territories){
-//    // check for all territories the surrounding territories for enemies
-//    auto adjacentTerritories = territory->getAdjacentTerritories();
-//    for(auto& adjTerritory: *adjacentTerritories){
-//      // check the playerID
-//      if(adjTerritory->getPlayer() != this && adjTerritory->getPlayer() != nullptr && canAttack(adjTerritory->getPlayer())){
-//        listOfTerritories.push_back(adjTerritory);
-//      }
-//    }
-//  }
-//
-//  // let's sort this stuff
-//  sort(listOfTerritories.begin(), listOfTerritories.end(), [ ]( const Territory* lhs, const Territory* rhs)
-//  {
-//    return lhs->getArmies() > lhs->getArmies();
-//  });
-//
-//  return listOfTerritories;
+  vector<Territory*> listOfTerritories;
+  // check all neighbours for enemies
+  // prioritize the territories with fewer enemies
+  for(auto& territory: territories){
+    // check for all territories the surrounding territories for enemies
+    auto adjacentTerritories = territory->getAdjacentTerritories();
+    for(auto& adjTerritory: *adjacentTerritories){
+      // check the playerID
+      if(adjTerritory->getPlayer() != this && adjTerritory->getPlayer() != nullptr && canAttack(adjTerritory->getPlayer())){
+        listOfTerritories.push_back(adjTerritory);
+      }
+    }
+  }
+
+  // let's sort this stuff
+  sort(listOfTerritories.begin(), listOfTerritories.end(), [ ]( const Territory* lhs, const Territory* rhs)
+  {
+    return lhs->getArmies() > lhs->getArmies();
+  });
+
+return listOfTerritories;
 }
 
 // Type of order
