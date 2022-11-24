@@ -33,7 +33,7 @@ public:
     std::vector <std::string> allPlayerStrategies;
     int numberOfGames = 0;
     int maxNumberOfTurns = 0;
-    
+
   //Constructors
   explicit CommandProcessor(GameEngine*, int argc,char* argv[]);
   CommandProcessor(const CommandProcessor &c);

@@ -7,6 +7,21 @@ using namespace std;
 regex regexRuleLoadMap("loadmap .+.map$");
 regex regexRulePlayerAdd("addplayer .+");
 
+vector<string> split(string s, string delimiter) {
+  size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+  string token;
+  vector<string> res;
+
+  while ((pos_end = s.find(delimiter, pos_start)) != string::npos) {
+    token = s.substr(pos_start, pos_end - pos_start);
+    pos_start = pos_end + delim_len;
+    res.push_back(token);
+  }
+
+  res.push_back(s.substr(pos_start));
+  return res;
+}
+
 CommandProcessor::CommandProcessor(GameEngine* game, int argc, char** argv) : game(game) {
   commandCollection = {};
   // add all program arguments to a raw string
@@ -72,6 +87,22 @@ Command* CommandProcessor::validate(const string& _userInput){
               return currentCommandObj;
             }
             break;
+
+        case GE_Tournament:
+          if (_userInput == "Tournament"){
+            try {
+              game->validateTournament();
+            }
+            catch(std::runtime_error& err){
+              cout<< err.what() << endl;
+              game->setCurrentState(GE_Start);
+              break;
+            }
+            game->setCurrentState(GE_Tournament);
+            currentCommandObj->saveEffect("Tournament started");
+            cout << currentCommandObj->getEffect() << endl;
+            return currentCommandObj;
+          }
 
         case GE_Map_Loaded:
             if (_userInput == "validatemap"){
@@ -230,6 +261,8 @@ string CommandProcessor::StateToString() {
   switch (game->getCurrentState()) {
     case GE_Start:
         return "Start";
+    case GE_Tournament:
+      return "Tournament";
     case GE_Map_Loaded:
         return "Map Loaded";
     case GE_Map_Validated:
@@ -279,4 +312,115 @@ CommandProcessor::~CommandProcessor() {
   if(game){
     Subject::detach((ILogObserver* )game->getLogObserver());
   }
+}
+
+void CommandProcessor::TournamentFunctionInput(string input) {
+  vector<string> enteredTournamentString = split(input, " ");
+  int i = 1; // skip the first word "tournament"
+  while (i < enteredTournamentString.size()) {
+    if (enteredTournamentString[i] == "-M") {
+      while (enteredTournamentString[++i] != "-P") {
+        allMaps.push_back(enteredTournamentString[i]);
+
+      }
+    }
+    else if (enteredTournamentString[i] == "-P") {
+      while (enteredTournamentString[++i] != "-G") {
+        allPlayerStrategies.push_back(enteredTournamentString[i]);
+      }
+
+    }
+    else if (enteredTournamentString[i] == "-G") {
+      i++;
+      string temp;
+      temp = enteredTournamentString[i++];
+      if (!isdigit(temp[0])) {
+        cout << "The number of games has to be a digit" << endl;
+        exit(0);
+      }
+      numberOfGames = stoi(temp);
+
+    }
+    else if (enteredTournamentString[i] == "-D") {
+      i++;
+      string temp;
+      temp = enteredTournamentString[i++];
+      if (!isdigit(temp[0])) {
+        cout << "The max number of turns has to be a digit" << endl;
+        exit(0);
+      }
+      maxNumberOfTurns = stoi(temp);
+    }
+  }
+}
+
+string CommandProcessor::FileTournamentFunctionInput(string input) {
+  ifstream ifs;
+  string line;
+  ifs.open(input);
+  if (!ifs.eof()) {
+    getline(ifs, line);
+    TournamentFunctionInput(line);
+  }
+  ifs.close();
+  return line;
+}
+
+//TODO: Move this into the game engine
+//TODO: Create TournamentDriver.cpp
+//TODO: Add testTournament()
+//TODO: Make sure each game is declared a draw after D turns
+//TODO: Make sure tournament plays all the games automatically without user interaction
+//TODO: At the end of the tournament, a report of the results should be output to the log file
+//TODO: Add required code to GameEngine
+
+bool CommandProcessor::validateTournament()
+{
+  bool allGood = true;
+  if (allMaps.size() < 1 || allMaps.size() > 5)
+  {
+    cout << "Please enter 1-5 different maps" << endl;
+    allGood = false;
+  }
+  if (allPlayerStrategies.size() < 2 || allPlayerStrategies.size() > 4)
+  {
+    cout << "Please enter 2-4 players strategies" << endl;
+    allGood = false;
+  }
+  if (numberOfGames < 1 || numberOfGames > 5)
+  {
+    cout << "Please enter a number among 1-5 for the number of games" << endl;
+    allGood = false;
+  }
+  if (maxNumberOfTurns < 10 || maxNumberOfTurns > 50)
+  {
+    cout << "Please enter a number between 10 and 50 for max number of turns" << endl;
+    allGood = false;
+  }
+  // validate strategy
+  string strategies[5] = {"Aggressive", "Benevolent", "Neutral", "Cheater", "Human"};
+  int invalidStrategyCounter = 0;
+  for (int i = 0; i < allPlayerStrategies.size(); i++)
+  {
+    for (int j = 0; j < 5; j++)
+    {
+      if (allPlayerStrategies[i] == strategies[j])
+      {
+        break;
+        // isStrategyValid = true;
+      }
+      else if (allPlayerStrategies[i] != strategies[j] && j == 4)
+      {
+        cout << allPlayerStrategies[i] + " X NOT VALID" << endl;
+        invalidStrategyCounter++;
+      }
+    }
+  }
+  if (invalidStrategyCounter > 0)
+  {
+    cout << invalidStrategyCounter;
+    cout << " Players Strategies entered are NOT valid" << endl;
+    allGood = false;
+  }
+  return allGood;
 }
