@@ -19,6 +19,7 @@ class Deck;
 // ----------------------------------------
 enum GameEngineState {
   GE_Start = 0,
+  GE_Tournament,
   GE_Map_Loaded,
   GE_Map_Validated,
   GE_Players_Added,
@@ -38,7 +39,7 @@ private:
   Player* currentPlayerTurn = nullptr;
   std::vector<Player*> players;
 
-  std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
+  std::vector<std::string> commands = {"tournament <mapFiles> <playerStrategies> <numGames> <maxTurns>", "loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
 
   // Deck
   Deck* deck = nullptr;
@@ -78,6 +79,12 @@ public:
   // Destructor
   // ----------------------------------------
   ~GameEngine() override;
+
+  // ----------------------------------------
+  // Validate Tournament
+  // ----------------------------------------
+
+  bool validateTournament();
 
   // ----------------------------------------
   // load game map

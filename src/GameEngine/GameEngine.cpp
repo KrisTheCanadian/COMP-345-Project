@@ -114,6 +114,8 @@ std::string GameEngine::getCurrentStateToString() {
   switch (this->state) {
     case GE_Start:
       return "Start";
+    case GE_Tournament:
+      return "Tournament";
     case GE_Map_Loaded:
       return "Map Loaded";
     case GE_Map_Validated:
@@ -200,6 +202,10 @@ void GameEngine::loadMap(const std::string& path) {
 bool GameEngine::validateMap() {
   if(map == nullptr){ throw runtime_error("ASSERT: Map is null."); }
   return map->validate();
+}
+
+bool GameEngine::validateTournament() {
+
 }
 
 std::string GameEngine::stringToLog() {
