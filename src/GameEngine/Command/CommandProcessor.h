@@ -27,8 +27,8 @@ private:
   Command* validate(const std::string& _userInput);
 
 public:
-    string FileTournamentFunctionInput(string input);
-    void TournamentFunctionInput(string);
+    std::string FileTournamentFunctionInput(std::string input);
+    void TournamentFunctionInput(std::string);
     std::vector <std::string> allMaps;
     std::vector <std::string> allPlayerStrategies;
     int numberOfGames = 0;
