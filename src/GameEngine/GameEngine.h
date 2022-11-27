@@ -39,7 +39,7 @@ private:
   Player* currentPlayerTurn = nullptr;
   std::vector<Player*> players;
 
-  std::vector<std::string> commands = {"tournament <mapFiles> <playerStrategies> <numGames> <maxTurns>", "loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
+  std::vector<std::string> commands = {"tournament -M <mapFiles> -P <playerStrategies> -G <numGames> -D <maxTurns>", "loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
 
   // Deck
   Deck* deck = nullptr;
@@ -64,6 +64,10 @@ private:
 
 
 public:
+  std::vector <std::string> allMaps;
+  std::vector <std::string> allPlayerStrategies;
+  int numberOfGames = 0;
+  int maxNumberOfTurns = 0;
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
@@ -84,7 +88,7 @@ public:
   // Validate Tournament
   // ----------------------------------------
 
-  bool validateTournament();
+  void validateTournament();
 
   // ----------------------------------------
   // load game map
@@ -135,7 +139,7 @@ public:
 
   Map* getMap();
 
-  void mainGameLoop();
+  void mainGameLoop(int maxRounds = 500);
 
   LogObserver* getLogObserver();
 
@@ -150,6 +154,14 @@ public:
   void addPlayer(Player* player);
 
   void resetGame();
+
+  void runTournament();
+
+  void generateRandomDeck(int deckSize = 15);
+
+  void assignCardsEvenly();
+
+  void assignTerritoriesEvenly();
 
   // getters
   std::vector<Player*>* getPlayers();
@@ -190,5 +202,7 @@ private:
     // convert current state to string
     // ----------------------------------------
     std::string getCurrentStateToString();
+
+    std::string getPlayerTypeToString();
 
 };

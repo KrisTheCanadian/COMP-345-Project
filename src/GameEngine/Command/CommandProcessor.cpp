@@ -86,23 +86,25 @@ Command* CommandProcessor::validate(const string& _userInput){
               cout << currentCommandObj->getEffect() << endl;
               return currentCommandObj;
             }
+
+            else if (_userInput.substr(0, _userInput.find(' ')) == "tournament"){
+              TournamentFunctionInput(_userInput);
+              try {
+                game->validateTournament();
+              }
+              catch(std::runtime_error& err){
+                cout<< err.what() << endl;
+                game->setCurrentState(GE_Start);
+                break;
+              }
+              game->setCurrentState(GE_Tournament);
+              currentCommandObj->saveEffect("Tournament started");
+              cout << currentCommandObj->getEffect() << endl;
+              return currentCommandObj;
+            }
+
             break;
 
-        case GE_Tournament:
-          if (_userInput == "Tournament"){
-            try {
-              game->validateTournament();
-            }
-            catch(std::runtime_error& err){
-              cout<< err.what() << endl;
-              game->setCurrentState(GE_Start);
-              break;
-            }
-            game->setCurrentState(GE_Tournament);
-            currentCommandObj->saveEffect("Tournament started");
-            cout << currentCommandObj->getEffect() << endl;
-            return currentCommandObj;
-          }
 
         case GE_Map_Loaded:
             if (_userInput == "validatemap"){
@@ -320,13 +322,12 @@ void CommandProcessor::TournamentFunctionInput(string input) {
   while (i < enteredTournamentString.size()) {
     if (enteredTournamentString[i] == "-M") {
       while (enteredTournamentString[++i] != "-P") {
-        allMaps.push_back(enteredTournamentString[i]);
-
+        game->allMaps.push_back(enteredTournamentString[i]);
       }
     }
     else if (enteredTournamentString[i] == "-P") {
       while (enteredTournamentString[++i] != "-G") {
-        allPlayerStrategies.push_back(enteredTournamentString[i]);
+        game->allPlayerStrategies.push_back(enteredTournamentString[i]);
       }
 
     }
@@ -338,7 +339,7 @@ void CommandProcessor::TournamentFunctionInput(string input) {
         cout << "The number of games has to be a digit" << endl;
         exit(0);
       }
-      numberOfGames = stoi(temp);
+      game->numberOfGames = stoi(temp);
 
     }
     else if (enteredTournamentString[i] == "-D") {
@@ -349,7 +350,7 @@ void CommandProcessor::TournamentFunctionInput(string input) {
         cout << "The max number of turns has to be a digit" << endl;
         exit(0);
       }
-      maxNumberOfTurns = stoi(temp);
+      game->maxNumberOfTurns = stoi(temp);
     }
   }
 }
@@ -366,61 +367,12 @@ string CommandProcessor::FileTournamentFunctionInput(string input) {
   return line;
 }
 
-//TODO: Move this into the game engine
-//TODO: Create TournamentDriver.cpp
-//TODO: Add testTournament()
-//TODO: Make sure each game is declared a draw after D turns
-//TODO: Make sure tournament plays all the games automatically without user interaction
-//TODO: At the end of the tournament, a report of the results should be output to the log file
-//TODO: Add required code to GameEngine
+//TODO: Move validateTournament into the game engine [DONE]
+//TODO: Create TournamentDriver.cpp [DONE]
+//TODO: Add testTournament() [DONE]
+//TODO: Make sure each game is declared a draw after D turns [DONE]
+//TODO: Make sure tournament plays all the games automatically without user interaction [DONE]
+//TODO: Add required code to GameEngine [DONE]
 
-bool CommandProcessor::validateTournament()
-{
-  bool allGood = true;
-  if (allMaps.size() < 1 || allMaps.size() > 5)
-  {
-    cout << "Please enter 1-5 different maps" << endl;
-    allGood = false;
-  }
-  if (allPlayerStrategies.size() < 2 || allPlayerStrategies.size() > 4)
-  {
-    cout << "Please enter 2-4 players strategies" << endl;
-    allGood = false;
-  }
-  if (numberOfGames < 1 || numberOfGames > 5)
-  {
-    cout << "Please enter a number among 1-5 for the number of games" << endl;
-    allGood = false;
-  }
-  if (maxNumberOfTurns < 10 || maxNumberOfTurns > 50)
-  {
-    cout << "Please enter a number between 10 and 50 for max number of turns" << endl;
-    allGood = false;
-  }
-  // validate strategy
-  string strategies[5] = {"Aggressive", "Benevolent", "Neutral", "Cheater", "Human"};
-  int invalidStrategyCounter = 0;
-  for (int i = 0; i < allPlayerStrategies.size(); i++)
-  {
-    for (int j = 0; j < 5; j++)
-    {
-      if (allPlayerStrategies[i] == strategies[j])
-      {
-        break;
-        // isStrategyValid = true;
-      }
-      else if (allPlayerStrategies[i] != strategies[j] && j == 4)
-      {
-        cout << allPlayerStrategies[i] + " X NOT VALID" << endl;
-        invalidStrategyCounter++;
-      }
-    }
-  }
-  if (invalidStrategyCounter > 0)
-  {
-    cout << invalidStrategyCounter;
-    cout << " Players Strategies entered are NOT valid" << endl;
-    allGood = false;
-  }
-  return allGood;
-}
+//TODO: Complete GameEngine::assignTerritoriesEvenly() function - Assign territories to each player evenly (or randomly?)
+//TODO: At the end of the tournament, a report of the results should be output to the log file

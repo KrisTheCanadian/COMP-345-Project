@@ -29,10 +29,6 @@ private:
 public:
     std::string FileTournamentFunctionInput(std::string input);
     void TournamentFunctionInput(std::string);
-    std::vector <std::string> allMaps;
-    std::vector <std::string> allPlayerStrategies;
-    int numberOfGames = 0;
-    int maxNumberOfTurns = 0;
 
   //Constructors
   explicit CommandProcessor(GameEngine*, int argc,char* argv[]);

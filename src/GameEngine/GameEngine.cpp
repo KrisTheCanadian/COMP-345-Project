@@ -1,6 +1,5 @@
 #include "GameEngine.h"
-
-
+#include <random>
 
 void GameEngine::setCurrentState(GameEngineState engineState) {
   this->state = engineState;
@@ -43,6 +42,11 @@ void GameEngine::startupPhase() {
         if(effect == "Game successfully restarted") {
           resetGame();
           startupPhase();
+        }
+
+        else if(effect == "Tournament started"){
+          runTournament();
+          strCommand = "quit";
         }
 
         else if(!isValid(effect) && strCommand != "quit"){
@@ -204,8 +208,51 @@ bool GameEngine::validateMap() {
   return map->validate();
 }
 
-bool GameEngine::validateTournament() {
+void GameEngine::validateTournament() {
+  if (allMaps.size() < 1 || allMaps.size() > 5)
+  {
+    std::cout << "GameEngine::validateTournament::Error | Number of maps must be between 1 to 5";
+    exit(0);
+  }
+  if (allPlayerStrategies.size() < 2 || allPlayerStrategies.size() > 4)
+  {
+    std::cout << "GameEngine::validateTournament::Error | Number of player strategies must be between 2 to 4";
+    exit(0);
+  }
+  if (numberOfGames < 1 || numberOfGames > 5)
+  {
+    std::cout << "GameEngine::validateTournament::Error | Number of games must be between 1 to 5";
+    exit(0);
+  }
+  if (maxNumberOfTurns < 10 || maxNumberOfTurns > 50)
+  {
+    std::cout << "GameEngine::validateTournament::Error | Number of turns must be between 10 to 50";
+    exit(0);
+  }
+  // validate strategy
+  string strategies[5] = {"Aggressive", "Benevolent", "Neutral", "Cheater", "Human"};
+  int invalidStrategyCounter = 0;
 
+  for (int i = 0; i < allPlayerStrategies.size(); i++)
+  {
+    for (int j = 0; j < 5; j++)
+    {
+      if (allPlayerStrategies[i] == strategies[j])
+      {
+        break;
+      }
+      else if (allPlayerStrategies[i] != strategies[j] && j == 4)
+      {
+        cout << allPlayerStrategies[i] + " X NOT VALID" << endl;
+        invalidStrategyCounter++;
+      }
+    }
+  }
+  if (invalidStrategyCounter > 0)
+  {
+    cout << invalidStrategyCounter;
+    throw std::runtime_error("GameEngine::validateTournament::Error | Player strategies entered are not valid");
+  }
 }
 
 std::string GameEngine::stringToLog() {
@@ -315,12 +362,11 @@ void GameEngine::executeOrdersPhase() {
   }
 }
 
-void GameEngine::mainGameLoop() {
+void GameEngine::mainGameLoop(int maxRounds) {
   if(players.empty()){throw std::runtime_error("GameEngine::mainGameLoop::Assert Player size is 0.");}
   Player* winner;
   // check win state
   int round = 0;
-  int maxRounds = 500;
   bool isDraw = false;
 
   while((winner = checkWinState()) == nullptr){
@@ -426,4 +472,66 @@ void GameEngine::resetGame() {
 }
 bool GameEngine::isTesting() const {
   return testing;
+}
+
+void GameEngine::runTournament() {
+  for(int i = 0; i < allMaps.size(); i++){
+    loadMap(allMaps[i]);
+    if(validateMap()){
+      for(int j = 0; j < numberOfGames; j++){
+        generateRandomDeck();
+        for (int k = 0; k < allPlayerStrategies.size(); k++){
+          new Player(this, new Hand(), allPlayerStrategies[k], allPlayerStrategies[k]);
+        }
+        assignCardsEvenly();
+        assignTerritoriesEvenly();
+        mainGameLoop(maxNumberOfTurns);
+        resetGame();
+        state = GE_Tournament;
+        loadMap(allMaps[i]);
+      }
+    }
+    else{
+      std::cout << "" << std::endl;
+      std::cout << "Map " + std::to_string(i+1) + " is invalid" << std::endl;
+      resetGame();
+      state = GE_Tournament;
+    }
+
+  }
+}
+
+void GameEngine::generateRandomDeck(int deckSize){
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> distribution(0, 4);
+
+  CardType cardOptions[5] = {CT_Bomb,
+                             CT_Reinforcement,
+                             CT_Blockade,
+                             CT_Airlift,
+                             CT_Diplomacy
+  };
+
+  for(int i = 0; i < deckSize; i++){
+    int randomNum = distribution(gen);
+    deck->addCardToDeck(new Card(cardOptions[randomNum], this));
+  };
+}
+
+//Or Randomly?
+void GameEngine::assignCardsEvenly(){
+  for(int i = 0; i < players.size(); i++){
+    players[i]->getHand()->addToHand(new Card(CardType::CT_Reinforcement, this));
+    players[i]->getHand()->addToHand(new Card(CardType::CT_Blockade, this));
+    players[i]->getHand()->addToHand(new Card(CardType::CT_Bomb, this));
+    players[i]->getHand()->addToHand(new Card(CardType::CT_Diplomacy, this));
+    players[i]->getHand()->addToHand(new Card(CardType::CT_Airlift, this));
+  }
+
+}
+
+//Or Randomly?
+void GameEngine::assignTerritoriesEvenly(){
+  std::cout << "TODO: GameEngine::assignTerritoriesEvenly() - Assign territories to each player evenly (or randomly?)";
 }
