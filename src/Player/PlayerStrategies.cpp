@@ -78,7 +78,13 @@ void Human::issueOrder() {
     case 4:
       break;
     case 5:
-      isTurnDone = true;
+      if(reinforcementPoolLeft > 0) {
+        cout << "You have " << reinforcementPoolLeft << " armies left to deploy." << endl;
+        cout << "You must deploy all armies before you can end your turn." << endl;
+        issueOrder();
+      } else {
+        isTurnDone = true;
+      }
       break;
     default:
       cout << "Invalid choice." << endl;
