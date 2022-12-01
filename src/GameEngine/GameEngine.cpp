@@ -1,5 +1,6 @@
 #include "GameEngine.h"
 #include <random>
+#include <iomanip>
 
 void GameEngine::setCurrentState(GameEngineState engineState) {
   this->state = engineState;
@@ -30,6 +31,7 @@ void GameEngine::startupPhase() {
     Command* command;
     std::string strCommand;
     std::string effect;
+    tournamentEnd = false;
 
     if(!commandProcessor){ throw std::runtime_error("GameEngine::startupPhase::ASSERT commandProcessor is null"); }
     cout << "Welcome to the startup phase of the game!\n"<< endl;
@@ -257,6 +259,7 @@ void GameEngine::validateTournament() {
 
 std::string GameEngine::stringToLog() {
   std::stringstream ss;
+  if(tournamentEnd) return getTournamentResults();
   ss << "GAME ENGINE: ";
   ss << "State transition to ";
   ss << getCurrentStateToString();
@@ -367,7 +370,7 @@ void GameEngine::mainGameLoop(int maxRounds) {
   Player* winner;
   // check win state
   int round = 0;
-  bool isDraw = false;
+  isDraw = false;
 
   while((winner = checkWinState()) == nullptr){
     cout << "-----------------------------------------------------------------------" << endl;
@@ -475,20 +478,26 @@ bool GameEngine::isTesting() const {
 }
 
 void GameEngine::runTournament() {
+    tournamentResults = new std::vector<std::vector<std::string>>;
   for(int i = 0; i < allMaps.size(); i++){
-    loadMap(allMaps[i]);
+    loadMap("res/" + allMaps[i]);
+    std::vector<std::string> currMap{};
+    currMap.push_back(allMaps.at(i));
     if(validateMap()){
+
       for(int j = 0; j < numberOfGames; j++){
         generateRandomDeck();
         for (int k = 0; k < allPlayerStrategies.size(); k++){
           new Player(this, new Hand(), allPlayerStrategies[k], allPlayerStrategies[k]);
         }
         assignCardsEvenly();
-        assignTerritoriesEvenly();
+        distributeTerritories();
         mainGameLoop(maxNumberOfTurns);
+        currMap.push_back(isDraw? "draw" : checkWinState()->getName());
+
         resetGame();
         state = GE_Tournament;
-        loadMap(allMaps[i]);
+//        loadMap(allMaps[i]);
       }
     }
     else{
@@ -497,8 +506,43 @@ void GameEngine::runTournament() {
       resetGame();
       state = GE_Tournament;
     }
-
+      tournamentResults->push_back(currMap);
   }
+    tournamentEnd = true;
+    Subject::notify(this);
+}
+
+std::string GameEngine::getTournamentResults() {
+    std::stringstream str;
+    const char separator = ' ';
+    const int mapNameWidth = 25;
+    const int nameWidth = 15;
+    str << "Tournament Mode: " << endl;
+    str << "M: ";
+    for(int i = 0; i < tournamentResults->size(); i++){
+        str << (tournamentResults->at(i))[0] << (i == tournamentResults->size()-1)? ', ' : ' ';
+    }
+    str << endl << "P: ";
+    for(int i = 0; i < players.size(); i++ ){
+        str << (players.at(i)->getName()) << (i == players.size()-1)? ', ' : ' ';
+    }
+    str << endl << "G: " << numberOfGames << endl << "D: " << maxNumberOfTurns << endl;
+    str << std::left << std::setw(mapNameWidth) << std::setfill(separator) << "Map Name";
+
+    for(int s = 1; s <= numberOfGames; s++){
+        str << std::left << std::setw(nameWidth) << std::setfill(separator) << ("Game " + std::to_string(s));
+    }
+    str << endl;
+
+    for(int i = 0; i < tournamentResults->size(); i++){
+        str << std::left << std::setw(mapNameWidth) << std::setfill(separator) << (tournamentResults->at(i)).at(0);
+
+        for(int j = 1; j < (tournamentResults->at(i)).size(); j++) {
+            str << std::left << std::setw(nameWidth) << std::setfill(separator) << (tournamentResults->at(i)).at(j);
+        }
+        str << endl;
+    }
+    return str.str();
 }
 
 void GameEngine::generateRandomDeck(int deckSize){
@@ -531,7 +575,4 @@ void GameEngine::assignCardsEvenly(){
 
 }
 
-//Or Randomly?
-void GameEngine::assignTerritoriesEvenly(){
-  std::cout << "TODO: GameEngine::assignTerritoriesEvenly() - Assign territories to each player evenly (or randomly?)";
-}
+

@@ -38,7 +38,10 @@ private:
   std::string fileName;
   Player* currentPlayerTurn = nullptr;
   std::vector<Player*> players;
+  std::vector<std::vector<std::string>>* tournamentResults;
 
+  bool isDraw = false;
+  bool tournamentEnd = false;
   std::vector<std::string> commands = {"tournament -M <mapFiles> -P <playerStrategies> -G <numGames> -D <maxTurns>", "loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
 
   // Deck
@@ -105,6 +108,9 @@ public:
   // ----------------------------------------
   std::string stringToLog() override;
 
+  std::string getTournamentResults();
+
+
   // ----------------------------------------
   // initiates startup phase for commands read from the console
   // ----------------------------------------
@@ -161,7 +167,6 @@ public:
 
   void assignCardsEvenly();
 
-  void assignTerritoriesEvenly();
 
   // getters
   std::vector<Player*>* getPlayers();
