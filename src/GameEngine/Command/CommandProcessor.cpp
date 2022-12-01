@@ -367,12 +367,3 @@ string CommandProcessor::FileTournamentFunctionInput(string input) {
   return line;
 }
 
-//TODO: Move validateTournament into the game engine [DONE]
-//TODO: Create TournamentDriver.cpp [DONE]
-//TODO: Add testTournament() [DONE]
-//TODO: Make sure each game is declared a draw after D turns [DONE]
-//TODO: Make sure tournament plays all the games automatically without user interaction [DONE]
-//TODO: Add required code to GameEngine [DONE]
-
-//TODO: Complete GameEngine::assignTerritoriesEvenly() function - Assign territories to each player evenly (or randomly?)
-//TODO: At the end of the tournament, a report of the results should be output to the log file

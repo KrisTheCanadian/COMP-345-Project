@@ -31,7 +31,6 @@ void GameEngine::startupPhase() {
     Command* command;
     std::string strCommand;
     std::string effect;
-    tournamentEnd = false;
 
     if(!commandProcessor){ throw std::runtime_error("GameEngine::startupPhase::ASSERT commandProcessor is null"); }
     cout << "Welcome to the startup phase of the game!\n"<< endl;
@@ -186,6 +185,7 @@ GameEngine::~GameEngine() {
   delete flr;
   delete logObserver;
   delete commandProcessor;
+  delete tournamentResults;
 }
 
 GameEngine::GameEngine(int argc, char** argv, bool testing) {
@@ -479,8 +479,9 @@ bool GameEngine::isTesting() const {
 
 void GameEngine::runTournament() {
     tournamentResults = new std::vector<std::vector<std::string>>;
+    tournamentEnd = false;
   for(int i = 0; i < allMaps.size(); i++){
-    loadMap("res/" + allMaps[i]);
+    loadMap(allMaps[i]);
     std::vector<std::string> currMap{};
     currMap.push_back(allMaps.at(i));
     if(validateMap()){
@@ -497,7 +498,7 @@ void GameEngine::runTournament() {
 
         resetGame();
         state = GE_Tournament;
-//        loadMap(allMaps[i]);
+        loadMap(allMaps[i]);
       }
     }
     else{
@@ -510,6 +511,7 @@ void GameEngine::runTournament() {
   }
     tournamentEnd = true;
     Subject::notify(this);
+
 }
 
 std::string GameEngine::getTournamentResults() {
@@ -520,11 +522,11 @@ std::string GameEngine::getTournamentResults() {
     str << "Tournament Mode: " << endl;
     str << "M: ";
     for(int i = 0; i < tournamentResults->size(); i++){
-        str << (tournamentResults->at(i))[0] << (i == tournamentResults->size()-1)? ', ' : ' ';
+        str << (tournamentResults->at(i))[0] << ((i != tournamentResults->size()-1)? ',' : ' ');
     }
     str << endl << "P: ";
-    for(int i = 0; i < players.size(); i++ ){
-        str << (players.at(i)->getName()) << (i == players.size()-1)? ', ' : ' ';
+    for(int i = 0; i < allPlayerStrategies.size(); i++ ){
+        str << (allPlayerStrategies.at(i)) << ((i != allPlayerStrategies.size()-1)? ',' : ' ');
     }
     str << endl << "G: " << numberOfGames << endl << "D: " << maxNumberOfTurns << endl;
     str << std::left << std::setw(mapNameWidth) << std::setfill(separator) << "Map Name";

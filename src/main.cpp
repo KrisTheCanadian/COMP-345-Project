@@ -9,11 +9,11 @@ using namespace std;
 int main(int argc, char** argv)
 {
   testTournament(argc, argv);
-//  testGameLoop(argc, argv);
-//  testCommandProcessor(argc, argv);
-//  testStartupPhase(argc, argv);
-//  testOrderExecution();
-//  testLoggingObserver(argc, argv);
+  testGameLoop(argc, argv);
+  testCommandProcessor(argc, argv);
+  testStartupPhase(argc, argv);
+  testOrderExecution();
+  testLoggingObserver(argc, argv);
   return 0;
 }
 
