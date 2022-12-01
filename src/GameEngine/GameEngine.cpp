@@ -477,14 +477,13 @@ bool GameEngine::isTesting() const {
 }
 
 void GameEngine::runTournament() {
-    tournamentResults = new std::vector<std::vector<std::string>>;
     tournamentEnd = false;
   for(int i = 0; i < allMaps.size(); i++){
+      resetGame();
     loadMap(allMaps[i]);
     std::vector<std::string> currMap{};
     currMap.push_back(allMaps.at(i));
     if(validateMap()){
-
       for(int j = 0; j < numberOfGames; j++){
         generateRandomDeck();
         for (int k = 0; k < allPlayerStrategies.size(); k++){
@@ -506,11 +505,10 @@ void GameEngine::runTournament() {
       resetGame();
       state = GE_Tournament;
     }
-      tournamentResults->push_back(currMap);
+      tournamentResults.push_back(currMap);
   }
     tournamentEnd = true;
     Subject::notify(this);
-    delete tournamentResults;
 }
 
 std::string GameEngine::getTournamentResults() {
@@ -520,8 +518,8 @@ std::string GameEngine::getTournamentResults() {
     const int nameWidth = 15;
     str << "Tournament Mode: " << endl;
     str << "M: ";
-    for(int i = 0; i < tournamentResults->size(); i++){
-        str << (tournamentResults->at(i))[0] << ((i != tournamentResults->size()-1)? ',' : ' ');
+    for(int i = 0; i < tournamentResults.size(); i++){
+        str << (tournamentResults.at(i))[0] << ((i != tournamentResults.size()-1)? ',' : ' ');
     }
     str << endl << "P: ";
     for(int i = 0; i < allPlayerStrategies.size(); i++ ){
@@ -535,11 +533,11 @@ std::string GameEngine::getTournamentResults() {
     }
     str << endl;
 
-    for(int i = 0; i < tournamentResults->size(); i++){
-        str << std::left << std::setw(mapNameWidth) << std::setfill(separator) << (tournamentResults->at(i)).at(0);
+    for(int i = 0; i < tournamentResults.size(); i++){
+        str << std::left << std::setw(mapNameWidth) << std::setfill(separator) << (tournamentResults.at(i)).at(0);
 
-        for(int j = 1; j < (tournamentResults->at(i)).size(); j++) {
-            str << std::left << std::setw(nameWidth) << std::setfill(separator) << (tournamentResults->at(i)).at(j);
+        for(int j = 1; j < (tournamentResults.at(i)).size(); j++) {
+            str << std::left << std::setw(nameWidth) << std::setfill(separator) << (tournamentResults.at(i)).at(j);
         }
         str << endl;
     }

@@ -38,7 +38,7 @@ private:
   std::string fileName;
   Player* currentPlayerTurn = nullptr;
   std::vector<Player*> players;
-  std::vector<std::vector<std::string>>* tournamentResults;
+  std::vector<std::vector<std::string>> tournamentResults;
 
   bool isDraw = false;
   bool tournamentEnd = false;
