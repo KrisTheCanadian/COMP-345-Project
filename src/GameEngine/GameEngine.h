@@ -19,6 +19,7 @@ class Deck;
 // ----------------------------------------
 enum GameEngineState {
   GE_Start = 0,
+  GE_Tournament,
   GE_Map_Loaded,
   GE_Map_Validated,
   GE_Players_Added,
@@ -37,8 +38,11 @@ private:
   std::string fileName;
   Player* currentPlayerTurn = nullptr;
   std::vector<Player*> players;
+  std::vector<std::vector<std::string>> tournamentResults;
 
-  std::vector<std::string> commands = {"loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
+  bool isDraw = false;
+  bool tournamentEnd = false;
+  std::vector<std::string> commands = {"tournament -M <mapFiles> -P <playerStrategies> -G <numGames> -D <maxTurns>", "loadmap <filename>", "validatemap", "addplayer <playername>", "gamestart", "replay", "quit"};
 
   // Deck
   Deck* deck = nullptr;
@@ -63,6 +67,10 @@ private:
 
 
 public:
+  std::vector <std::string> allMaps;
+  std::vector <std::string> allPlayerStrategies;
+  int numberOfGames = 0;
+  int maxNumberOfTurns = 0;
   // ----------------------------------------
   // Constructors
   // ----------------------------------------
@@ -80,6 +88,12 @@ public:
   ~GameEngine() override;
 
   // ----------------------------------------
+  // Validate Tournament
+  // ----------------------------------------
+
+  void validateTournament();
+
+  // ----------------------------------------
   // load game map
   // ----------------------------------------
   void loadMap(const std::string& path);
@@ -93,6 +107,9 @@ public:
   // convert current state to string
   // ----------------------------------------
   std::string stringToLog() override;
+
+  std::string getTournamentResults();
+
 
   // ----------------------------------------
   // initiates startup phase for commands read from the console
@@ -128,7 +145,7 @@ public:
 
   Map* getMap();
 
-  void mainGameLoop();
+  void mainGameLoop(int maxRounds = 500);
 
   LogObserver* getLogObserver();
 
@@ -143,6 +160,13 @@ public:
   void addPlayer(Player* player);
 
   void resetGame();
+
+  void runTournament();
+
+  void generateRandomDeck(int deckSize = 15);
+
+  void assignCardsEvenly();
+
 
   // getters
   std::vector<Player*>* getPlayers();
@@ -183,5 +207,7 @@ private:
     // convert current state to string
     // ----------------------------------------
     std::string getCurrentStateToString();
+
+    std::string getPlayerTypeToString();
 
 };

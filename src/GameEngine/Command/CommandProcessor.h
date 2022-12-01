@@ -27,7 +27,8 @@ private:
   Command* validate(const std::string& _userInput);
 
 public:
-
+    std::string FileTournamentFunctionInput(std::string input);
+    void TournamentFunctionInput(std::string);
 
   //Constructors
   explicit CommandProcessor(GameEngine*, int argc,char* argv[]);
@@ -40,6 +41,7 @@ public:
   int getCurrentState();
 
   std::vector<std::string>* getRawCommands();
+  bool validateTournament();
 
   //Functions for CommandProcessorDriver.cpp
   void printCommandCollection(const std::vector<Command *> &collection);

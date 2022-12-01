@@ -74,7 +74,7 @@ set(GAME_LIB_SRCS
 
     # Strategies
     src/Player/PlayerStrategies.cpp
-    src/Player/PlayerStrategies.h)
+    src/Player/PlayerStrategies.h src/GameEngine/TournamentDriver.cpp src/GameEngine/TournamentDriver.h)
 add_library(Game STATIC ${GAME_LIB_SRCS})
 target_include_directories(Game PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/src
