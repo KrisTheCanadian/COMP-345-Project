@@ -49,6 +49,8 @@ void Human::issueOrder() {
   if(cardsLeft > 0) {
     cout << "3. Play cards" << endl;
   }
+  cout << "4. Exit" << endl;
+  cout << "5. Finished issuing orders for the entire turn" << endl;
   cout << "--> ";
   cin >> choice;
   cout << endl;
@@ -56,22 +58,27 @@ void Human::issueOrder() {
   switch(choice) {
     case 1:
       if(reinforcementPoolLeft > 0) {
-        deploy();
+        if(!deploy()){ issueOrder(); }
       } else {
         cout << "You have no armies left to deploy." << endl;
         issueOrder();
       }
       break;
     case 2:
-      advance();
+      if(!advance()){ issueOrder(); }
       break;
     case 3:
       if(cardsLeft > 0) {
-        playCard();
+        if(!playCard()){ issueOrder(); }
       } else {
         cout << "You have no cards to play." << endl;
         issueOrder();
       }
+      break;
+    case 4:
+      break;
+    case 5:
+      isTurnDone = true;
       break;
     default:
       cout << "Invalid choice." << endl;
@@ -98,7 +105,7 @@ std::vector<Territory *> Human::toAttack() {
 
   return territoriesToAttack;
 }
-void Human::deploy() {
+bool Human::deploy() {
   int reinforcementPoolLeft = max(player->getReinforcementPool() - player->getDeployedArmiesThisTurn(), 0);
   cout << "You have " << reinforcementPoolLeft << " armies left to deploy." << endl;
   cout << "Which territory do you want to deploy to?" << endl;
@@ -107,7 +114,11 @@ void Human::deploy() {
   auto territoriesToDefend = player->toDefend();
 
   for(Territory* territory : territoriesToDefend) {
-    cout << i << ". " << territory->getName() << " (" << territory->getArmies() << " armies)" << endl;
+    if(deployedTroops.find(territory) != deployedTroops.end()) {
+      cout << i << ". " << territory->getName() << " (" << territory->getArmies() << " + " << deployedTroops[territory] << " armies)" << endl;
+    } else {
+      cout << i << ". " << territory->getName() << " (" << territory->getArmies() << " armies)" << endl;
+    }
     i++;
   }
 
@@ -118,8 +129,7 @@ void Human::deploy() {
 
   if(choice < 1 || choice > territoriesToDefend.size()) {
     cout << "Invalid choice." << endl;
-    deploy();
-    return;
+    return false;
   }
 
   Territory* territory = territoriesToDefend.at(choice - 1);
@@ -132,25 +142,27 @@ void Human::deploy() {
 
   if(armies < 1 || armies > reinforcementPoolLeft) {
     cout << "Invalid choice." << endl;
-    deploy();
-    return;
+    return false;
   }
+
+
+  deployedTroops[territory] += armies;
   player->addDeployedArmies(armies);
   player->getOrdersListObject()->add(new Deploy(player->getGameInstance(), territory, player, armies));
 
   cout << "You have " << player->getReinforcementPool() - player->getDeployedArmiesThisTurn() << " armies left to deploy." << endl;
   cout << endl;
-  issueOrder();
+  return true;
 }
 
-void Human::playCard() {
+bool Human::playCard() {
   int cardsLeft = (int)player->getHand()->getCards()->size();
   cout << "You have " << cardsLeft << " cards in your hand." << endl;
   cout << "Which card do you want to play?" << endl;
 
   int i = 1;
   for(Card* card : *player->getHand()->getCards()) {
-    cout << i << ". " << card->getCardType() << endl;
+    cout << i << ". " << card->getCardTypeString() << endl;
     i++;
   }
 
@@ -161,8 +173,7 @@ void Human::playCard() {
 
   if(choice < 1 || choice > cardsLeft) {
     cout << "Invalid choice." << endl;
-    playCard();
-    return;
+    return false;
   }
 
   Card* card = player->getHand()->getCards()->at(choice - 1);
@@ -171,10 +182,10 @@ void Human::playCard() {
 
   cout << "You have " << player->getHand()->getCards()->size() << " cards left in your hand." << endl;
   cout << endl;
-  issueOrder();
+  return true;
 }
 
-void Human::advance() {
+bool Human::advance() {
   int reinforcementPoolLeft = max(player->getReinforcementPool() - player->getDeployedArmiesThisTurn(), 0);
   cout << "You have " << reinforcementPoolLeft << " armies left to deploy." << endl;
   cout << "Which territory do you want to advance from?" << endl;
@@ -183,7 +194,11 @@ void Human::advance() {
   auto territoriesToDefend = player->toDefend();
 
   for(Territory* territory : territoriesToDefend) {
-    cout << i << ". " << territory->getName() << " (" << territory->getArmies() << " armies)" << endl;
+    if(deployedTroops.find(territory) != deployedTroops.end()) {
+      cout << i << ". " << territory->getName() << " (" << territory->getArmies() << " + " << deployedTroops[territory] << " armies)" << endl;
+    } else {
+      cout << i << ". " << territory->getName() << " (" << territory->getArmies() << " armies)" << endl;
+    }
     i++;
   }
 
@@ -194,8 +209,7 @@ void Human::advance() {
 
   if(choice < 1 || choice > territoriesToDefend.size()) {
     cout << "Invalid choice." << endl;
-    advance();
-    return;
+    return false;
   }
 
   Territory* territory = territoriesToDefend.at(choice - 1);
@@ -206,8 +220,19 @@ void Human::advance() {
   auto territoriesToAttack = player->toAttack();
 
   for(auto& t : territoriesToAttack) {
-    cout << i << ". " << t->getName() << " (" << t->getArmies() << " armies)" << " Owner: " << (t->getPlayer() == nullptr ? "Neutral": t->getPlayer()->getName()) << endl;
-    i++;
+    if(territory->isAdjacent(t)) {
+      if(deployedTroops.find(t) != deployedTroops.end()) {
+        cout << i << ". " << t->getName() << " (" << t->getArmies() << " armies) & (Attacking with " << deployedTroops[t] << " Armies)" << " Owner: " << (t->getPlayer() == nullptr ? "Neutral": t->getPlayer()->getName()) << endl;
+      } else {
+        cout << i << ". " << t->getName() << " (" << t->getArmies() << " armies)" << " Owner: " << (t->getPlayer() == nullptr ? "Neutral": t->getPlayer()->getName()) << endl;
+      }
+      i++;
+    }
+  }
+
+  if(i == 1) {
+    cout << "No adjacent territories to attack." << endl;
+    return false;
   }
 
   cout << "--> ";
@@ -216,8 +241,7 @@ void Human::advance() {
 
   if(choice < 1 || choice > territoriesToAttack.size()) {
     cout << "Invalid choice." << endl;
-    advance();
-    return;
+    return false;
   }
 
   Territory* targetTerritory = territoriesToAttack.at(choice - 1);
@@ -228,17 +252,17 @@ void Human::advance() {
   cin >> armies;
   cout << endl;
 
-  if(armies < 1 || armies > territory->getArmies()) {
+  if(armies < 1 || armies > territory->getArmies() + deployedTroops[territory]) {
     cout << "Invalid choice." << endl;
-    advance();
-    return;
+    return false;
   }
 
-  player->getOrdersListObject()->add(new Advance(player->getGameInstance(), territory, targetTerritory, player, armies));
+  deployedTroops[targetTerritory] += armies;
+  deployedTroops[territory] -= armies;
 
-  cout << "You have " << player->getReinforcementPool() - player->getDeployedArmiesThisTurn() << " armies left to deploy." << endl;
+  player->getOrdersListObject()->add(new Advance(player->getGameInstance(), territory, targetTerritory, player, armies));
   cout << endl;
-  issueOrder();
+  return true;
 }
 Order* Human::playReinforcementCard() {
   player->addReinforcement(5);
@@ -735,7 +759,8 @@ std::vector<Territory *> Benevolent::toAttack() {
 Order* Benevolent::decideCard(Card* card) {
   switch(card->getCardType()) {
     case CardType::CT_Bomb:
-      return playBombCard();
+      // will not play bombs
+      return nullptr;
     case CardType::CT_Blockade:
       return playBlockadeCard();
     case CardType::CT_Reinforcement:
@@ -744,33 +769,11 @@ Order* Benevolent::decideCard(Card* card) {
       return playDiplomacyCard();
     case CardType::CT_Airlift:
       return playAirliftCard();
+    default:
+      throw std::runtime_error("ASSERT::Benevolent::decideCard Invalid card type");
   }
 }
 
-Order* Benevolent::playBombCard() {
-  // bomb an enemy territory with the most armies that is connected to a territory that is owned by the player
-  auto territoriesToDefend = player->toDefend();
-  int mostArmies = 0;
-  Territory* territoryToBomb = nullptr;
-  for(auto& t: territoriesToDefend) {
-    for(auto& adjTerritory: *t->getAdjacentTerritories()) {
-      if(adjTerritory->getPlayer() != player && adjTerritory->getPlayer() != nullptr) {
-        if(adjTerritory->getArmies() > mostArmies) {
-          mostArmies = adjTerritory->getArmies();
-          territoryToBomb = adjTerritory;
-        }
-      }
-    }
-  }
-
-  if(territoryToBomb == nullptr) {
-    cout << "You don't have any territories to bomb." << endl;
-    return nullptr;
-  }
-
-  cout << "Issued Bombing " << territoryToBomb->getName() << "." << endl;
-  return new Bomb(player->getGameInstance(), territoryToBomb, player);
-}
 Order* Benevolent::playReinforcementCard() {
   player->addReinforcement(5);
   cout << "Issued Reinforcement of 5 armies." << endl;

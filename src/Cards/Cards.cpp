@@ -20,7 +20,7 @@ void Card::setCardType(const CardType& type)
     cardType = type;
 }
 
-CardType Card::getCardType()
+CardType Card::getCardType() const
 {
     return cardType;
 }
@@ -52,7 +52,7 @@ std::string Card::CardTypeToString(CardType& c) {
     case CT_Bomb:
       return "Bomb";
     case CT_Reinforcement:
-      return "CT_Reinforcement";
+      return "Reinforcement";
     case CT_Blockade:
       return "Blockade";
     case CT_Airlift:
@@ -62,6 +62,9 @@ std::string Card::CardTypeToString(CardType& c) {
     default:
       throw std::runtime_error("ASSERT: Invalid Card Type");
   }
+}
+std::string Card::getCardTypeString() {
+  return Card::CardTypeToString(cardType);
 }
 
 // Destructor

@@ -1,6 +1,8 @@
 #include "GameEngine.h"
+#include "Player/PlayerStrategies.h"
 #include <random>
 #include <iomanip>
+
 
 void GameEngine::setCurrentState(GameEngineState engineState) {
   this->state = engineState;
@@ -312,9 +314,16 @@ void GameEngine::issueOrdersPhase() {
 
     // when no more orders need to be issued
     if(currentPlayerTurn->getDeployedArmiesThisTurn() >= currentPlayerTurn->getReinforcementPool()){
+      if(auto strategy = dynamic_cast<Human*>(currentPlayerTurn->getStrategy())){
+        if(strategy->isTurnDone) {
+          completed[phaseTurn] = true;
+          continue;
+        }
+      } else {
+        completed[phaseTurn] = true;
+        continue;
+      }
       cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
-      completed[phaseTurn] = true;
-      continue;
     }
 
     currentPlayerTurn->issueOrder();
@@ -324,6 +333,10 @@ void GameEngine::issueOrdersPhase() {
 
   for(auto& player : players){
     player->clearDeploymentArmies();
+    // clear the deployment troops for all human players
+    if(auto strategy = dynamic_cast<Human*>(player->getStrategy())){
+      strategy->deployedTroops.clear();
+    }
   }
 }
 

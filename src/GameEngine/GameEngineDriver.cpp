@@ -6,7 +6,7 @@ void testStartupPhase(int argc, char** argv){
 }
 void testGameLoop(int argc, char** argv){
   // create a game engine
-  auto gameEngine = GameEngine(argc, argv, true);
+  auto gameEngine = GameEngine(argc, argv);
 
   // add cards to the gameEngine deck
   auto deck = gameEngine.getDeck();
@@ -35,7 +35,7 @@ void testGameLoop(int argc, char** argv){
   gameEngine.loadMap("../res/TestMap1_valid.map");
 
   // create players
-  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley", "Aggressive");
+  auto player1 = new Player(&gameEngine, new Hand(), "Rick Astley", "Human");
   auto player2 = new Player(&gameEngine, new Hand(), "Bob Ross", "Aggressive");
   auto player3 = new Player(&gameEngine, new Hand(), "Felix Kjellberg", "Aggressive");
   auto player4 = new Player(&gameEngine, new Hand(), "Elon Musk", "Aggressive");

@@ -66,6 +66,7 @@ public:
   Territory* findFirstNeighbourTerritory(Territory* target);
   std::vector<Player*> getEnemies();
 
+  PlayerStrategy* getStrategy() const;
 
   Order* createOrderFromCard(Card* card);
 
