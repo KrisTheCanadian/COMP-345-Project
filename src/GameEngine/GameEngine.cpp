@@ -312,18 +312,19 @@ void GameEngine::issueOrdersPhase() {
 
     cout << "Player: " << currentPlayerTurn->getName() << "'s turn to issue an order!" << endl;
 
+    auto human = dynamic_cast<Human*>(currentPlayerTurn->getStrategy());
+
     // when no more orders need to be issued
-    if(currentPlayerTurn->getDeployedArmiesThisTurn() >= currentPlayerTurn->getReinforcementPool()){
-      if(auto strategy = dynamic_cast<Human*>(currentPlayerTurn->getStrategy())){
-        if(strategy->isTurnDone) {
-          completed[phaseTurn] = true;
-          continue;
-        }
-      } else {
-        completed[phaseTurn] = true;
-        continue;
-      }
+    if(currentPlayerTurn->getDeployedArmiesThisTurn() >= currentPlayerTurn->getReinforcementPool() && human == nullptr){
+      completed[phaseTurn] = true;
       cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
+      continue;
+    }
+
+    if(human != nullptr && human->isTurnDone){
+      completed[phaseTurn] = true;
+      cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
+      continue;
     }
 
     currentPlayerTurn->issueOrder();
@@ -335,7 +336,7 @@ void GameEngine::issueOrdersPhase() {
     player->clearDeploymentArmies();
     // clear the deployment troops for all human players
     if(auto strategy = dynamic_cast<Human*>(player->getStrategy())){
-      strategy->deployedTroops.clear();
+      strategy->reset();
     }
   }
 }
@@ -499,8 +500,8 @@ void GameEngine::runTournament() {
     if(validateMap()){
       for(int j = 0; j < numberOfGames; j++){
         generateRandomDeck();
-        for (int k = 0; k < allPlayerStrategies.size(); k++){
-          new Player(this, new Hand(), allPlayerStrategies[k], allPlayerStrategies[k]);
+        for (auto & allPlayerStrategie : allPlayerStrategies){
+          new Player(this, new Hand(), allPlayerStrategie, allPlayerStrategie);
         }
         assignCardsEvenly();
         distributeTerritories();
@@ -546,11 +547,11 @@ std::string GameEngine::getTournamentResults() {
     }
     str << endl;
 
-    for(int i = 0; i < tournamentResults.size(); i++){
-        str << std::left << std::setw(mapNameWidth) << std::setfill(separator) << (tournamentResults.at(i)).at(0);
+    for(auto & tournamentResult : tournamentResults){
+        str << std::left << std::setw(mapNameWidth) << std::setfill(separator) << tournamentResult.at(0);
 
-        for(int j = 1; j < (tournamentResults.at(i)).size(); j++) {
-            str << std::left << std::setw(nameWidth) << std::setfill(separator) << (tournamentResults.at(i)).at(j);
+        for(int j = 1; j < tournamentResult.size(); j++) {
+            str << std::left << std::setw(nameWidth) << std::setfill(separator) << tournamentResult.at(j);
         }
         str << endl;
     }
@@ -577,12 +578,12 @@ void GameEngine::generateRandomDeck(int deckSize){
 
 //Or Randomly?
 void GameEngine::assignCardsEvenly(){
-  for(int i = 0; i < players.size(); i++){
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Reinforcement, this));
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Blockade, this));
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Bomb, this));
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Diplomacy, this));
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Airlift, this));
+  for(auto & player : players){
+    player->getHand()->addToHand(new Card(CardType::CT_Reinforcement, this));
+    player->getHand()->addToHand(new Card(CardType::CT_Blockade, this));
+    player->getHand()->addToHand(new Card(CardType::CT_Bomb, this));
+    player->getHand()->addToHand(new Card(CardType::CT_Diplomacy, this));
+    player->getHand()->addToHand(new Card(CardType::CT_Airlift, this));
   }
 
 }

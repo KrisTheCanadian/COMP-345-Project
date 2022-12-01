@@ -41,6 +41,8 @@ private:
   Order* playBlockadeCard();
   Order* playDiplomacyCard();
   Order* playAirliftCard();
+public:
+  void reset();
 };
 
 class Aggressive : public PlayerStrategy {
