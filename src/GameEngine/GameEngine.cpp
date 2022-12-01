@@ -185,7 +185,6 @@ GameEngine::~GameEngine() {
   delete flr;
   delete logObserver;
   delete commandProcessor;
-  delete tournamentResults;
 }
 
 GameEngine::GameEngine(int argc, char** argv, bool testing) {
@@ -511,7 +510,7 @@ void GameEngine::runTournament() {
   }
     tournamentEnd = true;
     Subject::notify(this);
-
+    delete tournamentResults;
 }
 
 std::string GameEngine::getTournamentResults() {
