@@ -58,7 +58,10 @@ set(GAME_LIB_SRCS
     src/GameEngine/GameEngineDriver.h
     src/GameEngine/GameEngine.cpp
     src/GameEngine/GameEngine.h
-    src/Logger/LogObserver.cpp src/Logger/LogObserver.h src/Logger/LoggingObserverDriver.cpp src/Logger/LoggingObserverDriver.h
+    src/Logger/LogObserver.cpp
+    src/Logger/LogObserver.h
+    src/Logger/LoggingObserverDriver.cpp
+    src/Logger/LoggingObserverDriver.h
 
     # CommandProcessing
     src/GameEngine/Command/Command.cpp
@@ -74,11 +77,11 @@ set(GAME_LIB_SRCS
 
     # Strategies
     src/Player/PlayerStrategies.cpp
-    src/Player/PlayerStrategies.h)
+    src/Player/PlayerStrategies.h
+    )
+
 add_library(Game STATIC ${GAME_LIB_SRCS})
-target_include_directories(Game PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        )
+target_include_directories(Game PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 
 

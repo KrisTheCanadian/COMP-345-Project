@@ -8,10 +8,10 @@ using namespace std;
 int main(int argc, char** argv)
 {
   testGameLoop(argc, argv);
-//  testCommandProcessor(argc, argv);
-//  testStartupPhase(argc, argv);
-//  testOrderExecution();
-//  testLoggingObserver(argc, argv);
+  testCommandProcessor(argc, argv);
+  testStartupPhase(argc, argv);
+  testOrderExecution();
+  testLoggingObserver(argc, argv);
   return 0;
 }
 

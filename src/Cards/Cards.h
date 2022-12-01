@@ -56,7 +56,8 @@ public:
   // Setters + Getters
   // --------------------------------
   void setCardType(const CardType& type);
-  CardType getCardType();
+  CardType getCardType() const;
+  std::string getCardTypeString();
 
   // --------------------------------
   // Static Method to Map CardType Enum to String
