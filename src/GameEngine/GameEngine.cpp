@@ -510,7 +510,6 @@ void GameEngine::runTournament() {
   }
     tournamentEnd = true;
     Subject::notify(this);
-    delete tournamentResults;
 }
 
 std::string GameEngine::getTournamentResults() {
