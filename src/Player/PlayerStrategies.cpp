@@ -109,6 +109,10 @@ std::vector<Territory *> Human::toAttack() {
     }
   }
 
+  // remove duplicates
+  sort( territoriesToAttack.begin(), territoriesToAttack.end() );
+  territoriesToAttack.erase( unique( territoriesToAttack.begin(), territoriesToAttack.end() ), territoriesToAttack.end() );
+
   return territoriesToAttack;
 }
 bool Human::deploy() {
@@ -228,11 +232,10 @@ bool Human::advance() {
   for(auto& t : territoriesToAttack) {
     if(territory->isAdjacent(t)) {
       if(deployedTroops.find(t) != deployedTroops.end()) {
-        cout << i << ". " << t->getName() << " (" << t->getArmies() << " armies) & (Attacking with " << deployedTroops[t] << " Armies)" << " Owner: " << (t->getPlayer() == nullptr ? "Neutral": t->getPlayer()->getName()) << endl;
+        cout << i++ << ". " << t->getName() << " (" << t->getArmies() << " armies) & (Attacking with " << deployedTroops[t] << " Armies)" << " Owner: " << (t->getPlayer() == nullptr ? "Neutral": t->getPlayer()->getName()) << endl;
       } else {
-        cout << i << ". " << t->getName() << " (" << t->getArmies() << " armies)" << " Owner: " << (t->getPlayer() == nullptr ? "Neutral": t->getPlayer()->getName()) << endl;
+        cout << i++ << ". " << t->getName() << " (" << t->getArmies() << " armies)" << " Owner: " << (t->getPlayer() == nullptr ? "Neutral": t->getPlayer()->getName()) << endl;
       }
-      i++;
     }
   }
 
@@ -445,6 +448,10 @@ Order* Human::decideCard(Card* card) {
   }
 
   throw std::runtime_error("ASSERT::Human::decideCard Invalid card type.");
+}
+void Human::reset() {
+  this->deployedTroops.clear();
+  this->isTurnDone = false;
 }
 
 

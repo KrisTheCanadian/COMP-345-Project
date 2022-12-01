@@ -7,6 +7,21 @@ using namespace std;
 regex regexRuleLoadMap("loadmap .+.map$");
 regex regexRulePlayerAdd("addplayer .+");
 
+vector<string> split(string s, string delimiter) {
+  size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+  string token;
+  vector<string> res;
+
+  while ((pos_end = s.find(delimiter, pos_start)) != string::npos) {
+    token = s.substr(pos_start, pos_end - pos_start);
+    pos_start = pos_end + delim_len;
+    res.push_back(token);
+  }
+
+  res.push_back(s.substr(pos_start));
+  return res;
+}
+
 CommandProcessor::CommandProcessor(GameEngine* game, int argc, char** argv) : game(game) {
   commandCollection = {};
   // add all program arguments to a raw string
@@ -71,7 +86,25 @@ Command* CommandProcessor::validate(const string& _userInput){
               cout << currentCommandObj->getEffect() << endl;
               return currentCommandObj;
             }
+
+            else if (_userInput.substr(0, _userInput.find(' ')) == "tournament"){
+              TournamentFunctionInput(_userInput);
+              try {
+                game->validateTournament();
+              }
+              catch(std::runtime_error& err){
+                cout<< err.what() << endl;
+                game->setCurrentState(GE_Start);
+                break;
+              }
+              game->setCurrentState(GE_Tournament);
+              currentCommandObj->saveEffect("Tournament started");
+              cout << currentCommandObj->getEffect() << endl;
+              return currentCommandObj;
+            }
+
             break;
+
 
         case GE_Map_Loaded:
             if (_userInput == "validatemap"){
@@ -230,6 +263,8 @@ string CommandProcessor::StateToString() {
   switch (game->getCurrentState()) {
     case GE_Start:
         return "Start";
+    case GE_Tournament:
+      return "Tournament";
     case GE_Map_Loaded:
         return "Map Loaded";
     case GE_Map_Validated:
@@ -280,3 +315,55 @@ CommandProcessor::~CommandProcessor() {
     Subject::detach((ILogObserver* )game->getLogObserver());
   }
 }
+
+void CommandProcessor::TournamentFunctionInput(string input) {
+  vector<string> enteredTournamentString = split(input, " ");
+  int i = 1; // skip the first word "tournament"
+  while (i < enteredTournamentString.size()) {
+    if (enteredTournamentString[i] == "-M") {
+      while (enteredTournamentString[++i] != "-P") {
+        game->allMaps.push_back(enteredTournamentString[i]);
+      }
+    }
+    else if (enteredTournamentString[i] == "-P") {
+      while (enteredTournamentString[++i] != "-G") {
+        game->allPlayerStrategies.push_back(enteredTournamentString[i]);
+      }
+
+    }
+    else if (enteredTournamentString[i] == "-G") {
+      i++;
+      string temp;
+      temp = enteredTournamentString[i++];
+      if (!isdigit(temp[0])) {
+        cout << "The number of games has to be a digit" << endl;
+        exit(0);
+      }
+      game->numberOfGames = stoi(temp);
+
+    }
+    else if (enteredTournamentString[i] == "-D") {
+      i++;
+      string temp;
+      temp = enteredTournamentString[i++];
+      if (!isdigit(temp[0])) {
+        cout << "The max number of turns has to be a digit" << endl;
+        exit(0);
+      }
+      game->maxNumberOfTurns = stoi(temp);
+    }
+  }
+}
+
+string CommandProcessor::FileTournamentFunctionInput(string input) {
+  ifstream ifs;
+  string line;
+  ifs.open(input);
+  if (!ifs.eof()) {
+    getline(ifs, line);
+    TournamentFunctionInput(line);
+  }
+  ifs.close();
+  return line;
+}
+
