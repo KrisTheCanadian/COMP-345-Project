@@ -395,7 +395,7 @@ void GameEngine::mainGameLoop(int maxRounds) {
     executeOrdersPhase();
     round++;
     if(round > maxRounds){
-      cout << "This game is gonna take forever. Draw..";
+      cout << "This game is gonna take forever. Draw.." << endl;
       isDraw = true;
       break;
     }
@@ -461,6 +461,13 @@ FileCommandProcessorAdapter *GameEngine::getFileCommandProcessorAdapter() {
 
 void GameEngine::resetGame() {
 
+  if(multipleTournaments){
+    allMaps = {};
+    allPlayerStrategies = {};
+    numberOfGames = 0;
+    maxNumberOfTurns = 0;
+  }
+
   for(auto player : players){
     delete player;
   }
@@ -470,18 +477,20 @@ void GameEngine::resetGame() {
   delete adapter;
   delete flr;
   delete logObserver;
-  delete commandProcessor;
 
   this->players = vector<Player*>();
   this->currentPlayerTurn = nullptr;
-
   this->logObserver = new LogObserver(this);
   this->map = new Map(this);
   this->deck = new Deck(this);
   this->adapter = new FileCommandProcessorAdapter(this, argc, argv);
   this->flr = new FileLineReader();
-  this->commandProcessor = new CommandProcessor(this, argc, argv);
   this->resetObservers();
+
+  if(!multipleTournaments){
+    delete commandProcessor;
+    this->commandProcessor = new CommandProcessor(this, argc, argv);
+  }
 
   Subject::attach((ILogObserver*)logObserver);
 
@@ -493,25 +502,28 @@ bool GameEngine::isTesting() const {
 void GameEngine::runTournament() {
     tournamentEnd = false;
   for(int i = 0; i < allMaps.size(); i++){
-      resetGame();
     loadMap(allMaps[i]);
     std::vector<std::string> currMap{};
     currMap.push_back(allMaps.at(i));
+    int localNumGames = numberOfGames;
+    int localMaxTurns = maxNumberOfTurns;
+    std::vector<std::string> localAllPlayerStrategies = allPlayerStrategies;
     if(validateMap()){
-      for(int j = 0; j < numberOfGames; j++){
+      for(int j = 0; j < localNumGames; j++){
         generateRandomDeck();
-        for (auto & allPlayerStrategie : allPlayerStrategies){
+        for (auto & allPlayerStrategie : localAllPlayerStrategies){
           new Player(this, new Hand(), allPlayerStrategie, allPlayerStrategie);
         }
         assignCardsEvenly();
         distributeTerritories();
-        mainGameLoop(maxNumberOfTurns);
+        mainGameLoop(localMaxTurns);
         currMap.push_back(isDraw? "draw" : checkWinState()->getName());
 
         resetGame();
         state = GE_Tournament;
         loadMap(allMaps[i]);
       }
+      resetGame();
     }
     else{
       std::cout << "" << std::endl;

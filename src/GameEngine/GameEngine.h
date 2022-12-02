@@ -71,6 +71,7 @@ public:
   std::vector <std::string> allPlayerStrategies;
   int numberOfGames = 0;
   int maxNumberOfTurns = 0;
+  bool multipleTournaments = false;
   // ----------------------------------------
   // Constructors
   // ----------------------------------------

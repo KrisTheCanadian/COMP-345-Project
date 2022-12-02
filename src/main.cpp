@@ -9,10 +9,13 @@ using namespace std;
 int main(int argc, char** argv)
 {
   testTournament(argc, argv);
+  std::cout << std::endl;
   testGameLoop(argc, argv);
+  std::cout << std::endl;
   testCommandProcessor(argc, argv);
   testStartupPhase(argc, argv);
   testOrderExecution();
+  std::cout << std::endl;
   testLoggingObserver(argc, argv);
   return 0;
 }
