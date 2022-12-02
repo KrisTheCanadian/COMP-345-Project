@@ -1,0 +1,3 @@
+tournament -M res/TestMap1_valid.map res/TestMap4_valid.map -P Aggressive Neutral -G 3 -D 20
+tournament -M res/TestMap1_valid.map -P Aggressive Aggressive -G 3 -D 20
+tournament -M res/TestMap3_invalid.map -P Aggressive Aggressive -G 3 -D 20
