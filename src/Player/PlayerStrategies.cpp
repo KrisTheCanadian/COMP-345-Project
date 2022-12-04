@@ -76,6 +76,7 @@ void Human::issueOrder() {
       }
       break;
     case 4:
+      cout << "Exiting..." << endl;
       break;
     case 5:
       if(reinforcementPoolLeft > 0) {
