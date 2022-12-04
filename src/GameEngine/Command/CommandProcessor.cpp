@@ -355,15 +355,37 @@ void CommandProcessor::TournamentFunctionInput(string input) {
   }
 }
 
-string CommandProcessor::FileTournamentFunctionInput(string input) {
+void CommandProcessor::FileTournamentFunctionInput(string input) {
+
+  std::ifstream temp(input);
+  int numberOfTournaments = 0;
+  int tournamentsPlayed = 0;
+  std::string lineCounter;
+  while (std::getline(temp , lineCounter)){
+    numberOfTournaments++;
+  }
+
+  if(numberOfTournaments > 1){
+    game->multipleTournaments = true;
+  }
+
+  temp.close();
   ifstream ifs;
   string line;
   ifs.open(input);
-  if (!ifs.eof()) {
-    getline(ifs, line);
+
+  if(!ifs.is_open()){
+    throw std::runtime_error("File already open");
+  }
+  while(getline(ifs, line)){
     TournamentFunctionInput(line);
+    game->validateTournament();
+    game->runTournament();
+    tournamentsPlayed++;
+    std::cout << std::endl;
+    if(tournamentsPlayed < numberOfTournaments){
+      std::cout << "------- NEXT TOURNAMENT STARTING NOW! -------" << std::endl;
+    }
   }
   ifs.close();
-  return line;
 }
-

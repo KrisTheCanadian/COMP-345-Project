@@ -27,18 +27,22 @@ public:
   std::vector<Territory *> toDefend() override;
   std::vector<Territory *> toAttack() override;
   Order* decideCard(Card*) override;
+  std::unordered_map<Territory*, int> deployedTroops;
+  bool isTurnDone = false;
 
 private:
-  void playCard();
+  bool playCard();
 
-  void deploy();
-  void advance();
+  bool deploy();
+  bool advance();
 
   Order* playReinforcementCard();
   Order* playBombCard();
   Order* playBlockadeCard();
   Order* playDiplomacyCard();
   Order* playAirliftCard();
+public:
+  void reset();
 };
 
 class Aggressive : public PlayerStrategy {
@@ -69,7 +73,6 @@ public:
   std::vector<Territory *> toDefend() override;
   std::vector<Territory *> toAttack() override;
 
-  Order* playBombCard();
   Order* playReinforcementCard();
   Order* playBlockadeCard();
   Order* playDiplomacyCard();

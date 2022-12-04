@@ -1,6 +1,8 @@
 #include "GameEngine.h"
+#include "Player/PlayerStrategies.h"
 #include <random>
 #include <iomanip>
+
 
 void GameEngine::setCurrentState(GameEngineState engineState) {
   this->state = engineState;
@@ -310,10 +312,18 @@ void GameEngine::issueOrdersPhase() {
 
     cout << "Player: " << currentPlayerTurn->getName() << "'s turn to issue an order!" << endl;
 
+    auto human = dynamic_cast<Human*>(currentPlayerTurn->getStrategy());
+
     // when no more orders need to be issued
-    if(currentPlayerTurn->getDeployedArmiesThisTurn() >= currentPlayerTurn->getReinforcementPool()){
-      cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
+    if(currentPlayerTurn->getDeployedArmiesThisTurn() >= currentPlayerTurn->getReinforcementPool() && human == nullptr){
       completed[phaseTurn] = true;
+      cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
+      continue;
+    }
+
+    if(human != nullptr && human->isTurnDone){
+      completed[phaseTurn] = true;
+      cout << "Player: " << currentPlayerTurn->getName() << " has no more orders to issue." << endl;
       continue;
     }
 
@@ -324,6 +334,10 @@ void GameEngine::issueOrdersPhase() {
 
   for(auto& player : players){
     player->clearDeploymentArmies();
+    // clear the deployment troops for all human players
+    if(auto strategy = dynamic_cast<Human*>(player->getStrategy())){
+      strategy->reset();
+    }
   }
 }
 
@@ -381,7 +395,7 @@ void GameEngine::mainGameLoop(int maxRounds) {
     executeOrdersPhase();
     round++;
     if(round > maxRounds){
-      cout << "This game is gonna take forever. Draw..";
+      cout << "This game is gonna take forever. Draw.." << endl;
       isDraw = true;
       break;
     }
@@ -447,6 +461,13 @@ FileCommandProcessorAdapter *GameEngine::getFileCommandProcessorAdapter() {
 
 void GameEngine::resetGame() {
 
+  if(multipleTournaments){
+    allMaps = {};
+    allPlayerStrategies = {};
+    numberOfGames = 0;
+    maxNumberOfTurns = 0;
+  }
+
   for(auto player : players){
     delete player;
   }
@@ -456,18 +477,20 @@ void GameEngine::resetGame() {
   delete adapter;
   delete flr;
   delete logObserver;
-  delete commandProcessor;
 
   this->players = vector<Player*>();
   this->currentPlayerTurn = nullptr;
-
   this->logObserver = new LogObserver(this);
   this->map = new Map(this);
   this->deck = new Deck(this);
   this->adapter = new FileCommandProcessorAdapter(this, argc, argv);
   this->flr = new FileLineReader();
-  this->commandProcessor = new CommandProcessor(this, argc, argv);
   this->resetObservers();
+
+  if(!multipleTournaments){
+    delete commandProcessor;
+    this->commandProcessor = new CommandProcessor(this, argc, argv);
+  }
 
   Subject::attach((ILogObserver*)logObserver);
 
@@ -479,25 +502,28 @@ bool GameEngine::isTesting() const {
 void GameEngine::runTournament() {
     tournamentEnd = false;
   for(int i = 0; i < allMaps.size(); i++){
-      resetGame();
     loadMap(allMaps[i]);
     std::vector<std::string> currMap{};
     currMap.push_back(allMaps.at(i));
+    int localNumGames = numberOfGames;
+    int localMaxTurns = maxNumberOfTurns;
+    std::vector<std::string> localAllPlayerStrategies = allPlayerStrategies;
     if(validateMap()){
-      for(int j = 0; j < numberOfGames; j++){
+      for(int j = 0; j < localNumGames; j++){
         generateRandomDeck();
-        for (int k = 0; k < allPlayerStrategies.size(); k++){
-          new Player(this, new Hand(), allPlayerStrategies[k], allPlayerStrategies[k]);
+        for (auto & allPlayerStrategie : localAllPlayerStrategies){
+          new Player(this, new Hand(), allPlayerStrategie, allPlayerStrategie);
         }
         assignCardsEvenly();
         distributeTerritories();
-        mainGameLoop(maxNumberOfTurns);
+        mainGameLoop(localMaxTurns);
         currMap.push_back(isDraw? "draw" : checkWinState()->getName());
 
         resetGame();
         state = GE_Tournament;
         loadMap(allMaps[i]);
       }
+      resetGame();
     }
     else{
       std::cout << "" << std::endl;
@@ -533,11 +559,11 @@ std::string GameEngine::getTournamentResults() {
     }
     str << endl;
 
-    for(int i = 0; i < tournamentResults.size(); i++){
-        str << std::left << std::setw(mapNameWidth) << std::setfill(separator) << (tournamentResults.at(i)).at(0);
+    for(auto & tournamentResult : tournamentResults){
+        str << std::left << std::setw(mapNameWidth) << std::setfill(separator) << tournamentResult.at(0);
 
-        for(int j = 1; j < (tournamentResults.at(i)).size(); j++) {
-            str << std::left << std::setw(nameWidth) << std::setfill(separator) << (tournamentResults.at(i)).at(j);
+        for(int j = 1; j < tournamentResult.size(); j++) {
+            str << std::left << std::setw(nameWidth) << std::setfill(separator) << tournamentResult.at(j);
         }
         str << endl;
     }
@@ -564,12 +590,12 @@ void GameEngine::generateRandomDeck(int deckSize){
 
 //Or Randomly?
 void GameEngine::assignCardsEvenly(){
-  for(int i = 0; i < players.size(); i++){
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Reinforcement, this));
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Blockade, this));
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Bomb, this));
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Diplomacy, this));
-    players[i]->getHand()->addToHand(new Card(CardType::CT_Airlift, this));
+  for(auto & player : players){
+    player->getHand()->addToHand(new Card(CardType::CT_Reinforcement, this));
+    player->getHand()->addToHand(new Card(CardType::CT_Blockade, this));
+    player->getHand()->addToHand(new Card(CardType::CT_Bomb, this));
+    player->getHand()->addToHand(new Card(CardType::CT_Diplomacy, this));
+    player->getHand()->addToHand(new Card(CardType::CT_Airlift, this));
   }
 
 }

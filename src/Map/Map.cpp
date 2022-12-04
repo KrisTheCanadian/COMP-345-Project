@@ -327,7 +327,14 @@ Player *Territory::getPlayer() {
 void Territory::setPlayer(Player* p) {
   this->player = p;
 }
-
+bool Territory::isAdjacent(Territory*& pTerritory) {
+  for(auto t : this->adjacentTerritories){
+    if(t == pTerritory){
+      return true;
+    }
+  }
+  return false;
+}
 
 
 // -----------------------------------------------------------------------------------------------------------------

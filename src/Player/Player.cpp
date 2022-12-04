@@ -209,3 +209,6 @@ void Player::setDeployedArmiesThisTurn(int a) {
 void Player::setStrategy(const string& strategyName) {
   strategy = PlayerStrategy::createStrategy(this, strategyName);
 }
+PlayerStrategy* Player::getStrategy() const {
+  return strategy;
+}

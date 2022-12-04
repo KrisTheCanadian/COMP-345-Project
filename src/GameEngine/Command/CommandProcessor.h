@@ -27,7 +27,7 @@ private:
   Command* validate(const std::string& _userInput);
 
 public:
-    std::string FileTournamentFunctionInput(std::string input);
+    void FileTournamentFunctionInput(std::string input);
     void TournamentFunctionInput(std::string);
 
   //Constructors
