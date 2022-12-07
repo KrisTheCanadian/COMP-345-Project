@@ -26,6 +26,7 @@
 - [Project Introduction](_docs/Project.COMP345.2022.2.pdf)
 - [Phase 1](_docs/Assignment1.COMP345.2022.2.pdf)
 - [Phase 2](_docs/Assignment2.COMP345.2022.2.pdf)
+- [Phase 3](_docs/Assignment3.COMP345.2022.2.pdf)
 
 ## Building The Project
 
