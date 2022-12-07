@@ -462,7 +462,6 @@ FileCommandProcessorAdapter *GameEngine::getFileCommandProcessorAdapter() {
 void GameEngine::resetGame() {
 
   if(multipleTournaments){
-    allMaps = {};
     allPlayerStrategies = {};
     numberOfGames = 0;
     maxNumberOfTurns = 0;
